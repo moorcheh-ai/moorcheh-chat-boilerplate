@@ -1,0 +1,45 @@
+{
+  "name": "moorcheh-chat-boilerplate",
+  "version": "1.0.0",
+  "description": "A Next.js boilerplate for building chat applications with Moorcheh AI integration",
+  "main": "bin/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "nextjs",
+    "chat",
+    "ai",
+    "boilerplate",
+    "moorcheh",
+    "react",
+    "typescript",
+    "tailwind"
+  ],
+  "author": "Your Name <your.email@example.com>",
+  "license": "ISC",
+  "type": "commonjs",
+  "bin": {
+    "moorcheh-chat-boilerplate": "./bin/index.js"
+  },
+  "files": [
+    "bin/",
+    "template/",
+    "README.md"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yourusername/moorcheh-chat-boilerplate.git"
+  },
+  "bugs": {
+    "url": "https://github.com/yourusername/moorcheh-chat-boilerplate/issues"
+  },
+  "homepage": "https://github.com/yourusername/moorcheh-chat-boilerplate#readme",
+  "dependencies": {
+    "fs-extra": "^11.3.0",
+    "inquirer": "^12.8.2"
+  },
+  "engines": {
+    "node": ">=16.0.0"
+  }
+}
