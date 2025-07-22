@@ -3,6 +3,7 @@ import "./globals.css";
 import { Navbar } from "../components/navbar";
 import { CustomizationProvider } from "../components/CustomizationProvider";
 import { getBrandingConfig } from "../lib/branding-config";
+import { getFontClasses } from "../lib/fonts";
 
 const brandingConfig = getBrandingConfig();
 
@@ -18,10 +19,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className="antialiased">
+      <body className={`${getFontClasses()} antialiased`}>
         <CustomizationProvider>
           <div className="min-h-screen bg-background text-foreground transition-colors duration-200">
-            <Navbar />
             <main className="relative">
               {children}
             </main>

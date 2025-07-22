@@ -2,7 +2,7 @@
 
 This folder contains a powerful, flexible chat system that can render as either a **widget** (floating button) or **interface** (full chat interface) based on your configuration.
 
-## 🚀 Quick Start
+## Quick Start
 
 ### 1. Choose Your Chat Type
 
@@ -27,7 +27,7 @@ export default function MyPage() {
 
 That's it! The chat will automatically render as a widget or interface based on your config.
 
-## 📁 Folder Structure
+## Folder Structure
 
 ```
 chat/
@@ -44,7 +44,7 @@ chat/
     └── index.tsx         # Widget exports
 ```
 
-## 🎨 Chat Types
+## Chat Types
 
 ### 1. Widget (`chatType: 'widget'`)
 
@@ -88,22 +88,22 @@ interface: {
 }
 ```
 
-## ⚙️ Configuration
+## Configuration
 
 ### Main Configuration (`lib/chat-config.ts`)
 
 ```typescript
 export const chatConfig: ChatConfig = {
-  // 🎨 Chat Type
+  // Chat Type
   chatType: 'interface', // 'widget' | 'interface'
   
-  // 🔮 Widget Config
+  // Widget Config
   widget: { /* ... */ },
   
-  // 🖥️ Interface Config  
+  // Interface Config  
   interface: { /* ... */ },
   
-  // ⚙️ Common Config (applies to both)
+  // Common Config (applies to both)
   common: {
     enableFileUpload: true,
     enableExport: true,
@@ -137,7 +137,7 @@ branding: {
 }
 ```
 
-## 🎨 Theme Integration
+## Theme Integration
 
 Both chat types automatically work with your theme system:
 
@@ -158,7 +158,7 @@ interface: {
 }
 ```
 
-## 🔧 Advanced Usage
+## Advanced Usage
 
 ### Force Specific Chat Type
 
@@ -215,7 +215,7 @@ const widget = getWidgetConfig();
 const interface = getInterfaceConfig();
 ```
 
-## 📱 Responsive Design
+## Responsive Design
 
 ### Widget
 - Always responsive
@@ -227,7 +227,7 @@ const interface = getInterfaceConfig();
 - Mobile-first design
 - Adaptive sidebar (hides on mobile)
 
-## 🚀 Performance
+## Performance
 
 ### Lazy Loading
 Components are loaded dynamically based on chat type.
@@ -238,7 +238,7 @@ Only the required chat type is included in your bundle.
 ### Memory Management
 Chat history is limited by `maxMessages` config.
 
-## 🔍 Troubleshooting
+## Troubleshooting
 
 ### Configuration Issues
 
@@ -259,7 +259,7 @@ if (!isValid) {
 3. **API errors**: Check API configuration and keys
 4. **Widget positioning**: Adjust `position` and `offset` values
 
-## 🎯 Examples
+## Examples
 
 ### E-commerce Site (Widget)
 ```typescript
@@ -317,7 +317,7 @@ chatConfig: {
 }
 ```
 
-## 🔄 Migration
+## Migration
 
 ### From Old Chat Component
 
@@ -340,24 +340,24 @@ import { DynamicChat } from '@/components/chat';
 3. Update branding settings
 4. Choose chat type
 
-## 🆘 Support
+## Support
 
 - Check configuration with `validateChatConfig()`
 - Review console errors for validation issues
 - Ensure all required dependencies are installed
 - Verify API keys are set correctly
 
-## 🎉 Features
+## Features
 
-✅ **Two Chat Types**: Widget and Interface  
-✅ **Dynamic Rendering**: Based on configuration  
-✅ **Theme Integration**: Works with your theme system  
-✅ **Responsive Design**: Mobile-friendly  
-✅ **File Upload**: Optional file upload support  
-✅ **Chat History**: Persistent chat sessions  
-✅ **Export**: Save chat conversations  
-✅ **Customizable**: Extensive configuration options  
-✅ **TypeScript**: Full type safety  
-✅ **Performance**: Optimized bundle sizes  
+**Two Chat Types**: Widget and Interface  
+**Dynamic Rendering**: Based on configuration  
+**Theme Integration**: Works with your theme system  
+**Responsive Design**: Mobile-friendly  
+**File Upload**: Optional file upload support  
+**Chat History**: Persistent chat sessions  
+**Export**: Save chat conversations  
+**Customizable**: Extensive configuration options  
+**TypeScript**: Full type safety  
+**Performance**: Optimized bundle sizes  
 
-Happy chatting! 🚀 
+Happy chatting! 

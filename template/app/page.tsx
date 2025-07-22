@@ -71,7 +71,7 @@ export default function Home() {
           </div>
         ) : (
           // Interface mode - centered layout
-          <div className="mt-12">
+          <div className="mt-6">
             <DynamicChat />
           </div>
         )}

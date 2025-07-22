@@ -1,8 +1,8 @@
-# 🔧 API Configuration Guide
+#  API Configuration Guide
 
 This guide shows you how to completely customize your API requests by simply pasting your API request body into a JSON file.
 
-## 🚀 Quick Setup
+##  Quick Setup
 
 **Just paste your API body into `config/api-config.json`:**
 
@@ -32,7 +32,7 @@ This guide shows you how to completely customize your API requests by simply pas
 
 **That's it!** The system will automatically use your request body template and fill in the `query` and `chatHistory` from user interactions.
 
-## 📋 Complete API Configuration
+##  Complete API Configuration
 
 ### JSON Configuration File (`config/api-config.json`)
 
@@ -66,7 +66,7 @@ This guide shows you how to completely customize your API requests by simply pas
 }
 ```
 
-## 🎯 Configuration Fields Explained
+##  Configuration Fields Explained
 
 | Field | Type | Description | Example |
 |-------|------|-------------|---------|
@@ -80,7 +80,7 @@ This guide shows you how to completely customize your API requests by simply pas
 | `headerPrompt` | string | System prompt for the AI | Custom instructions |
 | `footerPrompt` | string | Additional context instructions | Custom context handling |
 
-## 🌍 Environment Variable Overrides
+##  Environment Variable Overrides
 
 You can override any configuration value using environment variables:
 
@@ -96,7 +96,7 @@ NEXT_PUBLIC_API_KIOSK_MODE=true
 
 **Priority:** Environment Variables > JSON Configuration > Defaults
 
-## 🎨 Real-World Examples
+##  Real-World Examples
 
 ### Example 1: E-commerce Support Bot
 
@@ -160,7 +160,7 @@ NEXT_PUBLIC_API_KIOSK_MODE=true
 }
 ```
 
-## 🔄 Dynamic Fields
+##  Dynamic Fields
 
 The system automatically handles these dynamic fields:
 
@@ -169,7 +169,7 @@ The system automatically handles these dynamic fields:
 
 You don't need to configure these - they're handled automatically.
 
-## 🛡️ Validation & Error Handling
+##  Validation & Error Handling
 
 The system automatically validates your configuration:
 
@@ -188,7 +188,7 @@ if (!validation.isValid) {
 - Missing API key
 - Invalid top_k (must be positive number)
 
-## 🚀 Advanced Usage
+##  Advanced Usage
 
 ### Custom Request Body Fields
 
@@ -244,7 +244,7 @@ If you're upgrading from the old hardcoded system:
 3. **Remove hardcoded values** from your components
 4. **Use environment variables** for environment-specific settings
 
-## 🆘 Troubleshooting
+##  Troubleshooting
 
 **Problem:** API requests failing
 - **Solution:** Check `validateApiConfig()` for configuration errors
@@ -258,13 +258,13 @@ If you're upgrading from the old hardcoded system:
 **Problem:** Headers not being sent
 - **Solution:** Check the `headers` section in your JSON config
 
-## 📚 Related Guides
+##  Related Guides
 
 - [Branding Customization](BRANDING_GUIDE.md) - Customize app branding
 - [Theme Configuration](customize/themes/README.md) - Customize themes
 - [Chat Configuration](lib/chat-config.ts) - Configure chat behavior
 
-## 🎯 Best Practices
+##  Best Practices
 
 1. **Use JSON configuration** for complex request bodies
 2. **Use environment variables** for sensitive data and environment-specific settings

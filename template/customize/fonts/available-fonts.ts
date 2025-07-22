@@ -116,6 +116,19 @@ export const availableFonts: Record<string, FontDefinition> = {
     popularity: 5,
   },
 
+  'Saira': {
+    name: 'Saira',
+    googleFontsName: 'Saira',
+    weights: [100, 200, 300, 400, 500, 600, 700, 800, 900],
+    category: 'sans-serif',
+    fallback: 'system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif',
+    display: 'swap',
+    subsets: ['latin', 'latin-ext'],
+    description: 'Modern geometric sans-serif with excellent readability',
+    designer: 'Omnibus-Type',
+    popularity: 4,
+  },
+
   // MORE POPULAR SANS-SERIF FONTS
   'Nunito': {
     name: 'Nunito',

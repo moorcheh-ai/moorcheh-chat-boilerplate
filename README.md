@@ -46,12 +46,12 @@ npm run dev
 
 ## Features
 
-- 🤖 **AI Chat Interface** - Pre-built chat components
-- 🎨 **Modern UI** - Beautiful, responsive design with Tailwind CSS
-- 🔧 **TypeScript** - Full type safety
-- 📱 **Mobile Responsive** - Works on all devices
-- 🌙 **Dark Mode** - Built-in theme switching
-- ⚡ **Fast Development** - Hot reload and Turbopack support
+- **AI Chat Interface** - Pre-built chat components
+- **Modern UI** - Beautiful, responsive design with Tailwind CSS
+- **TypeScript** - Full type safety
+- **Mobile Responsive** - Works on all devices
+- **Dark Mode** - Built-in theme switching
+- **Fast Development** - Hot reload and Turbopack support
 
 ## Configuration
 

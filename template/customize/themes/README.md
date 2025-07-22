@@ -45,7 +45,7 @@ export const customThemes = {
 - **blue** - Ocean-inspired blue theme
 - **green** - Nature-inspired green theme
 
-##  Theme Variables
+## Theme Variables
 
 Each theme must include these CSS variables:
 
@@ -77,7 +77,7 @@ Each theme must include these CSS variables:
 - `--sidebar-accent` / `--sidebar-accent-foreground`
 - `--sidebar-border` / `--sidebar-ring`
 
-##  Color Format
+## Color Format
 
 Use **OKLCH** format for consistent colors:
 
@@ -92,7 +92,7 @@ Use **OKLCH** format for consistent colors:
 - **Better color mixing**
 - **Perceptually uniform**
 
-##  Advanced Customization
+## Advanced Customization
 
 ### Theme-Specific Overrides
 
@@ -130,7 +130,7 @@ export const dynamicProperties = {
 };
 ```
 
-## 📱 Responsive Themes
+## Responsive Themes
 
 Create responsive theme variations:
 
@@ -149,7 +149,7 @@ export const responsiveThemes = {
 };
 ```
 
-##  Best Practices
+## Best Practices
 
 1. **Test Accessibility**: Ensure good contrast ratios
 2. **Use OKLCH**: For consistent color perception
@@ -157,7 +157,7 @@ export const responsiveThemes = {
 4. **Test All Components**: Verify theme works across all UI elements
 5. **Document Custom Themes**: Add comments explaining your color choices
 
-##  Examples
+## Examples
 
 ### Creating a "Sunset" Theme
 
@@ -174,11 +174,11 @@ sunset: {
 },
 ```
 
-##  Hot Reload
+## Hot Reload
 
 Changes to theme files are automatically detected and applied during development. For production, rebuild your application after theme changes.
 
-##  Troubleshooting
+## Troubleshooting
 
 - **Theme not applying**: Check that all required variables are defined
 - **Colors look wrong**: Verify OKLCH values are in correct format
