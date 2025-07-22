@@ -1,0 +1,59 @@
+{
+  "_comment": "This is an example API configuration file. Copy this to api-config.json and customize for your needs.",
+  
+  "apiEndpoint": "https://your-api-endpoint.com/v1/answer",
+  
+  "defaultRequestBody": {
+    "namespace": "your-knowledge-base",
+    "top_k": 5,
+    "type": "text",
+    "aiModel": "your-preferred-model",
+    "temperature": 0.7,
+    "kiosk_mode": false,
+    "headerPrompt": "You are a helpful AI assistant for [YOUR COMPANY]. Answer questions based on the provided context and be helpful, accurate, and professional.",
+    "footerPrompt": "Always base your answers on the provided context. If the context doesn't contain enough information to answer the question, politely say so and offer to help in other ways.",
+    
+    "_examples": {
+      "customer_support": {
+        "namespace": "customer-support-kb",
+        "headerPrompt": "You are a customer support assistant for TechCorp. Help customers with their questions about our products and services.",
+        "temperature": 0.3
+      },
+      "technical_docs": {
+        "namespace": "technical-documentation",
+        "headerPrompt": "You are a technical documentation assistant. Provide accurate, detailed technical information with code examples when relevant.",
+        "temperature": 0.1,
+        "top_k": 8
+      },
+      "sales_assistant": {
+        "namespace": "product-catalog",
+        "headerPrompt": "You are a sales assistant. Help customers find the right products and answer questions about features, pricing, and availability.",
+        "temperature": 0.5
+      }
+    }
+  },
+  
+  "headers": {
+    "Content-Type": "application/json",
+    "_comment": "Add any custom headers your API requires",
+    "_examples": {
+      "custom_auth": "X-API-Version: 2.0",
+      "tracking": "X-Source: web-app"
+    }
+  },
+  
+  "dynamicFields": {
+    "_comment": "These fields are automatically populated by the system",
+    "query": "user_input",
+    "chatHistory": "chat_history"
+  },
+  
+  "environmentOverrides": {
+    "_comment": "These allow environment variables to override JSON values",
+    "namespace": "NEXT_PUBLIC_API_NAMESPACE",
+    "aiModel": "NEXT_PUBLIC_API_MODEL", 
+    "temperature": "NEXT_PUBLIC_API_TEMPERATURE",
+    "top_k": "NEXT_PUBLIC_API_TOP_K",
+    "kiosk_mode": "NEXT_PUBLIC_API_KIOSK_MODE"
+  }
+} 

@@ -9,7 +9,6 @@ export { Chat } from './Chat';
 export { default as ChatWindow } from '../chat-interface/ChatWindow';
 export { default as MessageList } from '../chat-interface/MessageList';
 export { default as MessageInput } from '../chat-interface/MessageInput';
-export { default as FileUploader } from '../chat-interface/FileUploader';
 
 // Chat widget components
 export { ChatWidget } from '../chat-widget';

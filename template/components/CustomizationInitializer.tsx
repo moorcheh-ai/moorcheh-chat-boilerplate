@@ -4,7 +4,7 @@
  * CustomizationInitializer Component
  * 
  * This component runs on the client side to initialize the customization system.
- * It ensures themes and fonts are applied as early as possible.
+ * It ensures themes and fonts are applied as early as possible and respects theme-config.ts changes.
  */
 
 import { useEffect } from 'react';
@@ -13,6 +13,7 @@ import { customThemes } from '../customize/themes/custom-themes';
 import { themeConfig } from '../customize/themes/theme-config';
 import { fontConfig } from '../customize/fonts/font-config';
 import { availableFonts, generateGoogleFontsUrl } from '../customize/fonts/available-fonts';
+import { branding } from '../lib/branding-config';
 import { customFonts, generateFontFaceCSS } from '../customize/fonts/custom-fonts';
 
 export function CustomizationInitializer() {
@@ -22,14 +23,24 @@ export function CustomizationInitializer() {
         // Combine all themes
         const allThemes = { ...themes, ...customThemes };
         
-        // Get the theme to apply
+        // Get the theme to apply - prioritize config over saved theme
         let themeToApply = themeConfig.defaultTheme;
         
-        // Check for saved theme
+        // Check for saved theme only if it matches the current config
         if (themeConfig.persistTheme) {
-          const savedTheme = localStorage.getItem('moorcheh-chat-theme');
-          if (savedTheme && (savedTheme === 'system' || allThemes[savedTheme])) {
-            themeToApply = savedTheme;
+          const savedTheme = localStorage.getItem(branding.getThemeStorageKey());
+          if (savedTheme) {
+            // If saved theme differs from config, update localStorage to match config
+            if (savedTheme !== themeConfig.defaultTheme) {
+              console.log(`Updating theme from config: ${themeConfig.defaultTheme}`);
+              localStorage.setItem(branding.getThemeStorageKey(), themeConfig.defaultTheme);
+              themeToApply = themeConfig.defaultTheme;
+            } else {
+              themeToApply = savedTheme;
+            }
+          } else {
+            // No saved theme, use config default and save it
+            localStorage.setItem(branding.getThemeStorageKey(), themeConfig.defaultTheme);
           }
         }
 
@@ -43,13 +54,49 @@ export function CustomizationInitializer() {
         const theme = allThemes[themeToApply];
         if (theme) {
           const root = document.documentElement;
+          
+          // Clear existing theme classes
+          const existingThemeClasses = Array.from(root.classList).filter(cls => cls.startsWith('theme-'));
+          existingThemeClasses.forEach(cls => root.classList.remove(cls));
+          
+          // Apply theme variables
           Object.entries(theme).forEach(([property, value]) => {
             root.style.setProperty(property, value);
           });
+          
+          // Add theme class
           root.classList.add(`theme-${themeToApply}`);
+          
+          // Add transition class for smooth theme changes
+          if (themeConfig.transitionDuration > 0) {
+            root.style.setProperty('--theme-transition-duration', `${themeConfig.transitionDuration}ms`);
+            root.classList.add('theme-transitioning');
+          }
+          
+          console.log(`Applied theme: ${themeToApply}`);
+        } else {
+          console.warn(`Theme "${themeToApply}" not found, falling back to light theme`);
+          // Fallback to light theme
+          const lightTheme = allThemes['light'];
+          if (lightTheme) {
+            const root = document.documentElement;
+            Object.entries(lightTheme).forEach(([property, value]) => {
+              root.style.setProperty(property, value);
+            });
+            root.classList.add('theme-light');
+          }
         }
 
         // Apply fonts
+        applyFonts();
+
+      } catch (error) {
+        console.error('Failed to initialize customization:', error);
+      }
+    };
+
+    const applyFonts = () => {
+      try {
         const root = document.documentElement;
         
         // Get font definitions
@@ -75,32 +122,7 @@ export function CustomizationInitializer() {
             .filter((value, index, self) => self.indexOf(value) === index); // Remove duplicates
 
           if (googleFonts.length > 0) {
-            // Remove existing Google Fonts link
-            const existingLink = document.getElementById('google-fonts');
-            if (existingLink) {
-              existingLink.remove();
-            }
-
-            // Add preconnect links for performance
-            const preconnect1 = document.createElement('link');
-            preconnect1.rel = 'preconnect';
-            preconnect1.href = 'https://fonts.googleapis.com';
-            
-            const preconnect2 = document.createElement('link');
-            preconnect2.rel = 'preconnect';
-            preconnect2.href = 'https://fonts.gstatic.com';
-            preconnect2.crossOrigin = 'anonymous';
-
-            // Add Google Fonts stylesheet
-            const googleFontsUrl = generateGoogleFontsUrl(googleFonts);
-            const link = document.createElement('link');
-            link.id = 'google-fonts';
-            link.rel = 'stylesheet';
-            link.href = googleFontsUrl;
-
-            document.head.appendChild(preconnect1);
-            document.head.appendChild(preconnect2);
-            document.head.appendChild(link);
+            loadGoogleFonts(googleFonts);
           }
         }
 
@@ -122,10 +144,40 @@ export function CustomizationInitializer() {
             document.head.appendChild(style);
           }
         });
-
       } catch (error) {
-        console.error('Failed to initialize customization:', error);
+        console.error('Failed to apply fonts:', error);
       }
+    };
+
+    const loadGoogleFonts = (fontNames: string[]) => {
+      const existingLink = document.getElementById('google-fonts');
+      if (existingLink) {
+        existingLink.remove();
+      }
+
+      const googleFontsUrl = generateGoogleFontsUrl(fontNames);
+      const link = document.createElement('link');
+      link.id = 'google-fonts';
+      link.rel = 'stylesheet';
+      link.href = googleFontsUrl;
+      
+      // Add preconnect for performance
+      if (!document.querySelector('link[href="https://fonts.googleapis.com"]')) {
+        const preconnect1 = document.createElement('link');
+        preconnect1.rel = 'preconnect';
+        preconnect1.href = 'https://fonts.googleapis.com';
+        document.head.appendChild(preconnect1);
+      }
+      
+      if (!document.querySelector('link[href="https://fonts.gstatic.com"]')) {
+        const preconnect2 = document.createElement('link');
+        preconnect2.rel = 'preconnect';
+        preconnect2.href = 'https://fonts.gstatic.com';
+        preconnect2.crossOrigin = 'anonymous';
+        document.head.appendChild(preconnect2);
+      }
+
+      document.head.appendChild(link);
     };
 
     // Initialize immediately
@@ -135,7 +187,7 @@ export function CustomizationInitializer() {
     if (themeConfig.enableSystemTheme) {
       const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
       const handleSystemThemeChange = () => {
-        const currentTheme = localStorage.getItem('moorcheh-chat-theme');
+        const currentTheme = localStorage.getItem(branding.getThemeStorageKey());
         if (currentTheme === 'system') {
           initializeCustomization();
         }

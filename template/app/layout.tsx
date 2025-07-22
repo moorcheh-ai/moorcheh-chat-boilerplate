@@ -2,10 +2,13 @@ import type { Metadata } from "next";
 import "./globals.css";
 import { Navbar } from "../components/navbar";
 import { CustomizationProvider } from "../components/CustomizationProvider";
+import { getBrandingConfig } from "../lib/branding-config";
+
+const brandingConfig = getBrandingConfig();
 
 export const metadata: Metadata = {
-  title: "Moorcheh Chat",
-  description: "AI-powered chat application with customizable themes and fonts",
+  title: brandingConfig.appTitle,
+  description: brandingConfig.appDescription,
 };
 
 export default function RootLayout({
@@ -17,8 +20,12 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <body className="antialiased">
         <CustomizationProvider>
-          <Navbar />
-          {children}
+          <div className="min-h-screen bg-background text-foreground transition-colors duration-200">
+            <Navbar />
+            <main className="relative">
+              {children}
+            </main>
+          </div>
         </CustomizationProvider>
       </body>
     </html>

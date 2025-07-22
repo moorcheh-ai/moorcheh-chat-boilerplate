@@ -5,6 +5,8 @@
  * Change the chatType to switch between different chat implementations.
  */
 
+import { getBrandingConfig } from './branding-config';
+
 export type ChatType = 'widget' | 'interface';
 
 export interface ChatConfig {
@@ -74,15 +76,16 @@ export interface ChatConfig {
 }
 
 /**
- * 🎯 MAIN CHAT CONFIGURATION
+ *  MAIN CHAT CONFIGURATION
  * 
  * Change these settings to customize your chat application
+ * Branding is now automatically loaded from environment variables
  */
 export const chatConfig: ChatConfig = {
-  // 🎨 Chat Type - Change this to switch between widget and interface
+  // Chat Type - Change this to switch between widget and interface
   chatType: 'interface', // Options: 'widget' | 'interface'
   
-  // 🔮 Widget Configuration
+  // Widget Configuration
   widget: {
     position: 'bottom-right',
     size: 'medium',
@@ -94,7 +97,7 @@ export const chatConfig: ChatConfig = {
     },
   },
   
-  // 🖥️ Interface Configuration
+  // Interface Configuration
   interface: {
     layout: 'sidebar',
     showSidebar: true,
@@ -102,7 +105,7 @@ export const chatConfig: ChatConfig = {
     responsive: true,
   },
   
-  // ⚙️ Common Configuration
+  // Common Configuration
   common: {
     enableFileUpload: true,
     enableExport: true,
@@ -115,16 +118,18 @@ export const chatConfig: ChatConfig = {
       topK: 3,
       threshold: 0.7,
     },
+    // Branding - Automatically loaded from environment variables
+    // Set NEXT_PUBLIC_APP_NAME, NEXT_PUBLIC_APP_SUBTITLE, etc. in .env.local
     branding: {
-      title: 'Moorcheh AI Assistant',
-      subtitle: 'Your intelligent chat companion',
-      logo: '/moorcheh-logo.png',
+      title: getBrandingConfig().appName,
+      subtitle: getBrandingConfig().appSubtitle,
+      logo: getBrandingConfig().appLogo,
     },
   },
 };
 
 /**
- * 🔧 Configuration Helpers
+ * Configuration Helpers
  */
 
 // Get current chat type
@@ -158,7 +163,7 @@ export function getCommonConfig() {
 }
 
 /**
- * 🎨 Theme Integration
+ * Theme Integration
  */
 
 // Get theme for current chat type
@@ -171,7 +176,7 @@ export function getChatTheme(): string | undefined {
 }
 
 /**
- * 📱 Responsive Helpers
+ * Responsive Helpers
  */
 
 // Check if responsive design is enabled
@@ -184,7 +189,7 @@ export function isResponsive(): boolean {
 }
 
 /**
- * 🚀 Validation
+ * Validation
  */
 
 // Validate configuration

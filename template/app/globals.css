@@ -45,6 +45,24 @@
 }
 
 /* 
+ * Theme transition styles for smooth theme switching
+ */
+.theme-transitioning {
+  transition: 
+    background-color var(--theme-transition-duration, 200ms) ease-in-out,
+    color var(--theme-transition-duration, 200ms) ease-in-out,
+    border-color var(--theme-transition-duration, 200ms) ease-in-out;
+}
+
+.theme-transitioning * {
+  transition: 
+    background-color var(--theme-transition-duration, 200ms) ease-in-out,
+    color var(--theme-transition-duration, 200ms) ease-in-out,
+    border-color var(--theme-transition-duration, 200ms) ease-in-out,
+    box-shadow var(--theme-transition-duration, 200ms) ease-in-out;
+}
+
+/* 
  * Default CSS variables - these will be overridden by the customization system
  * The actual theme values come from customize/themes/available-themes.ts
  */

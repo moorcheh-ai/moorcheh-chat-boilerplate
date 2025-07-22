@@ -44,12 +44,12 @@ export interface FontDefinition {
 }
 
 /**
- * 🔤 Available Google Fonts
+ * Available Google Fonts
  * 
  * Curated selection of 50+ popular Google Fonts across all categories
  */
 export const availableFonts: Record<string, FontDefinition> = {
-  // 🎯 MOST POPULAR SANS-SERIF FONTS
+  // MOST POPULAR SANS-SERIF FONTS
   'Inter': {
     name: 'Inter',
     googleFontsName: 'Inter',
@@ -116,7 +116,7 @@ export const availableFonts: Record<string, FontDefinition> = {
     popularity: 5,
   },
 
-  // 🌟 MORE POPULAR SANS-SERIF FONTS
+  // MORE POPULAR SANS-SERIF FONTS
   'Nunito': {
     name: 'Nunito',
     googleFontsName: 'Nunito',
@@ -260,7 +260,7 @@ export const availableFonts: Record<string, FontDefinition> = {
     popularity: 3,
   },
 
-  // 📖 POPULAR SERIF FONTS
+  // POPULAR SERIF FONTS
   'Merriweather': {
     name: 'Merriweather',
     googleFontsName: 'Merriweather',
@@ -365,7 +365,7 @@ export const availableFonts: Record<string, FontDefinition> = {
     popularity: 3,
   },
 
-  // 💻 MONOSPACE FONTS
+  // MONOSPACE FONTS
   'JetBrains Mono': {
     name: 'JetBrains Mono',
     googleFontsName: 'JetBrains+Mono',
@@ -446,7 +446,7 @@ export const availableFonts: Record<string, FontDefinition> = {
     popularity: 3,
   },
 
-  // 🎨 DISPLAY FONTS
+  // DISPLAY FONTS
   'Space Grotesk': {
     name: 'Space Grotesk',
     googleFontsName: 'Space+Grotesk',
@@ -499,7 +499,7 @@ export const availableFonts: Record<string, FontDefinition> = {
     popularity: 3,
   },
 
-  // ✍️ HANDWRITING FONTS
+  // HANDWRITING FONTS
   'Dancing Script': {
     name: 'Dancing Script',
     googleFontsName: 'Dancing+Script',
@@ -541,7 +541,7 @@ export const availableFonts: Record<string, FontDefinition> = {
 };
 
 /**
- * 🔧 Font Utilities
+ * Font Utilities
  */
 
 // Get fonts by category

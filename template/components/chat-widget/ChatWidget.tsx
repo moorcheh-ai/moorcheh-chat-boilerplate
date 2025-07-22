@@ -4,10 +4,11 @@ import { useState, useRef, useEffect } from 'react';
 import { MessageCircle, X, Send, Bot, Minimize2, Maximize2 } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { fetchAnswer } from '../../lib/answer';
 import { getWidgetConfig, getCommonConfig } from '../../lib/chat-config';
+import { branding } from '../../lib/branding-config';
 import { cn } from '../../lib/utils';
 
 interface Message {
@@ -23,7 +24,7 @@ export default function ChatWidget() {
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const inputRef = useRef<HTMLInputElement>(null);
+  const inputRef = useRef<HTMLTextAreaElement>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   
   const widgetConfig = getWidgetConfig();
@@ -56,18 +57,16 @@ export default function ChatWidget() {
     setError(null);
 
     try {
+      // Use the new API configuration system
       const data = await fetchAnswer({
-        namespace: commonConfig.api.namespace,
         query: userMessage.content,
-        type: "text",
+        chatHistory: messages.map((m) => ({ role: m.role, content: m.content })),
+        // Fallback parameters for backward compatibility
+        namespace: commonConfig.api.namespace,
         top_k: commonConfig.api.topK,
         aiModel: commonConfig.api.model,
         temperature: commonConfig.api.temperature,
-        kiosk_mode: true,
         threshold: commonConfig.api.threshold,
-        chatHistory: messages.map((m) => ({ role: m.role, content: m.content })),
-        headerPrompt: "You are a helpful AI assistant name moorcheh.",
-        footerPrompt: "Provide a clear and concise answer.",
       });
 
       const assistantMessage: Message = {
@@ -84,7 +83,7 @@ export default function ChatWidget() {
     }
   };
 
-  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
     if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault();
       handleSend();
@@ -104,23 +103,9 @@ export default function ChatWidget() {
     setIsMinimized(false);
   };
 
-  // Position classes based on config
+  // Widget is now positioned by parent container, so we just need relative positioning
   const getPositionClasses = () => {
-    const { position, offset } = widgetConfig;
-    const baseClasses = 'fixed z-[1000]';
-    
-    switch (position) {
-      case 'bottom-right':
-        return `${baseClasses} bottom-[${offset.y}px] right-[${offset.x}px]`;
-      case 'bottom-left':
-        return `${baseClasses} bottom-[${offset.y}px] left-[${offset.x}px]`;
-      case 'top-right':
-        return `${baseClasses} top-[${offset.y}px] right-[${offset.x}px]`;
-      case 'top-left':
-        return `${baseClasses} top-[${offset.y}px] left-[${offset.x}px]`;
-      default:
-        return `${baseClasses} bottom-6 right-6`;
-    }
+    return 'relative';
   };
 
   // Size classes based on config
@@ -150,11 +135,11 @@ export default function ChatWidget() {
 
   return (
     <div className={getPositionClasses()}>
-      {/* Chat Window */}
+      {/* Chat Window - Positioned absolutely above the button */}
       {isOpen && (
         <div 
           className={cn(
-            'mb-4 transition-all duration-300 ease-in-out',
+            'absolute bottom-16 right-0 transition-all duration-300 ease-in-out',
             isMinimized ? 'scale-95 opacity-75' : 'scale-100 opacity-100',
             getChatSizeClasses()
           )}
@@ -286,21 +271,31 @@ export default function ChatWidget() {
 
                 {/* Input */}
                 <div className="p-3 border-t bg-card">
-                  <div className="flex gap-2">
-                    <Input
+                  <div className="flex items-end gap-2">
+                    <Textarea
                       ref={inputRef}
                       value={input}
                       onChange={(e) => setInput(e.target.value)}
                       onKeyDown={handleKeyDown}
                       placeholder="Type your message..."
                       disabled={isLoading}
-                      className="flex-1 text-sm"
+                      rows={1}
+                      className="flex-1 min-h-[36px] max-h-24 py-2 px-3 text-sm resize-none"
+                      style={{
+                        height: 'auto',
+                        overflow: input.split('\n').length > 1 || input.length > 30 ? 'auto' : 'hidden'
+                      }}
+                      onInput={(e: React.FormEvent<HTMLTextAreaElement>) => {
+                        const target = e.target as HTMLTextAreaElement;
+                        target.style.height = 'auto';
+                        target.style.height = `${Math.min(target.scrollHeight, 96)}px`;
+                      }}
                     />
                     <Button
                       onClick={handleSend}
                       disabled={isLoading || !input.trim()}
                       size="sm"
-                      className="px-3"
+                      className="px-3 flex-shrink-0 self-end"
                     >
                       <Send size={14} />
                     </Button>

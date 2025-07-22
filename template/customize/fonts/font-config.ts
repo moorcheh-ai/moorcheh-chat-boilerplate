@@ -37,31 +37,31 @@ export interface FontConfig {
 }
 
 /**
- * 🔤 MAIN FONT CONFIGURATION
+ *  MAIN FONT CONFIGURATION
  * 
  * Change these settings to customize your app's typography
  */
 export const fontConfig: FontConfig = {
-  // 🎯 Primary fonts
+  // Primary fonts
   primaryFont: 'sans-serif', // Main UI font - Options: 'Inter', 'Roboto', 'Open Sans', 'Lato', etc.
   headingFont: 'sans-serif', // Headings font - Can be same as primary or different
   monoFont: 'sans-serif', // Code font - Options: 'JetBrains Mono', 'Fira Code', 'Source Code Pro'
   
-  // 🌐 Google Fonts integration
+  // Google Fonts integration
   enableGoogleFonts: true, // Automatically load fonts from Google Fonts
   
-  // ⚡ Performance settings
+  // Performance settings
   preloadFonts: true, // Preload critical fonts
   fontDisplay: 'swap', // Font loading strategy
   enableOptimization: true, // Enable font optimization
   
-  // 📏 Typography scale
+  // Typography scale
   baseFontSize: '16px', // Base font size
   scaleRatio: 1.25, // Font size scaling ratio (1.25 = Major Third)
 };
 
 /**
- * 🔧 Advanced Font Configuration
+ * Advanced Font Configuration
  */
 export const advancedFontConfig = {
   // Font loading timeout
@@ -102,7 +102,7 @@ export const advancedFontConfig = {
 };
 
 /**
- * 📱 Responsive Typography Settings
+ * Responsive Typography Settings
  */
 export const responsiveTypography = {
   // Base font sizes for different screen sizes
@@ -141,7 +141,7 @@ export const responsiveTypography = {
 };
 
 /**
- * 🎨 Typography Utilities
+ * Typography Utilities
  */
 export const typographyUtils = {
   // Generate font size scale
@@ -188,7 +188,7 @@ export const typographyUtils = {
 };
 
 /**
- * 📋 Font Loading Priority
+ * Font Loading Priority
  * 
  * Fonts are loaded in this order for optimal performance
  */
@@ -199,7 +199,7 @@ export const fontLoadingPriority = [
 ];
 
 /**
- * 🎯 Preset Font Combinations
+  * Preset Font Combinations
  * 
  * Popular font pairings you can use
  */

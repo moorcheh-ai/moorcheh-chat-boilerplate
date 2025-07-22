@@ -31,24 +31,26 @@ export interface ThemeConfig {
 }
 
 /**
- * 🎨 MAIN THEME CONFIGURATION
+ * MAIN THEME CONFIGURATION
  * 
- * Change these settings to customize your app's theming behavior
+ * Change these settings to customize your app's theming behavior.
+ * 🔥 IMPORTANT: Changes to defaultTheme will immediately take effect across your entire app!
+ * The system will automatically update localStorage and apply the new theme.
  */
 export const themeConfig: ThemeConfig = {
-  // 🎯 Default theme when app loads
-  defaultTheme: 'light', // Options: 'light', 'dark', 'blue', 'green', 'system', or custom theme name
+  // Default theme when app loads - CHANGE THIS TO SWITCH YOUR APP'S THEME
+  defaultTheme: 'blue', // Options: 'light', 'dark', 'blue', 'green', 'system', or custom theme name
   
-  // 🌓 System theme detection
+  // System theme detection
   enableSystemTheme: true, // Auto-detect user's system preference (light/dark)
   
-  // 🔄 Theme switcher UI
+  // Theme switcher UI
   enableThemeToggle: true, // Show theme selector in your app
   
-  // 💾 Theme persistence
+  // Theme persistence
   persistTheme: true, // Remember user's theme choice
   
-  // 🎨 Available themes in theme switcher
+  // Available themes in theme switcher
   availableThemes: [
     'light',
     'dark', 
@@ -60,7 +62,7 @@ export const themeConfig: ThemeConfig = {
     // 'sunset',
   ],
   
-  // 🏷️ Theme display names (shown in UI)
+  // Theme display names (shown in UI)
   themeLabels: {
     light: 'Light',
     dark: 'Dark',
@@ -72,12 +74,12 @@ export const themeConfig: ThemeConfig = {
     // sunset: 'Sunset Glow',
   },
   
-  // ⚡ Animation settings
+  // Animation settings
   transitionDuration: 200, // Theme transition animation (milliseconds)
 };
 
 /**
- * 🔧 Advanced Configuration
+ * Advanced Configuration
  */
 export const advancedThemeConfig = {
   // CSS class prefix for themes
@@ -87,7 +89,7 @@ export const advancedThemeConfig = {
   cssVariablePrefix: '--',
   
   // Local storage key for theme persistence
-  storageKey: 'moorcheh-chat-theme',
+  storageKey: process.env.NEXT_PUBLIC_STORAGE_PREFIX ? `${process.env.NEXT_PUBLIC_STORAGE_PREFIX}-theme` : 'moorcheh-chat-theme',
   
   // Media query for system theme detection
   systemThemeQuery: '(prefers-color-scheme: dark)',
@@ -100,7 +102,7 @@ export const advancedThemeConfig = {
 };
 
 /**
- * 🎨 Theme Validation
+ * Theme Validation
  * 
  * Required CSS variables that every theme must have
  */

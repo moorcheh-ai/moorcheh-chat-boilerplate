@@ -36,7 +36,7 @@ export interface CustomFontDefinition extends Omit<FontDefinition, 'googleFontsN
 }
 
 /**
- * 🎨 Add Your Custom Fonts Here
+ * Add Your Custom Fonts Here
  * 
  * You can add:
  * 1. Self-hosted custom font files
@@ -93,7 +93,7 @@ export const customFonts: Record<string, CustomFontDefinition> = {
 };
 
 /**
- * 🔧 Font Loading Utilities
+ * Font Loading Utilities
  */
 
 // Generate CSS font-face declarations for custom fonts
@@ -143,7 +143,7 @@ export function getCustomFontDefinition(name: string): CustomFontDefinition | un
 }
 
 /**
- * 📝 Font Installation Guide
+ * Font Installation Guide
  */
 export const fontInstallationGuide = {
   selfHosted: {
@@ -217,7 +217,7 @@ export const fontInstallationGuide = {
 };
 
 /**
- * 🎯 Best Practices
+ * Best Practices
  */
 export const bestPractices = {
   performance: [

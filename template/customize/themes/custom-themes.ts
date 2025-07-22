@@ -8,7 +8,7 @@
 import type { ThemeDefinition } from './available-themes';
 
 /**
- * 🎨 Add Your Custom Themes Here
+ * Add Your Custom Themes Here
  * 
  * Copy the structure from available-themes.ts and modify the colors.
  * Make sure to include all required CSS variables.
@@ -88,7 +88,7 @@ export const customThemes: Record<string, ThemeDefinition> = {
 };
 
 /**
- * 🔧 Theme Utilities
+  * Theme Utilities
  */
 
 // Merge custom themes with available themes

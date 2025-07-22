@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { fetchAnswer } from "../../lib/answer";
 import { getCommonConfig } from "../../lib/chat-config";
+import { branding } from "../../lib/branding-config";
 
 interface Message {
   role: "user" | "assistant";
@@ -27,18 +28,16 @@ export function Chat() {
     setLoading(true);
     setError(null);
     try {
+      // Use the new API configuration system
       const data = await fetchAnswer({
-        namespace: commonConfig.api.namespace,
         query: input,
-        type: "text",
+        chatHistory: messages.map((m) => ({ role: m.role, content: m.content })),
+        // Fallback parameters for backward compatibility
+        namespace: commonConfig.api.namespace,
         top_k: commonConfig.api.topK,
         aiModel: commonConfig.api.model,
         temperature: commonConfig.api.temperature,
-        kiosk_mode: true,
         threshold: commonConfig.api.threshold,
-        chatHistory: messages.map((m) => ({ role: m.role, content: m.content })),
-        headerPrompt: "You are a helpful AI assistant name moorcheh.",
-        footerPrompt: "Provide a clear and concise answer.",
       });
       setMessages((msgs) => [
         ...msgs,

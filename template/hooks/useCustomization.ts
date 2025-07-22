@@ -12,6 +12,7 @@ import { themeConfig, type ThemeName } from '../customize/themes/theme-config';
 import { fontConfig } from '../customize/fonts/font-config';
 import { availableFonts, generateGoogleFontsUrl } from '../customize/fonts/available-fonts';
 import { customFonts, generateFontFaceCSS } from '../customize/fonts/custom-fonts';
+import { branding } from '@/lib/branding-config';
 
 export interface UseCustomizationReturn {
   // Theme management
@@ -55,6 +56,18 @@ export function useCustomization(): UseCustomizationReturn {
   // Apply theme to DOM
   const applyTheme = useCallback((themeName: ThemeName) => {
     try {
+      // Handle system theme first
+      if (themeName === 'system') {
+        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        const systemTheme = prefersDark ? 'dark' : 'light';
+        applyTheme(systemTheme);
+        setCurrentTheme('system'); // Keep track that we're in system mode
+        if (themeConfig.persistTheme) {
+          localStorage.setItem(branding.getThemeStorageKey(), 'system');
+        }
+        return;
+      }
+
       const theme = allThemes[themeName];
       if (!theme) {
         throw new Error(`Theme "${themeName}" not found`);
@@ -62,10 +75,15 @@ export function useCustomization(): UseCustomizationReturn {
 
       const root = document.documentElement;
       
+      // Add transition class for smooth theme changes
+      if (themeConfig.transitionDuration > 0) {
+        root.style.setProperty('--theme-transition-duration', `${themeConfig.transitionDuration}ms`);
+        root.classList.add('theme-transitioning');
+      }
+      
       // Remove existing theme classes
-      availableThemes.forEach(name => {
-        root.classList.remove(`theme-${name}`);
-      });
+      const existingThemeClasses = Array.from(root.classList).filter(cls => cls.startsWith('theme-'));
+      existingThemeClasses.forEach(cls => root.classList.remove(cls));
       
       // Add new theme class
       root.classList.add(`theme-${themeName}`);
@@ -75,24 +93,18 @@ export function useCustomization(): UseCustomizationReturn {
         root.style.setProperty(property, value);
       });
 
-      // Handle system theme
-      if (themeName === 'system') {
-        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-        const systemTheme = prefersDark ? 'dark' : 'light';
-        applyTheme(systemTheme);
-        return;
-      }
-
       setCurrentTheme(themeName);
       
       // Persist theme preference
       if (themeConfig.persistTheme) {
-        localStorage.setItem('moorcheh-chat-theme', themeName);
+        localStorage.setItem(branding.getThemeStorageKey(), themeName);
       }
+
+      console.log(`Theme applied: ${themeName}`);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to apply theme');
     }
-  }, [allThemes, availableThemes]);
+  }, [allThemes]);
 
   // Apply fonts to DOM
   const applyFonts = useCallback(() => {
@@ -217,7 +229,7 @@ export function useCustomization(): UseCustomizationReturn {
       heading: fontConfig.headingFont,
       mono: fontConfig.monoFont,
     });
-    localStorage.removeItem('moorcheh-chat-theme');
+          localStorage.removeItem(branding.getThemeStorageKey());
     setError(null);
   }, [setTheme]);
 
@@ -227,17 +239,29 @@ export function useCustomization(): UseCustomizationReturn {
       try {
         setIsLoading(true);
         
-        // Load saved theme
-        let savedTheme = themeConfig.defaultTheme;
+        // Prioritize theme config over saved theme
+        let themeToUse = themeConfig.defaultTheme;
+        
         if (themeConfig.persistTheme) {
-          const stored = localStorage.getItem('moorcheh-chat-theme');
-          if (stored && (stored === 'system' || allThemes[stored])) {
-            savedTheme = stored;
+          const stored = localStorage.getItem(branding.getThemeStorageKey());
+          if (stored) {
+            // If stored theme differs from config default, prefer config (user changed config)
+            if (stored !== themeConfig.defaultTheme) {
+              console.log(`Config theme changed from "${stored}" to "${themeConfig.defaultTheme}". Using config theme.`);
+              localStorage.setItem(branding.getThemeStorageKey(), themeConfig.defaultTheme);
+              themeToUse = themeConfig.defaultTheme;
+            } else {
+              // Stored theme matches config, use it
+              themeToUse = stored;
+            }
+          } else {
+            // No stored theme, save the config default
+            localStorage.setItem(branding.getThemeStorageKey(), themeConfig.defaultTheme);
           }
         }
 
         // Apply initial theme and fonts
-        applyTheme(savedTheme);
+        applyTheme(themeToUse);
         applyFonts();
 
         // Listen for system theme changes
@@ -260,7 +284,7 @@ export function useCustomization(): UseCustomizationReturn {
     };
 
     initialize();
-  }, [applyTheme, applyFonts, allThemes, currentTheme]);
+  }, [applyTheme, applyFonts, allThemes]);
 
   // Apply fonts when they change
   useEffect(() => {

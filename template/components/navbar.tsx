@@ -7,6 +7,7 @@ import { Button } from "./ui/button";
 import { cn } from "@/lib/utils";
 import { Menu } from "lucide-react";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import { branding } from "@/lib/branding-config";
 
 export function Navbar() {
   const [open, setOpen] = useState(false);
@@ -21,9 +22,9 @@ export function Navbar() {
         <div className="flex justify-between h-16 items-center w-full">
           <Link href="/" className="flex-shrink-0 flex items-center">
             <Image 
-              src="/moorcheh-logo.png" 
-              alt="Moorcheh" 
-              width={140}
+              src={branding.getAppLogo()} 
+              alt={branding.getCompanyName()} 
+              width={140} 
               height={40}
               className="h-10 w-auto"
               priority
@@ -55,7 +56,7 @@ export function Navbar() {
                     Home
                   </Link>
                   <Link 
-                    href="/demo" 
+                    href="/chat" 
                     className="text-lg font-medium transition-colors hover:underline"
                     style={{ color: "var(--foreground)" }}
                     onClick={handleLinkClick}
