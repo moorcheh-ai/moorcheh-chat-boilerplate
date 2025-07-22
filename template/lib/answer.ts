@@ -2,8 +2,7 @@ import {
   buildApiRequestBody, 
   getApiEndpoint, 
   getApiHeaders, 
-  validateApiConfig,
-  type ApiRequestBody 
+  validateApiConfig
 } from './api-config';
 
 export interface AnswerRequest {
@@ -18,7 +17,7 @@ export interface AnswerRequest {
   chatHistory?: { role: string; content: string }[];
   headerPrompt?: string;
   footerPrompt?: string;
-  [key: string]: any; // Allow additional custom fields
+  [key: string]: unknown; // Allow additional custom fields
 }
 
 export interface AnswerResponse {

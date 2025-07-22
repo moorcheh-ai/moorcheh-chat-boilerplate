@@ -2,7 +2,7 @@
 
 import { useRef, useEffect } from 'react';
 import { Message } from '@/hooks/useChat';
-import { CircleUser, Bot, Info } from 'lucide-react';
+import { CircleUser, Bot } from 'lucide-react';
 import { formatDistanceToNow } from 'date-fns';
 import { Button } from '@/components/ui/button';
 import ReactMarkdown from 'react-markdown';

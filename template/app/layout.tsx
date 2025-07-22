@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import { Navbar } from "../components/navbar";
 import { CustomizationProvider } from "../components/CustomizationProvider";
 import { getBrandingConfig } from "../lib/branding-config";
 import { getFontClasses } from "../lib/fonts";

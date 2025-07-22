@@ -6,7 +6,6 @@ import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { fetchAnswer } from "../../lib/answer";
 import { getCommonConfig } from "../../lib/chat-config";
-import { branding } from "../../lib/branding-config";
 
 interface Message {
   role: "user" | "assistant";

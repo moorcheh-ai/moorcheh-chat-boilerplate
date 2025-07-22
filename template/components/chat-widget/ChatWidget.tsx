@@ -8,7 +8,6 @@ import { Textarea } from '@/components/ui/textarea';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { fetchAnswer } from '../../lib/answer';
 import { getWidgetConfig, getCommonConfig } from '../../lib/chat-config';
-import { branding } from '../../lib/branding-config';
 import { cn } from '../../lib/utils';
 
 interface Message {

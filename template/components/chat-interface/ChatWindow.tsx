@@ -1,21 +1,17 @@
 'use client';
 
-import { useState } from 'react';
-import { Card, CardContent, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Trash2, Download, BookOpen, WifiOff, MessageSquare, Clock, PlusCircle, Trash, X } from 'lucide-react';
+import { BookOpen, WifiOff, MessageSquare, Clock, PlusCircle, Trash } from 'lucide-react';
 import MessageList from './MessageList';
 import MessageInput from './MessageInput';
 import useChat from '@/hooks/useChat';
 import { formatDistanceToNow } from 'date-fns';
 import { getInterfaceConfig, getCommonConfig } from "@/lib/chat-config";
-import { branding } from "@/lib/branding-config";
 
 export default function ChatWindow() {
   const { 
     messages, 
     sendMessage, 
-    clearMessages, 
     startNewChat, 
     deleteChat,
     switchChat,
@@ -28,19 +24,7 @@ export default function ChatWindow() {
   const interfaceConfig = getInterfaceConfig();
   const commonConfig = getCommonConfig();
 
-  const exportChat = () => {
-    const chatText = messages.map(m => 
-      `${m.sender.toUpperCase()} (${m.timestamp?.toLocaleString() || 'unknown'}): ${m.text}`
-    ).join('\n\n');
-    
-    const blob = new Blob([chatText], { type: 'text/plain' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = branding.getExportFilename();
-    a.click();
-    URL.revokeObjectURL(url);
-  };
+
 
   const handleDeleteChat = (chatId: string, e: React.MouseEvent) => {
     e.stopPropagation();

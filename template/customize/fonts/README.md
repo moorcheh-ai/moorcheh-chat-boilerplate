@@ -7,7 +7,6 @@ This folder contains all font-related customization options for your chat applic
 - `font-config.ts` - Main configuration - Edit this to change your active fonts
 - `available-fonts.ts` - 50+ curated fonts - Popular Google Fonts selection  
 - `custom-fonts.ts` - Your custom fonts - Add custom font configurations here
-- `google-fonts-browser.md` - Browse 1,400+ Google Fonts - Complete guide to finding and adding fonts
 - `README.md` - This guide
 
 ##  Two Font Loading Approaches

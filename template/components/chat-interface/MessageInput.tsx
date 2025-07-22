@@ -3,8 +3,7 @@
 import { useState, useRef, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
-import { Send, Paperclip } from 'lucide-react';
-import { getCommonConfig } from "@/lib/chat-config";
+import { Send } from 'lucide-react';
 
 interface MessageInputProps {
   onSend: (text: string) => void;
@@ -14,7 +13,6 @@ interface MessageInputProps {
 export default function MessageInput({ onSend, isLoading = false }: MessageInputProps) {
   const [text, setText] = useState<string>('');
   const inputRef = useRef<HTMLTextAreaElement>(null);
-  const commonConfig = getCommonConfig();
   
   // Focus input on component mount
   useEffect(() => {

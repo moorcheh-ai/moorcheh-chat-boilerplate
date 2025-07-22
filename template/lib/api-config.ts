@@ -21,7 +21,7 @@ export interface ApiRequestBody {
   }>;
   headerPrompt: string;
   footerPrompt: string;
-  [key: string]: any; // Allow additional custom fields
+  [key: string]: unknown; // Allow additional custom fields
 }
 
 /**

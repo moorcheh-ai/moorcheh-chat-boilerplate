@@ -7,9 +7,8 @@
  * It automatically applies themes and fonts from the customize folder.
  */
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { CustomizationInitializer } from './CustomizationInitializer';
-import { useCustomization } from '../hooks/useCustomization';
 import { themeConfig } from '../customize/themes/theme-config';
 import { branding } from '../lib/branding-config';
 
@@ -18,8 +17,6 @@ interface CustomizationProviderProps {
 }
 
 export function CustomizationProvider({ children }: CustomizationProviderProps) {
-  const [isInitialized, setIsInitialized] = useState(false);
-
   useEffect(() => {
     // Force apply the theme from config on mount
     const initializeTheme = () => {
@@ -52,11 +49,8 @@ export function CustomizationProvider({ children }: CustomizationProviderProps) 
         if (themeToUse !== 'system') {
           root.classList.add(`theme-${themeToUse}`);
         }
-        
-        setIsInitialized(true);
       } catch (error) {
         console.error('Failed to initialize theme:', error);
-        setIsInitialized(true);
       }
     };
 

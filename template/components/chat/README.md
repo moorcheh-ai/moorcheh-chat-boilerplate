@@ -37,8 +37,7 @@ chat/
 ├── chat-interface/       # Full chat interface components
 │   ├── ChatWindow.tsx    # Main interface component
 │   ├── MessageList.tsx   # Message display
-│   ├── MessageInput.tsx  # Input field
-│   └── FileUploader.tsx  # File upload (if enabled)
+│   └── MessageInput.tsx  # Input field
 └── chat-widget/          # Chat widget components
     ├── ChatWidget.tsx    # Main widget component
     └── index.tsx         # Widget exports
