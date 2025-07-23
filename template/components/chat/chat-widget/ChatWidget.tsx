@@ -9,6 +9,7 @@ import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { fetchAnswer } from '../../../lib/answer';
 import { getWidgetConfig, getCommonConfig } from '../../../lib/chat-config';
 import { cn } from '../../../lib/utils';
+import { useIsMobile } from '../../../hooks/use-mobile';
 
 interface Message {
   role: "user" | "assistant";
@@ -28,18 +29,21 @@ export default function ChatWidget() {
   
   const widgetConfig = getWidgetConfig();
   const commonConfig = getCommonConfig();
+  const isMobile = useIsMobile();
 
-  // Auto-scroll to bottom when messages change
+  // Scroll to bottom when messages change
   useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-  }, [messages]);
-
-  // Focus input when chat opens
-  useEffect(() => {
-    if (isOpen && !isMinimized) {
-      setTimeout(() => inputRef.current?.focus(), 100);
+    if (messagesEndRef.current) {
+      messagesEndRef.current.scrollIntoView({ behavior: 'smooth' });
     }
-  }, [isOpen, isMinimized]);
+  }, [messages, isLoading]);
+
+  // Auto-focus input when chat opens (desktop only)
+  useEffect(() => {
+    if (isOpen && !isMinimized && !isMobile && inputRef.current) {
+      inputRef.current.focus();
+    }
+  }, [isOpen, isMinimized, isMobile]);
 
   const handleSend = async () => {
     if (!input.trim() || isLoading) return;
@@ -83,9 +87,17 @@ export default function ChatWidget() {
   };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
-    if (e.key === 'Enter' && !e.shiftKey) {
-      e.preventDefault();
-      handleSend();
+    if (e.key === 'Enter') {
+      if (isMobile) {
+        // On mobile, Enter creates new line
+        return;
+      } else {
+        // On desktop, Enter sends (unless Shift+Enter)
+        if (!e.shiftKey) {
+          e.preventDefault();
+          handleSend();
+        }
+      }
     }
   };
 
@@ -102,13 +114,17 @@ export default function ChatWidget() {
     setIsMinimized(false);
   };
 
-  // Widget is now positioned by parent container, so we just need relative positioning
+  // Widget positioning classes
   const getPositionClasses = () => {
     return 'relative';
   };
 
-  // Size classes based on config
+  // Size classes based on config and mobile
   const getSizeClasses = () => {
+    if (isMobile) {
+      return 'w-12 h-12 sm:w-14 sm:h-14';
+    }
+    
     const { size } = widgetConfig;
     switch (size) {
       case 'small':
@@ -121,6 +137,11 @@ export default function ChatWidget() {
   };
 
   const getChatSizeClasses = () => {
+    if (isMobile) {
+      // On mobile, make chat fullscreen-like
+      return 'w-[95vw] h-[85vh] max-w-sm';
+    }
+    
     const { size } = widgetConfig;
     switch (size) {
       case 'small':
@@ -132,48 +153,60 @@ export default function ChatWidget() {
     }
   };
 
+  const getChatPositionClasses = () => {
+    if (isMobile) {
+      // Center on mobile
+      return 'fixed inset-4 z-50';
+    }
+    return 'absolute bottom-16 right-0';
+  };
+
   return (
     <div className={getPositionClasses()}>
-      {/* Chat Window - Positioned absolutely above the button */}
+      {/* Chat Window */}
       {isOpen && (
         <div 
           className={cn(
-            'absolute bottom-16 right-0 transition-all duration-300 ease-in-out',
+            'transition-all duration-300 ease-in-out',
+            getChatPositionClasses(),
             isMinimized ? 'scale-95 opacity-75' : 'scale-100 opacity-100',
-            getChatSizeClasses()
+            !isMobile && getChatSizeClasses()
           )}
+          style={isMobile ? {} : { width: 'auto', height: 'auto' }}
         >
-          <Card className="h-full flex flex-col shadow-2xl border border-border bg-card">
+          <Card className="h-full flex flex-col shadow-lg border-border">
             {/* Header */}
             <CardHeader className="flex flex-row items-center justify-between p-3 pb-2 border-b bg-primary text-primary-foreground rounded-t-lg">
-              <div className="flex items-center gap-2">
-                <div className="w-8 h-8 rounded-full bg-primary-foreground/20 flex items-center justify-center">
-                  <Bot size={16} className="text-primary-foreground" />
+              <div className="flex items-center gap-2 min-w-0 flex-1">
+                <div className="w-6 h-6 sm:w-8 sm:h-8 rounded-full bg-primary-foreground/20 flex items-center justify-center flex-shrink-0">
+                  <Bot size={isMobile ? 12 : 16} className="text-primary-foreground" />
                 </div>
-                <div>
-                  <CardTitle className="text-sm font-semibold">
+                <div className="min-w-0 flex-1">
+                  <CardTitle className="text-sm font-semibold truncate">
                     {commonConfig.branding.title}
                   </CardTitle>
-                  {commonConfig.branding.subtitle && (
-                    <p className="text-xs opacity-80">
+                  {commonConfig.branding.subtitle && !isMobile && (
+                    <p className="text-xs opacity-80 truncate">
                       {commonConfig.branding.subtitle}
                     </p>
                   )}
                 </div>
               </div>
               <div className="flex items-center gap-1">
+                {!isMobile && (
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    className="h-6 w-6 p-0 hover:bg-primary-foreground/20 text-primary-foreground"
+                    onClick={isMinimized ? maximizeChat : minimizeChat}
+                  >
+                    {isMinimized ? <Maximize2 size={12} /> : <Minimize2 size={12} />}
+                  </Button>
+                )}
                 <Button
                   variant="ghost"
                   size="sm"
-                  className="h-6 w-6 p-0 hover:bg-primary-foreground/20 text-primary-foreground"
-                  onClick={isMinimized ? maximizeChat : minimizeChat}
-                >
-                  {isMinimized ? <Maximize2 size={12} /> : <Minimize2 size={12} />}
-                </Button>
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  className="h-6 w-6 p-0 hover:bg-primary-foreground/20 text-primary-foreground"
+                  className="h-6 w-6 p-0 hover:bg-primary-foreground/20 text-primary-foreground touch-manipulation"
                   onClick={toggleChat}
                 >
                   <X size={12} />
@@ -186,9 +219,9 @@ export default function ChatWidget() {
               <>
                 <CardContent className="flex-1 overflow-y-auto p-3 space-y-3">
                   {messages.length === 0 && (
-                    <div className="text-center text-muted-foreground py-8">
-                      <Bot size={32} className="mx-auto mb-2 opacity-50" />
-                      <p className="text-sm">
+                    <div className="text-center text-muted-foreground py-4 sm:py-8">
+                      <Bot size={isMobile ? 24 : 32} className="mx-auto mb-2 opacity-50" />
+                      <p className="text-xs sm:text-sm">
                         {commonConfig.branding.subtitle || "Hi! How can I help you today?"}
                       </p>
                     </div>
@@ -202,7 +235,7 @@ export default function ChatWidget() {
                         message.role === 'user' ? 'justify-end' : 'justify-start'
                       )}
                     >
-                      {message.role === 'assistant' && (
+                      {message.role === 'assistant' && !isMobile && (
                         <Avatar className="h-6 w-6 mt-1">
                           <AvatarFallback className="text-xs bg-primary text-primary-foreground">
                             AI
@@ -212,27 +245,41 @@ export default function ChatWidget() {
                       
                       <div
                         className={cn(
-                          'max-w-[80%] px-3 py-2 rounded-lg text-sm',
+                          'max-w-[85%] px-2.5 sm:px-3 py-2 rounded-lg text-xs sm:text-sm break-words',
                           message.role === 'user'
                             ? 'bg-primary text-primary-foreground rounded-br-sm'
                             : 'bg-muted text-foreground rounded-bl-sm'
                         )}
                       >
-                        {message.content}
+                        {/* Mobile AI indicator */}
+                        {message.role === 'assistant' && isMobile && (
+                          <div className="flex items-center gap-1 mb-1 opacity-75">
+                            <Bot size={10} className="text-primary" />
+                            <span className="text-xs font-medium">AI</span>
+                          </div>
+                        )}
+                        
+                        <div className="leading-relaxed">{message.content}</div>
                         <div
                           className={cn(
-                            'text-xs mt-1 opacity-70',
+                            'text-xs mt-1 opacity-70 flex items-center justify-between',
                             message.role === 'user' ? 'text-primary-foreground' : 'text-muted-foreground'
                           )}
                         >
-                          {message.timestamp.toLocaleTimeString([], { 
-                            hour: '2-digit', 
-                            minute: '2-digit' 
-                          })}
+                          <span>
+                            {message.timestamp.toLocaleTimeString([], { 
+                              hour: '2-digit', 
+                              minute: '2-digit' 
+                            })}
+                          </span>
+                          {/* Mobile user indicator */}
+                          {message.role === 'user' && isMobile && (
+                            <span className="text-xs opacity-75">You</span>
+                          )}
                         </div>
                       </div>
                       
-                      {message.role === 'user' && (
+                      {message.role === 'user' && !isMobile && (
                         <Avatar className="h-6 w-6 mt-1">
                           <AvatarFallback className="text-xs bg-secondary text-secondary-foreground">
                             U
@@ -243,24 +290,32 @@ export default function ChatWidget() {
                   ))}
                   
                   {isLoading && (
-                    <div className="flex gap-2 items-start justify-start">
-                      <Avatar className="h-6 w-6 mt-1">
-                        <AvatarFallback className="text-xs bg-primary text-primary-foreground">
-                          AI
-                        </AvatarFallback>
-                      </Avatar>
-                      <div className="bg-muted text-foreground px-3 py-2 rounded-lg rounded-bl-sm">
-                        <div className="flex space-x-1">
-                          <div className="h-1.5 w-1.5 bg-primary rounded-full animate-bounce [animation-delay:-0.3s]"></div>
-                          <div className="h-1.5 w-1.5 bg-primary rounded-full animate-bounce [animation-delay:-0.15s]"></div>
-                          <div className="h-1.5 w-1.5 bg-primary rounded-full animate-bounce"></div>
+                    <div className="flex justify-start">
+                      {!isMobile && (
+                        <Avatar className="h-6 w-6 mt-1 mr-2">
+                          <AvatarFallback className="text-xs bg-primary text-primary-foreground">
+                            AI
+                          </AvatarFallback>
+                        </Avatar>
+                      )}
+                      <div className="max-w-[85%] px-2.5 sm:px-3 py-2 rounded-lg bg-muted rounded-bl-sm">
+                        {isMobile && (
+                          <div className="flex items-center gap-1 mb-1 opacity-75">
+                            <Bot size={10} className="text-primary" />
+                            <span className="text-xs font-medium">AI</span>
+                          </div>
+                        )}
+                        <div className="flex space-x-1 items-center h-4">
+                          <div className="h-1.5 w-1.5 bg-primary/60 rounded-full animate-bounce [animation-delay:-0.3s]"></div>
+                          <div className="h-1.5 w-1.5 bg-primary/60 rounded-full animate-bounce [animation-delay:-0.15s]"></div>
+                          <div className="h-1.5 w-1.5 bg-primary/60 rounded-full animate-bounce"></div>
                         </div>
                       </div>
                     </div>
                   )}
                   
                   {error && (
-                    <div className="text-center text-destructive text-xs bg-destructive/10 p-2 rounded">
+                    <div className="text-destructive text-xs text-center p-2 bg-destructive/10 rounded">
                       {error}
                     </div>
                   )}
@@ -268,7 +323,7 @@ export default function ChatWidget() {
                   <div ref={messagesEndRef} />
                 </CardContent>
 
-                {/* Input */}
+                {/* Input Area */}
                 <div className="p-3 border-t bg-card">
                   <div className="flex items-end gap-2">
                     <Textarea
@@ -276,29 +331,46 @@ export default function ChatWidget() {
                       value={input}
                       onChange={(e) => setInput(e.target.value)}
                       onKeyDown={handleKeyDown}
-                      placeholder="Type your message..."
+                      placeholder={isMobile ? "Type a message..." : "Type your message..."}
                       disabled={isLoading}
                       rows={1}
-                      className="flex-1 min-h-[36px] max-h-24 py-2 px-3 text-sm resize-none"
+                      className={cn(
+                        "flex-1 min-h-[32px] sm:min-h-[36px] max-h-20 sm:max-h-24 py-1.5 sm:py-2 px-2 sm:px-3 text-xs sm:text-sm resize-none touch-manipulation",
+                        isMobile && "text-base" // Prevent zoom on iOS
+                      )}
                       style={{
                         height: 'auto',
-                        overflow: input.split('\n').length > 1 || input.length > 30 ? 'auto' : 'hidden'
+                        overflow: input.split('\n').length > 1 || input.length > (isMobile ? 25 : 30) ? 'auto' : 'hidden'
                       }}
                       onInput={(e: React.FormEvent<HTMLTextAreaElement>) => {
                         const target = e.target as HTMLTextAreaElement;
                         target.style.height = 'auto';
-                        target.style.height = `${Math.min(target.scrollHeight, 96)}px`;
+                        target.style.height = `${Math.min(target.scrollHeight, isMobile ? 80 : 96)}px`;
                       }}
+                      autoComplete="off"
+                      autoCorrect="off"
+                      autoCapitalize="sentences"
                     />
                     <Button
                       onClick={handleSend}
                       disabled={isLoading || !input.trim()}
                       size="sm"
-                      className="px-3 flex-shrink-0 self-end"
+                      className={cn(
+                        "flex-shrink-0 self-end touch-manipulation",
+                        isMobile ? "px-3 h-[32px]" : "px-3"
+                      )}
                     >
-                      <Send size={14} />
+                      <Send size={isMobile ? 12 : 14} />
+                      {isMobile && <span className="ml-1 text-xs">Send</span>}
                     </Button>
                   </div>
+                  
+                  {/* Mobile helper text */}
+                  {isMobile && (
+                    <div className="text-xs text-muted-foreground mt-1 text-center">
+                      Tap Send to send your message
+                    </div>
+                  )}
                 </div>
               </>
             )}
@@ -310,18 +382,12 @@ export default function ChatWidget() {
       <Button
         onClick={toggleChat}
         className={cn(
-          'rounded-full shadow-lg hover:scale-105 transition-all duration-200',
-          'bg-primary hover:bg-primary/90 text-primary-foreground',
-          getSizeClasses(),
-          widgetConfig.animations && 'animate-pulse'
+          "rounded-full shadow-lg hover:shadow-xl transition-all duration-200 bg-primary hover:bg-primary/90 text-primary-foreground touch-manipulation",
+          getSizeClasses()
         )}
-        style={{ zIndex: widgetConfig.zIndex + 1 }}
+        size="icon"
       >
-        {isOpen ? (
-          <X size={widgetConfig.size === 'small' ? 16 : widgetConfig.size === 'large' ? 24 : 20} />
-        ) : (
-          <MessageCircle size={widgetConfig.size === 'small' ? 16 : widgetConfig.size === 'large' ? 24 : 20} />
-        )}
+        <MessageCircle size={isMobile ? 20 : 24} />
       </Button>
     </div>
   );

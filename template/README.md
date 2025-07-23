@@ -88,6 +88,14 @@ export const fontConfig = {
 };
 ```
 
+### Change Chat Mode
+```typescript
+// lib/chat-config.ts
+export const chatConfig = {
+  type: 'interface', // 'interface' or 'widget'
+};
+```
+
 ### Change Branding
 ```bash
 # .env.local
