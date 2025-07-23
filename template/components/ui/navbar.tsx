@@ -3,7 +3,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { useState } from "react";
-import { Button } from "./ui/button";
+import { Button } from "../ui/button";
 import { Menu } from "lucide-react";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { branding } from "@/lib/branding-config";
@@ -32,7 +32,6 @@ export function Navbar() {
           {/* Desktop Navigation */}
           <div className="hidden md:flex md:items-center md:space-x-4">
             <Link href="/" className="text-base font-medium hover:underline" style={{ color: "var(--foreground)" }}>Home</Link>
-            <Link href="/demo" className="text-base font-medium hover:underline" style={{ color: "var(--foreground)" }}>Chat</Link>
             <Link href="/demo" className="text-base font-medium hover:underline" style={{ color: "var(--foreground)" }}>Demo</Link>
           </div>
           {/* Mobile Navigation Button */}
@@ -54,14 +53,7 @@ export function Navbar() {
                   >
                     Home
                   </Link>
-                  <Link 
-                    href="/chat" 
-                    className="text-lg font-medium transition-colors hover:underline"
-                    style={{ color: "var(--foreground)" }}
-                    onClick={handleLinkClick}
-                  >
-                    Chat
-                  </Link>
+
                   <Link 
                     href="/demo" 
                     className="text-lg font-medium transition-colors hover:underline"

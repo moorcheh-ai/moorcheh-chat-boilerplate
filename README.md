@@ -55,15 +55,37 @@ npm run dev
 
 ## Configuration
 
-After creating your project, you'll need to:
+After creating your project, you'll need to configure the Moorcheh AI integration:
 
-1. Set up your Moorcheh API key in `.env.local`:
+### 1. Get Your Moorcheh API Key
+
+1. Visit [Moorcheh Console](https://console.moorcheh.ai/)
+2. Sign up or log in to your account
+3. Create a new Namespace and upload documents or select an existing one
+4. Copy your API key from the [Moorcheh API](https://console.moorcheh.ai/api-keys)
+
+### 2. Configure API Settings
+
+1. **Set your API key** in `.env.local`:
 ```bash
 NEXT_PUBLIC_MOORCHEH_API_KEY=your_api_key_here
 ```
 
-2. Customize the chat components in `components/chat/`
-3. Modify the API integration in `client/answer.ts`
+2. **Configure your API request** in `config/api-config.json`:
+   - Visit [Moorcheh Console Playground](https://console.moorcheh.ai/playground)
+   - Configure your namespace, model, and other settings
+   - Copy the complete JSON configuration
+   - Paste it into `config/api-config.json`
+
+The boilerplate will automatically handle the `query` and `chatHistory` fields while using your namespace and model configuration.
+
+### 3. Additional Customization (Optional)
+
+- **Branding**: Edit `.env.local` with your app name and logo
+- **Themes**: Customize in `customize/themes/` directory  
+- **Fonts**: Customize in `customize/fonts/` directory
+
+See the documentation files in your generated project for detailed customization guides.
 
 ## Project Structure
 
@@ -73,6 +95,8 @@ your-project/
 ├── components/            # React components
 │   ├── chat/             # Chat-specific components
 │   └── ui/               # Reusable UI components
+├── config/               # API configuration
+├── customize/            # Theme and font customization
 ├── hooks/                # Custom React hooks
 ├── lib/                  # Utility functions
 └── public/               # Static assets
@@ -84,4 +108,4 @@ Contributions are welcome! Please feel free to submit a Pull Request.
 
 ## License
 
-ISC 
+MIT

@@ -1,5 +1,5 @@
 import { Chat } from "../../components/chat/Chat";
-import { CustomizationDemo } from "../../components/CustomizationDemo";
+import { CustomizationDemo } from "../../components/chat/CustomizationDemo";
 
 export default function DemoPage() {
   return (

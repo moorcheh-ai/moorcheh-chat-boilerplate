@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { getChatType, validateChatConfig } from '../lib/chat-config';
+import { getChatType, validateChatConfig } from '../../lib/chat-config';
 import { ChatWidget } from './chat-widget';
 import ChatWindow from './chat-interface/ChatWindow';
 

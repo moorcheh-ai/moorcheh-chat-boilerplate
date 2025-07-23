@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import { CustomizationProvider } from "../components/CustomizationProvider";
+import { CustomizationInitializer } from "../components/chat/CustomizationInitializer";
 import { getBrandingConfig } from "../lib/branding-config";
 import { getFontClasses } from "../lib/fonts";
 
@@ -19,13 +19,12 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={`${getFontClasses()} antialiased`}>
-        <CustomizationProvider>
-          <div className="min-h-screen bg-background text-foreground transition-colors duration-200">
-            <main className="relative">
-              {children}
-            </main>
-          </div>
-        </CustomizationProvider>
+        <CustomizationInitializer />
+        <div className="min-h-screen bg-background text-foreground transition-colors duration-200">
+          <main className="relative">
+            {children}
+          </main>
+        </div>
       </body>
     </html>
   );

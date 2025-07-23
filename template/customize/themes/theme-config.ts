@@ -39,7 +39,7 @@ export interface ThemeConfig {
  */
 export const themeConfig: ThemeConfig = {
   // Default theme when app loads - CHANGE THIS TO SWITCH YOUR APP'S THEME
-  defaultTheme: 'blue', // Options: 'light', 'dark', 'blue', 'green', 'system', or custom theme name
+  defaultTheme: 'dark', // Options: 'light', 'dark', 'blue', 'green', 'system', or custom theme name
   
   // System theme detection
   enableSystemTheme: true, // Auto-detect user's system preference (light/dark)

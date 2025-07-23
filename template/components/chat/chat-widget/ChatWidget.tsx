@@ -6,9 +6,9 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
-import { fetchAnswer } from '../../lib/answer';
-import { getWidgetConfig, getCommonConfig } from '../../lib/chat-config';
-import { cn } from '../../lib/utils';
+import { fetchAnswer } from '../../../lib/answer';
+import { getWidgetConfig, getCommonConfig } from '../../../lib/chat-config';
+import { cn } from '../../../lib/utils';
 
 interface Message {
   role: "user" | "assistant";

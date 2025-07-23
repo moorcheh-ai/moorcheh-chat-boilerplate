@@ -43,8 +43,8 @@ export interface FontConfig {
  */
 export const fontConfig: FontConfig = {
   // Primary fonts
-  primaryFont: 'Montserrat', // Main UI font - Options: 'Inter', 'Roboto', 'Open Sans', 'Lato', etc.
-  headingFont: 'Roboto', // Headings font - Can be same as primary or different
+  primaryFont: 'Saira', // Main UI font - Options: 'Inter', 'Roboto', 'Open Sans', 'Lato', etc.
+  headingFont: 'Inter', // Headings font - Can be same as primary or different
   monoFont: 'Fira Code', // Code font - Options: 'JetBrains Mono', 'Fira Code', 'Source Code Pro'
   
   // Google Fonts integration

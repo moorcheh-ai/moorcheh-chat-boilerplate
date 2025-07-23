@@ -8,13 +8,13 @@
  */
 
 import { useEffect } from 'react';
-import { themes } from '../customize/themes/available-themes';
-import { customThemes } from '../customize/themes/custom-themes';
-import { themeConfig } from '../customize/themes/theme-config';
-import { fontConfig } from '../customize/fonts/font-config';
-import { availableFonts, generateGoogleFontsUrl } from '../customize/fonts/available-fonts';
-import { branding } from '../lib/branding-config';
-import { customFonts, generateFontFaceCSS } from '../customize/fonts/custom-fonts';
+import { themes } from '../../customize/themes/available-themes';
+import { customThemes } from '../../customize/themes/custom-themes';
+import { themeConfig } from '../../customize/themes/theme-config';
+import { fontConfig } from '../../customize/fonts/font-config';
+import { availableFonts, generateGoogleFontsUrl } from '../../customize/fonts/available-fonts';
+import { branding } from '../../lib/branding-config';
+import { customFonts, generateFontFaceCSS } from '../../customize/fonts/custom-fonts';
 
 export function CustomizationInitializer() {
   useEffect(() => {

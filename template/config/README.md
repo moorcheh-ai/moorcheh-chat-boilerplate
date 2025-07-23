@@ -1,10 +1,26 @@
-# 🔧 API Configuration
+# 🔧 API Configuration Guide
 
-## How to Configure Your API
+## Quick Start
 
-Simply paste your complete API request body into `api-config.json`. That's it!
+1. Create a new file named `api-config.json` in the `config` directory
+2. Visit [Moorcheh Console](https://console.moorcheh.ai/playground) to generate your configuration
+3. Copy the JSON configuration and paste it into `api-config.json`
+4. Restart your development server with `npm run dev`
 
-### Example:
+## Detailed Configuration Steps
+
+### Step 1: Get Your API Configuration
+
+1. Log in to [Moorcheh Console](https://console.moorcheh.ai)
+2. Navigate to the Documentation section at `console.moorcheh.ai/docs`
+3. Use the Playground at `console.moorcheh.ai/playground` to:
+   - Test different settings
+   - Generate your configuration
+   - Verify the behavior
+
+### Step 2: Create Configuration File
+
+Create `api-config.json` in the `config` directory with your settings:
 
 ```json
 {
@@ -21,17 +37,34 @@ Simply paste your complete API request body into `api-config.json`. That's it!
 }
 ```
 
-### What happens automatically:
+### Configuration Fields Explained
 
-- `query` gets filled with the user's message
-- `chatHistory` gets filled with the conversation history
-- Everything else stays exactly as you configured it
+| Field | Description | Auto-filled? |
+|-------|-------------|--------------|
+| `namespace` | Your unique project namespace | No |
+| `query` | The user's current message | Yes ✓ |
+| `top_k` | Number of top results to return (1-10) | No |
+| `type` | Response type (e.g., "text", "json") | No |
+| `aiModel` | AI model to use for responses | No |
+| `temperature` | Response creativity (0.0-1.0) | No |
+| `kiosk_mode` | Enable/disable kiosk mode | No |
+| `chatHistory` | Conversation history array | Yes ✓ |
+| `headerPrompt` | System instructions at start | No |
+| `footerPrompt` | Instructions at end of prompt | No |
 
-### To customize:
+### Important Notes
 
-1. Get your API request body from your provider
-2. Paste it into `config/api-config.json`
-3. Restart your dev server: `npm run dev`
-4. Done!
+- Only `query` and `chatHistory` are automatically managed by the system
+- All other fields remain exactly as you configure them
+- Changes to `api-config.json` require a server restart
+- Keep your configuration secure and never commit it to version control
 
-The system will use your exact configuration and only replace the dynamic fields (`query` and `chatHistory`) during chat interactions. 
+## Troubleshooting
+
+If you encounter issues:
+1. Verify your configuration matches the example format
+2. Ensure all required fields are present
+3. Check that the values match your Moorcheh Console settings
+4. Try regenerating the configuration in the Playground
+
+Need help? Visit our [support documentation](https://console.moorcheh.ai/docs) for more information. 

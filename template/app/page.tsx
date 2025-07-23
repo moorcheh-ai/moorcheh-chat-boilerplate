@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import DynamicChat from "../components/DynamicChat";
+import DynamicChat from "../components/chat/DynamicChat";
 import { getChatType, getWidgetConfig } from "../lib/chat-config";
 
 export default function Home() {

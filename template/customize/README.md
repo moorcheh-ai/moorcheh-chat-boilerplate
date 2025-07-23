@@ -1,55 +1,121 @@
 # Customization Guide
 
-Welcome to the customization system for your Moorcheh Chat Boilerplate! This folder contains everything you need to customize the look and feel of your chat application.
+This folder contains font and theme customization for your chat application.
 
-## Folder Structure
 
+## Quick Setup
+
+### Change Fonts
+
+Edit `fonts/font-config.ts`:
+
+```typescript
+export const fontConfig = {
+  primaryFont: 'Inter',     // Main UI font
+  headingFont: 'Roboto',    // Headings font
+  monoFont: 'Fira Code',    // Code font
+  enableGoogleFonts: true,
+};
 ```
-customize/
-├── fonts/          # Font customization
-├── themes/         # Theme customization
-└── README.md       # This file
+
+### Change Theme
+
+Edit `themes/theme-config.ts`:
+
+```typescript
+export const themeConfig = {
+  defaultTheme: 'light',    // 'light', 'dark', 'blue', 'green'
+  enableSystemTheme: true,  // Auto-detect system preference
+  enableThemeToggle: true,  // Show theme switcher
+};
 ```
 
-## What You Can Customize
+## Adding New Fonts
 
-### **Themes**
-- Color schemes (light, dark, blue, green, and custom themes)
-- Component styling variables
-- Chart colors
-- Sidebar appearance
+### Method 1: Next.js Optimized (Recommended)
 
-### **Fonts**
-- Typography from Google Fonts
-- Font weights and sizes
-- Custom font configurations
+1. Add import in `lib/fonts.ts`:
+```typescript
+import { Your_Font } from "next/font/google";
 
-## How It Works
+export const yourFont = Your_Font({
+  subsets: ['latin'],
+  display: 'swap',
+  variable: '--font-your-font',
+});
+```
 
-1. **Make Changes**: Edit files in the `fonts/` or `themes/` folders
-2. **Automatic Updates**: Changes are automatically reflected throughout your app
-3. **Hot Reload**: See changes instantly during development
+2. Add to font map:
+```typescript
+export const nextFontMap = {
+  'Your Font': yourFont,
+} as const;
+```
 
-## Getting Started
+### Method 2: Dynamic Loading
 
-1. **For Themes**: Check out `themes/README.md` and `themes/available-themes.ts`
-2. **For Fonts**: Check out `fonts/README.md` and `fonts/available-fonts.ts`
+Add to `fonts/available-fonts.ts`:
+```typescript
+export const availableFonts = {
+  'Your Font': {
+    name: 'Your Font',
+    googleFontsName: 'Your+Font',
+    weights: [400, 700],
+    category: 'sans-serif',
+    fallback: 'system-ui, sans-serif',
+  },
+};
+```
 
-## Configuration Files
+## Adding New Themes
 
-- `themes/theme-config.ts` - Main theme configuration
-- `fonts/font-config.ts` - Main font configuration
-- `themes/available-themes.ts` - All available themes
-- `fonts/available-fonts.ts` - All available fonts
+Add to `themes/custom-themes.ts`:
 
-## Tips
+```typescript
+export const customThemes = {
+  yourtheme: {
+    '--background': 'oklch(0.98 0.02 240)',
+    '--foreground': 'oklch(0.2 0.1 240)',
+    '--primary': 'oklch(0.55 0.15 240)',
+    '--primary-foreground': 'oklch(0.98 0.02 240)',
+    '--secondary': 'oklch(0.95 0.05 240)',
+    '--secondary-foreground': 'oklch(0.3 0.08 240)',
+    '--muted': 'oklch(0.9 0.03 240)',
+    '--muted-foreground': 'oklch(0.5 0.05 240)',
+    '--accent': 'oklch(0.9 0.03 240)',
+    '--accent-foreground': 'oklch(0.3 0.08 240)',
+    '--destructive': 'oklch(0.6 0.2 25)',
+    '--destructive-foreground': 'oklch(0.98 0.02 240)',
+    '--border': 'oklch(0.9 0.03 240)',
+    '--input': 'oklch(0.9 0.03 240)',
+    '--ring': 'oklch(0.55 0.15 240)',
+    '--radius': '0.5rem',
+    '--chart-1': 'oklch(0.55 0.15 240)',
+    '--chart-2': 'oklch(0.6 0.18 120)',
+    '--chart-3': 'oklch(0.65 0.2 60)',
+    '--chart-4': 'oklch(0.7 0.15 300)',
+    '--chart-5': 'oklch(0.75 0.12 180)',
+  },
+};
+```
+**Test your changes:** Visit `/demo` to see how your themes and fonts look in action.
 
-- Always restart your development server after making major changes
-- Use the available themes and fonts as templates for creating custom ones
-- Check the README files in each subfolder for detailed instructions
+## Available Options
 
-## Need Help?
+### Fonts
+- 30+ Next.js optimized fonts (better performance)
+- 50+ dynamic Google Fonts
+- Categories: sans-serif, serif, monospace, display, handwriting
 
-- Check the individual README files in `fonts/` and `themes/` folders
-- Look at the example configurations
-- Refer to the main project documentation
+### Themes
+- Built-in: light, dark, blue, green
+- Use OKLCH color format for consistent colors
+- All CSS variables must be defined for proper theme support
+
+## Important Notes
+
+- Restart development server after major changes
+- Next.js optimized fonts provide better performance
+- Use OKLCH format: `oklch(lightness chroma hue)`
+- Test themes across all UI components
+- Keep font selections minimal for better performance

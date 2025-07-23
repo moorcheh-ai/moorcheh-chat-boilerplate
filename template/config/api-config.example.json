@@ -1,59 +1,19 @@
 {
-  "_comment": "This is an example API configuration file. Copy this to api-config.json and customize for your needs.",
-  
-  "apiEndpoint": "https://your-api-endpoint.com/v1/answer",
-  
-  "defaultRequestBody": {
-    "namespace": "your-knowledge-base",
-    "top_k": 5,
-    "type": "text",
-    "aiModel": "your-preferred-model",
-    "temperature": 0.7,
-    "kiosk_mode": false,
-    "headerPrompt": "You are a helpful AI assistant for [YOUR COMPANY]. Answer questions based on the provided context and be helpful, accurate, and professional.",
-    "footerPrompt": "Always base your answers on the provided context. If the context doesn't contain enough information to answer the question, politely say so and offer to help in other ways.",
+  "namespace": "your-namespace",
+  "query": "",
+  "top_k": 5,
+  "type": "text",
+  "aiModel": "anthropic.claude-3-7-sonnet-20250219-v1:0",
+  "temperature": 0.7,
+  "kiosk_mode": true,
+  "threshold": 0.5,
+  "chatHistory": [
     
-    "_examples": {
-      "customer_support": {
-        "namespace": "customer-support-kb",
-        "headerPrompt": "You are a customer support assistant for TechCorp. Help customers with their questions about our products and services.",
-        "temperature": 0.3
-      },
-      "technical_docs": {
-        "namespace": "technical-documentation",
-        "headerPrompt": "You are a technical documentation assistant. Provide accurate, detailed technical information with code examples when relevant.",
-        "temperature": 0.1,
-        "top_k": 8
-      },
-      "sales_assistant": {
-        "namespace": "product-catalog",
-        "headerPrompt": "You are a sales assistant. Help customers find the right products and answer questions about features, pricing, and availability.",
-        "temperature": 0.5
-      }
+    {
+      "role": "assistant",
+      "content": "Hello! I'm Moorcheh AI, ready to assist you. How can I help you today?"
     }
-  },
-  
-  "headers": {
-    "Content-Type": "application/json",
-    "_comment": "Add any custom headers your API requires",
-    "_examples": {
-      "custom_auth": "X-API-Version: 2.0",
-      "tracking": "X-Source: web-app"
-    }
-  },
-  
-  "dynamicFields": {
-    "_comment": "These fields are automatically populated by the system",
-    "query": "user_input",
-    "chatHistory": "chat_history"
-  },
-  
-  "environmentOverrides": {
-    "_comment": "These allow environment variables to override JSON values",
-    "namespace": "NEXT_PUBLIC_API_NAMESPACE",
-    "aiModel": "NEXT_PUBLIC_API_MODEL", 
-    "temperature": "NEXT_PUBLIC_API_TEMPERATURE",
-    "top_k": "NEXT_PUBLIC_API_TOP_K",
-    "kiosk_mode": "NEXT_PUBLIC_API_KIOSK_MODE"
-  }
-} 
+  ],
+  "headerPrompt": "You are a helpful AI assistant. Based on the provided context and chat history, please answer the user's query. If the context is not sufficient, say you don't have enough information.",
+  "footerPrompt": "Base your answers on the context provided in the following context block and on our chat history. When using context chunks, prioritize information from chunks with higher relevance labels. Pay special attention to content labeled as 'Close Match' or 'Very High Relevance' as these are most likely to contain the most pertinent information for answering the query.\nEach piece of context includes:9--\n  - A Score (0-1) where 1 means highly relevant and 0 means less relevant\n  - A Label indicating the level of relevance ('Close Match', 'Very High Relevance', 'High Relevance', 'Good Relevance', 'Low Relevance', 'Very Low Relevance', 'Irrelevant')\n  - The text of the context chunk\n  Give more weight to information from contexts with higher relevance scores when formulating your answer.\n  If contexts have conflicting information, prefer information from the more relevant (higher-scoring) contexts.;\n  When analyzing the provided context, consider both the relevance scores and their corresponding labels:\n  - Close Match (score >= 0.8): Indicates near-perfect relevance to the query\n  - Very High Relevance (0.4 <= score < 0.8): Strongly related content\n  - High Relevance (0.2 <= score < 0.4): Significantly related content\n  - Good Relevance (0.1 <= score < 0.2): Moderately related content\n  - Low Relevance (0.05 <= score < 0.1): Minimally related content\n  - Very Low Relevance (0.01 <= score < 0.05): Barely related content\n  - Irrelevant (score < 0.01): No meaningful relation to the query\n  If all the context provided are labeled as Irrelevant then you should answer:\n  \"Unfortunately most of the retrieved context are not relevant to your query\""
+}

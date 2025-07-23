@@ -1,73 +1,110 @@
 # Moorcheh Chat Boilerplate
 
-Welcome to your new Moorcheh Chat Boilerplate project! This is a [Next.js](https://nextjs.org) project designed to get you building AI-powered chat applications quickly.
+A Next.js boilerplate for building AI-powered chat applications with customizable themes, fonts, and branding.
 
-## Getting Started
+## Quick Start
 
-First, install the dependencies:
-
+1. **Install dependencies:**
 ```bash
 npm install
 ```
 
-Then, run the development server:
+2. **Get your API key:**
+   - Visit [Moorcheh Console API Keys](https://console.moorcheh.ai/api-keys)
+   - Copy your API key
 
+3. **Set up environment variables:**
+   - Create `.env.local` in your project root
+   - Add your API key:
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+NEXT_PUBLIC_MOORCHEH_API_KEY=your_api_key_here
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+4. **Configure API request body:**
+   - Visit [Moorcheh Console Playground](https://console.moorcheh.ai/playground)
+   - Configure your namespace, model, and settings
+   - Copy the complete JSON configuration
+   - Create `config/api-config.json` and paste the configuration
+   - See `config/README.md` for detailed instructions
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+5. **Start development server:**
+```bash
+npm run dev
+```
 
-## What's Included
+Open [http://localhost:3000](http://localhost:3000) to see your chat application.
 
-- **Next.js 15** with React 19
-- **Tailwind CSS** for styling
-- **Radix UI** components
-- **Chat components** pre-built and ready to use
-- **Moorcheh AI integration** setup
-- **TypeScript** configuration
-- **ESLint** configuration
+**Test your customizations:** Visit [http://localhost:3000/demo](http://localhost:3000/demo) to test themes and fonts.
 
-## Configuration
+**Build your app:** Use `components/ui` for additional UI components throughout your application.
 
-Before you begin, you'll need to:
+## Features
 
-1.  **Set up your API configuration**: Copy the contents of `config/api-config.example.json` to a new file named `config/api-config.json`. Then, paste your complete API request body into this new file. The boilerplate will automatically handle the `query` and `chatHistory` fields.
+- **Next.js 15** with React 19 and TypeScript
+- **Pre-built chat components** ready to use
+- **Moorcheh AI integration** with easy configuration
+- **Customizable themes** (light, dark, blue, green, custom)
+- **30+ fonts** with Next.js optimization
+- **Tailwind CSS** and Radix UI components
+- **Complete branding system** via environment variables
 
-2.  **Customize your chat**: Explore the `customize` directory to change themes and fonts. See the `README.md` files in those directories for more details.
+## Configuration Guides
+
+- **API Setup**: `config/README.md` - Configure your AI API
+- **Branding**: `BRANDING_GUIDE.md` - Customize app name, logo, colors
+- **Themes & Fonts**: `customize/README.md` - Change appearance
 
 ## Project Structure
 
 ```
 your-project/
-├── app/                    # Next.js app directory
+├── app/                    # Next.js pages
 ├── components/             # React components
-│   ├── chat/             # Chat-specific components
-│   └── ui/               # Reusable UI components
+│   ├── chat/              # Chat components
+│   └── ui/                # UI components
 ├── config/                 # API configuration
-├── customize/              # Theme and font customization
-├── hooks/                  # Custom React hooks
-├── lib/                    # Utility functions and core logic
-└── public/                 # Static assets
+├── customize/              # Themes and fonts
+├── hooks/                  # React hooks
+├── lib/                    # Utilities
+└── public/                 # Static files
 ```
 
-## Learn More
+## Customization
 
-To learn more about Next.js, take a look at the following resources:
+### Change Theme
+```typescript
+// customize/themes/theme-config.ts
+export const themeConfig = {
+  defaultTheme: 'dark', // 'light', 'dark', 'blue', 'green'
+};
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### Change Fonts  
+```typescript
+// customize/fonts/font-config.ts
+export const fontConfig = {
+  primaryFont: 'Inter',
+  monoFont: 'Fira Code',
+};
+```
 
-## Deploy on Vercel
+### Change Branding
+```bash
+# .env.local
+NEXT_PUBLIC_APP_NAME=My Chat App
+NEXT_PUBLIC_APP_TITLE=My Chat
+NEXT_PUBLIC_APP_LOGO=/logo.png
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Deployment
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Deploy to Vercel with one click:
+
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new)
+
+Or follow the [Next.js deployment guide](https://nextjs.org/docs/app/building-your-application/deploying).
+
+## Support
+
+- [Moorcheh Console](https://console.moorcheh.ai) - API configuration
+- [Next.js Documentation](https://nextjs.org/docs) - Framework guide

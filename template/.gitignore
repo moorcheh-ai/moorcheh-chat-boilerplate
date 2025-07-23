@@ -39,3 +39,7 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# Moorcheh Boilerplate specific
+/config/api-config.json
+
