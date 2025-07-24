@@ -13,21 +13,26 @@ npm install
    - Visit [Moorcheh Console API Keys](https://console.moorcheh.ai/api-keys)
    - Copy your API key
 
-3. **Set up environment variables:**
+3. **Create text namespace and upload documents:**
+   - Visit [Moorcheh Console Namespaces](https://console.moorcheh.ai/namespaces)
+   - Create a new text namespace
+   - Upload your documents to the namespace
+
+4. **Set up environment variables:**
    - Create `.env.local` in your project root
    - Add your API key:
 ```bash
 NEXT_PUBLIC_MOORCHEH_API_KEY=your_api_key_here
 ```
 
-4. **Configure API request body:**
+5. **Configure API request body:**
    - Visit [Moorcheh Console Playground](https://console.moorcheh.ai/playground)
    - Configure your namespace, model, and settings
    - Export the complete JSON configuration
    - Create `config/api-config.json` and paste the configuration
    - See `config/README.md` for detailed instructions
 
-5. **Start development server:**
+6. **Start development server:**
 ```bash
 npm run dev
 ```
