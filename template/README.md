@@ -23,7 +23,7 @@ NEXT_PUBLIC_MOORCHEH_API_KEY=your_api_key_here
 4. **Configure API request body:**
    - Visit [Moorcheh Console Playground](https://console.moorcheh.ai/playground)
    - Configure your namespace, model, and settings
-   - Copy the complete JSON configuration
+   - Export the complete JSON configuration
    - Create `config/api-config.json` and paste the configuration
    - See `config/README.md` for detailed instructions
 

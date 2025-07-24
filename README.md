@@ -68,13 +68,13 @@ After creating your project, you'll need to configure the Moorcheh AI integratio
 
 1. **Set your API key** in `.env.local`:
 ```bash
-NEXT_PUBLIC_MOORCHEH_API_KEY=your_api_key_here
+NEXT_PUBLIC_MOORCHEH_API_KEY = 'your_api_key_here'
 ```
 
 2. **Configure your API request** in `config/api-config.json`:
    - Visit [Moorcheh Console Playground](https://console.moorcheh.ai/playground)
    - Configure your namespace, model, and other settings
-   - Copy the complete JSON configuration
+   - Export the complete JSON configuration
    - Paste it into `config/api-config.json`
 
 The boilerplate will automatically handle the `query` and `chatHistory` fields while using your namespace and model configuration.

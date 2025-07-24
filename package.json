@@ -1,6 +1,6 @@
 {
   "name": "moorcheh-chat-boilerplate",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A Next.js boilerplate for building chat applications with Moorcheh AI integration",
   "main": "bin/index.js",
   "scripts": {
@@ -16,7 +16,7 @@
     "typescript",
     "tailwind"
   ],
-  "author": "Your Name <your.email@example.com>",
+  "author": "Mooecheh-ai <majid.fekri@edgeaiinnovations.com>",
   "license": "MIT",
   "type": "commonjs",
   "bin": {

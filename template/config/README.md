@@ -4,7 +4,7 @@
 
 1. Create a new file named `api-config.json` in the `config` directory
 2. Visit [Moorcheh Console](https://console.moorcheh.ai/playground) to generate your configuration
-3. Copy the JSON configuration and paste it into `api-config.json`
+3. Export the JSON configuration and paste it into `api-config.json`
 4. Restart your development server with `npm run dev`
 
 ## Detailed Configuration Steps
