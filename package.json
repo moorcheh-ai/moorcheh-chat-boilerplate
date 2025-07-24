@@ -1,6 +1,6 @@
 {
   "name": "moorcheh-chat-boilerplate",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "A Next.js boilerplate for building chat applications with Moorcheh AI integration",
   "main": "bin/index.js",
   "scripts": {
