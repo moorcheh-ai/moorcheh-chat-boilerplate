@@ -38,11 +38,15 @@ export async function fetchAnswer(payload: AnswerRequest): Promise<AnswerRespons
     throw new Error(`API Configuration invalid: ${validation.errors.join(', ')}`);
   }
 
+  // Prepare overrides from payload (excluding query and chatHistory which are handled separately)
+  const { query, chatHistory, ...overrides } = payload;
+  
   // Build the complete request body using the configuration
+  // This will include all parameters from the payload and handle threshold logic
   const requestBody = buildApiRequestBody(
-    payload.query,
-    payload.chatHistory || [],
-    payload // Any overrides from the payload
+    query,
+    chatHistory || [],
+    overrides
   );
 
   // Get endpoint and headers from configuration
@@ -55,6 +59,7 @@ export async function fetchAnswer(payload: AnswerRequest): Promise<AnswerRespons
       headers,
       body: JSON.stringify(requestBody),
     });
+    //console.log(requestBody); // uncomment this to see the request body for debugging
 
     if (!res.ok) {
       const errorText = await res.text();
@@ -62,6 +67,7 @@ export async function fetchAnswer(payload: AnswerRequest): Promise<AnswerRespons
     }
 
     return res.json();
+   // console.log(res.json()); // uncomment this to see the response for debugging
   } catch (error) {
     console.error('API request failed:', error);
     throw error;

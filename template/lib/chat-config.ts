@@ -3,9 +3,11 @@
  * 
  * This file controls which type of chat implementation to use in your application.
  * Change the chatType to switch between different chat implementations.
+ * API settings are automatically loaded from config/api-config.json
  */
 
 import { getBrandingConfig } from './branding-config';
+import { getApiConfigForChat } from './api-config';
 
 export type ChatType = 'widget' | 'interface';
 
@@ -58,13 +60,17 @@ export interface ChatConfig {
     enableHistory: boolean;
     /** Maximum number of messages to store */
     maxMessages: number;
-    /** API configuration */
+    /** API configuration - automatically loaded from config/api-config.json */
     api: {
       namespace: string;
-      model: string;
-      temperature: number;
-      topK: number;
-      threshold: number;
+      model?: string;
+      temperature?: number;
+      topK?: number;
+      threshold?: number; // Optional - only present when kiosk_mode is true
+      kioskMode?: boolean;
+      type?: string;
+      headerPrompt?: string;
+      footerPrompt?: string;
     };
     /** Branding */
     branding: {
@@ -79,7 +85,8 @@ export interface ChatConfig {
  *  MAIN CHAT CONFIGURATION
  * 
  * Change these settings to customize your chat application
- * Branding is now automatically loaded from environment variables
+ * Branding is automatically loaded from environment variables
+ * API settings are automatically loaded from config/api-config.json
  */
 export const chatConfig: ChatConfig = {
   // Chat Type - Change this to switch between widget and interface
@@ -111,13 +118,8 @@ export const chatConfig: ChatConfig = {
     enableExport: true,
     enableHistory: true,
     maxMessages: 100,
-    api: {
-      namespace: 'Demo-doc',
-      model: 'anthropic.claude-3-7-sonnet-20250219-v1:0',
-      temperature: 0.7,
-      topK: 3,
-      threshold: 0.7,
-    },
+    // API configuration - Automatically loaded from config/api-config.json
+    api: getApiConfigForChat(),
     // Branding - Automatically loaded from environment variables
     // Set NEXT_PUBLIC_APP_NAME, NEXT_PUBLIC_APP_SUBTITLE, etc. in .env.local
     branding: {
@@ -160,6 +162,22 @@ export function getInterfaceConfig() {
 // Get common configuration
 export function getCommonConfig() {
   return chatConfig.common;
+}
+
+/**
+ * Dynamic API Configuration Helpers
+ */
+
+// Get fresh API configuration (re-reads from api-config.json)
+export function getFreshApiConfig() {
+  return getApiConfigForChat();
+}
+
+// Update API configuration dynamically (useful for runtime updates)
+export function updateApiConfig() {
+  const freshApiConfig = getApiConfigForChat();
+  chatConfig.common.api = freshApiConfig;
+  return freshApiConfig;
 }
 
 /**
@@ -229,6 +247,13 @@ export function validateChatConfig(): boolean {
         console.error('Invalid interface layout:', layout);
         return false;
       }
+    }
+    
+    // Validate API config
+    const apiConfig = chatConfig.common.api;
+    if (!apiConfig.namespace) {
+      console.error('API namespace is required');
+      return false;
     }
     
     return true;
