@@ -172,7 +172,7 @@ export default function ChatWidget() {
             isMinimized ? 'scale-95 opacity-75' : 'scale-100 opacity-100',
             !isMobile && getChatSizeClasses()
           )}
-          style={isMobile ? {} : { width: 'auto', height: 'auto' }}
+          style={isMobile ? {} : undefined}
         >
           <Card className="h-full flex flex-col shadow-lg border-border">
             {/* Header */}
@@ -386,8 +386,9 @@ export default function ChatWidget() {
           getSizeClasses()
         )}
         size="icon"
+        aria-label={isOpen ? 'Close chat' : 'Open chat'}
       >
-        <MessageCircle size={isMobile ? 20 : 24} />
+        {isOpen ? <X size={isMobile ? 20 : 24} /> : <MessageCircle size={isMobile ? 20 : 24} />}
       </Button>
     </div>
   );

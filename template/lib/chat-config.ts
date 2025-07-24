@@ -90,7 +90,7 @@ export interface ChatConfig {
  */
 export const chatConfig: ChatConfig = {
   // Chat Type - Change this to switch between widget and interface
-  chatType: 'interface', // Options: 'widget' | 'interface'
+  chatType: 'widget', // Options: 'widget' | 'interface'
   
   // Widget Configuration
   widget: {
