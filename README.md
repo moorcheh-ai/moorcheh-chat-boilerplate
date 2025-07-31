@@ -2,9 +2,9 @@
 
 <div align="center">
   <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/moorcheh-ai/moorcheh-boilerplate/main/template/public/moorcheh-logo-dark.svg">
-    <source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/moorcheh-ai/moorcheh-boilerplate/main/template/public/moorcheh-logo-light.svg">
-    <img width="250px" alt="Moorcheh Logo" src="https://raw.githubusercontent.com/moorcheh-ai/moorcheh-boilerplate/main/template/public/moorcheh-logo-light.svg">
+    <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/moorcheh-ai/moorcheh-boilerplate/implement_logo/template/public/moorcheh-logo-dark.svg">
+    <source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/moorcheh-ai/moorcheh-boilerplate/implement_logo/template/public/moorcheh-logo-light.svg">
+    <img width="250px" alt="Moorcheh Logo" src="https://raw.githubusercontent.com/moorcheh-ai/moorcheh-boilerplate/implement_logo/template/public/moorcheh-logo-light.svg">
   </picture>
   <br />
   <p><em>A Next.js boilerplate for building chat applications with Moorcheh AI integration.</em></p>
