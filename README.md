@@ -1,7 +1,18 @@
 # Moorcheh Chat Boilerplate
 
-A Next.js boilerplate for building chat applications with Moorcheh AI integration.
+<div align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/moorcheh-ai/moorcheh-boilerplate/main/template/public/moorcheh-logo-dark.svg">
+    <source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/moorcheh-ai/moorcheh-boilerplate/main/template/public/moorcheh-logo-light.svg">
+    <img width="250px" alt="Moorcheh Logo" src="https://raw.githubusercontent.com/moorcheh-ai/moorcheh-boilerplate/main/template/public/moorcheh-logo-light.svg">
+  </picture>
+  <br />
+  <p><em>A Next.js boilerplate for building chat applications with Moorcheh AI integration.</em></p>
+</div>
 
+[![npm version](https://img.shields.io/npm/v/moorcheh-chat-boilerplate?style=flat-square)](https://www.npmjs.com/package/moorcheh-chat-boilerplate)
+[![npm downloads](https://img.shields.io/npm/dt/moorcheh-chat-boilerplate?style=flat-square)](https://www.npmjs.com/package/moorcheh-chat-boilerplate)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=flat-square)](https://opensource.org/licenses/MIT)
 ## Installation
 
 ```bash
