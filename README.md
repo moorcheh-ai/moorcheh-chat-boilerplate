@@ -1,8 +1,8 @@
 <div align="left">
   <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/moorcheh-ai/moorcheh-boilerplate/implement_logo/template/public/moorcheh-logo-dark.svg">
-    <source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/moorcheh-ai/moorcheh-boilerplate/implement_logo/template/public/moorcheh-logo-light.svg">
-    <img width="250px" alt="Moorcheh Logo" src="https://raw.githubusercontent.com/moorcheh-ai/moorcheh-boilerplate/implement_logo/template/public/moorcheh-logo-light.svg">
+    <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/moorcheh-ai/moorcheh-boilerplate/main/template/public/moorcheh-logo-dark.svg">
+    <source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/moorcheh-ai/moorcheh-boilerplate/main/template/public/moorcheh-logo-light.svg">
+    <img width="250px" alt="Moorcheh Logo" src="https://raw.githubusercontent.com/moorcheh-ai/moorcheh-boilerplate/main/template/public/moorcheh-logo-light.svg">
   </picture>
   <br />
   <h1>Moorcheh Chat Boilerplate</h1>
