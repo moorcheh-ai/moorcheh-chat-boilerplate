@@ -39,7 +39,7 @@ export interface ThemeConfig {
  */
 export const themeConfig: ThemeConfig = {
   // Default theme when app loads - CHANGE THIS TO SWITCH YOUR APP'S THEME
-  defaultTheme: 'dark', // Options: 'light', 'dark', 'blue', 'green', 'system', or custom theme name
+  defaultTheme: 'slate', // Options: 'light', 'dark', 'blue', 'green', 'system', or custom theme name
   
   // System theme detection
   enableSystemTheme: true, // Auto-detect user's system preference (light/dark)
@@ -56,10 +56,19 @@ export const themeConfig: ThemeConfig = {
     'dark', 
     'blue',
     'green',
-    'system'
-    // Add your custom themes here
-    // 'purple',
-    // 'sunset',
+    'purple',
+    'orange',
+    'red',
+    'pink',
+    'yellow',
+    'teal',
+    'indigo',
+    'rose',
+    'emerald',
+    'amber',
+    'system',
+    'coral',
+    'slate'
   ],
   
   // Theme display names (shown in UI)
@@ -68,10 +77,19 @@ export const themeConfig: ThemeConfig = {
     dark: 'Dark',
     blue: 'Ocean Blue',
     green: 'Nature Green',
+    purple: 'Purple Dream',
+    orange: 'Sunset Orange',
+    red: 'Ruby Red',
+    pink: 'Blossom Pink',
+    yellow: 'Golden Yellow',
+    teal: 'Aqua Teal',
+    indigo: 'Deep Indigo',
+    rose: 'Rose Garden',
+    emerald: 'Emerald Forest',
+    amber: 'Warm Amber',
     system: 'System',
-    // Add labels for custom themes
-    // purple: 'Purple Dream',
-    // sunset: 'Sunset Glow',
+    coral: 'Coral',
+    slate: 'Slate',
   },
   
   // Animation settings

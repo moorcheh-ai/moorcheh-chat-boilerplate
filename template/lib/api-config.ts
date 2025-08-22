@@ -50,8 +50,8 @@ export function buildApiRequestBody(
   const template = getApiRequestTemplate();
   
   // Merge template with overrides, excluding query and chatHistory which are handled separately
-  const { query: _, chatHistory: __, ...templateWithoutDynamic } = template;
-  const { query: ___, chatHistory: ____, ...overridesWithoutDynamic } = overrides;
+  const { query: _unusedQuery, chatHistory: _unusedChatHistory, ...templateWithoutDynamic } = template;
+  const { query: _unusedOverrideQuery, chatHistory: _unusedOverrideChatHistory, ...overridesWithoutDynamic } = overrides;
   
   // Build the base request body
   const requestBody: ApiRequestBody = {

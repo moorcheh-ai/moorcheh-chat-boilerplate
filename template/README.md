@@ -39,6 +39,8 @@ npm run dev
 
 Open [http://localhost:3000](http://localhost:3000) to see your chat application.
 
+**Explore setup options:** Visit [http://localhost:3000/landing](http://localhost:3000/landing) to configure themes, fonts, and branding.
+
 **Test your customizations:** Visit [http://localhost:3000/demo](http://localhost:3000/demo) to test themes and fonts.
 
 **Build your app:** Use `components/ui` for additional UI components throughout your application.
@@ -48,7 +50,7 @@ Open [http://localhost:3000](http://localhost:3000) to see your chat application
 - **Next.js 15** with React 19 and TypeScript
 - **Pre-built chat components** ready to use
 - **Moorcheh AI integration** with easy configuration
-- **Customizable themes** (light, dark, blue, green, custom)
+- **10+ Customizable themes** with Tailwind CSS
 - **30+ fonts** with Next.js optimization
 - **Tailwind CSS** and Radix UI components
 - **Complete branding system** via environment variables
