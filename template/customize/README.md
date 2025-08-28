@@ -5,6 +5,11 @@ This folder contains font and theme customization for your chat application.
 
 ## Quick Setup
 
+**Option 1: Interactive Setup (Recommended)**
+Visit [http://localhost:3000/landing](http://localhost:3000/landing) to use the interactive setup flow that guides you through theme and font selection with live previews.
+
+**Option 2: Manual Setup**
+
 ### Change Fonts
 
 Edit `fonts/font-config.ts`:

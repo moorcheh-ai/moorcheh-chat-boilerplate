@@ -4,6 +4,10 @@ Customize your chat application's branding using environment variables.
 
 ## Quick Setup
 
+**Option 1: Interactive Setup (Recommended)**
+Visit [http://localhost:3000/landing](http://localhost:3000/landing) to use the interactive setup flow that guides you through all branding options.
+
+**Option 2: Manual Setup**
 1. Create `.env.local` in your project root:
 ```bash
 # Required API key

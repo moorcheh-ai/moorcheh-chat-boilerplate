@@ -2,6 +2,10 @@
 
 ## Quick Start
 
+**Option 1: Interactive Setup (Recommended)**
+Visit [http://localhost:3000/landing](http://localhost:3000/landing) to use the interactive setup flow that guides you through API configuration step by step.
+
+**Option 2: Manual Setup**
 1. Create a new file named `api-config.json` in the `config` directory
 2. Visit [Moorcheh Console](https://console.moorcheh.ai/playground) to generate your configuration
 3. Export the JSON configuration and paste it into `api-config.json`

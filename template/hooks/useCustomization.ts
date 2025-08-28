@@ -239,20 +239,20 @@ export function useCustomization(): UseCustomizationReturn {
       try {
         setIsLoading(true);
         
-        // Prioritize theme config over saved theme
+        // Respect user's stored theme preference, fallback to config default
         let themeToUse = themeConfig.defaultTheme;
         
         if (themeConfig.persistTheme) {
           const stored = localStorage.getItem(branding.getThemeStorageKey());
           if (stored) {
-            // If stored theme differs from config default, prefer config (user changed config)
-            if (stored !== themeConfig.defaultTheme) {
-              console.log(`Config theme changed from "${stored}" to "${themeConfig.defaultTheme}". Using config theme.`);
+            // Use stored theme if it exists and is valid
+            if (availableThemes.includes(stored)) {
+              themeToUse = stored;
+            } else {
+              // Invalid stored theme, fallback to config default
+              console.log(`Invalid stored theme "${stored}", falling back to config default "${themeConfig.defaultTheme}"`);
               localStorage.setItem(branding.getThemeStorageKey(), themeConfig.defaultTheme);
               themeToUse = themeConfig.defaultTheme;
-            } else {
-              // Stored theme matches config, use it
-              themeToUse = stored;
             }
           } else {
             // No stored theme, save the config default

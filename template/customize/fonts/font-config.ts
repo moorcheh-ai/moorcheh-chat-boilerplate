@@ -43,7 +43,7 @@ export interface FontConfig {
  */
 export const fontConfig: FontConfig = {
   // Primary fonts
-  primaryFont: 'Saira', // Main UI font - Options: 'Inter', 'Roboto', 'Open Sans', 'Lato', etc.
+  primaryFont: 'Roboto', // Main UI font - Options: 'Inter', 'Roboto', 'Open Sans', 'Lato', etc.
   headingFont: 'Inter', // Headings font - Can be same as primary or different
   monoFont: 'Fira Code', // Code font - Options: 'JetBrains Mono', 'Fira Code', 'Source Code Pro'
   
