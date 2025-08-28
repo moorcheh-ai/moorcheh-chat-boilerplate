@@ -1,49 +1,57 @@
 /**
  * 🎨 Branding Configuration
- * 
- * This file manages all branding-related configuration using environment variables.
- * Users can customize their app by setting these variables in .env.local
+ *
+ * This file manages all branding-related configuration from appearance.json.
+ * Users can customize their app by editing the appearance.json file.
  */
+
+import appearanceConfig from '../config/appearance.json';
 
 export interface BrandingConfig {
   /** App name used throughout the application */
-  appName: string;
+  appName?: string;
   /** App title used in browser tab and metadata */
-  appTitle: string;
+  appTitle?: string;
   /** App subtitle/description used in chat interface */
-  appSubtitle: string;
+  appSubtitle?: string;
   /** App description used in metadata */
-  appDescription: string;
-  /** Logo path in public directory */
-  appLogo: string;
+  appDescription?: string;
   /** Company name */
-  companyName: string;
+  companyName?: string;
   /** Contact email */
-  contactEmail: string;
-  /** AI assistant name used in prompts */
-  aiAssistantName: string;
+  contactEmail?: string;
   /** Storage prefix for localStorage keys */
-  storagePrefix: string;
+  storagePrefix?: string;
   /** Export file prefix for downloaded files */
-  exportPrefix: string;
+  exportPrefix?: string;
+  /** Logo URL or base64 data URI */
+  logo?: string;
 }
 
 /**
- * Get branding configuration from environment variables
- * Falls back to default "Moorcheh" branding if not set
+ * Get branding configuration from appearance.json
+ * Falls back to default "Moorcheh" branding if not found
  */
 export function getBrandingConfig(): BrandingConfig {
+  const branding = appearanceConfig.branding;
+
+  // Handle logo - if it's a data URI, use it directly; otherwise treat as file path
+  let logo = branding?.logo;
+  if (logo && !logo.startsWith('data:') && !logo.startsWith('/')) {
+    // If it's not a data URI or absolute path, assume it's a relative path
+    logo = `/assets/${logo}`;
+  }
+
   return {
-    appName: process.env.NEXT_PUBLIC_APP_NAME || 'Moorcheh AI Assistant',
-    appTitle: process.env.NEXT_PUBLIC_APP_TITLE || 'Moorcheh Chat',
-    appSubtitle: process.env.NEXT_PUBLIC_APP_SUBTITLE || 'Your intelligent chat companion',
-    appDescription: process.env.NEXT_PUBLIC_APP_DESCRIPTION || 'AI-powered chat application with customizable themes and fonts',
-    appLogo: process.env.NEXT_PUBLIC_APP_LOGO || '/moorcheh-logo.png',
-    companyName: process.env.NEXT_PUBLIC_COMPANY_NAME || 'Moorcheh',
-    contactEmail: process.env.NEXT_PUBLIC_CONTACT_EMAIL || 'support@moorcheh.ai',
-    aiAssistantName: process.env.NEXT_PUBLIC_AI_ASSISTANT_NAME || 'Moorcheh',
-    storagePrefix: process.env.NEXT_PUBLIC_STORAGE_PREFIX || 'moorcheh-chat',
-    exportPrefix: process.env.NEXT_PUBLIC_EXPORT_PREFIX || 'Moorcheh-chat',
+    appName: branding?.appName || 'Moorcheh AI Assistant',
+    appTitle: branding?.appTitle || 'Moorcheh Chat',
+    appSubtitle: branding?.appSubtitle || 'Your intelligent chat companion',
+    appDescription: branding?.appDescription || 'AI-powered chat application with customizable themes and fonts',
+    companyName: branding?.companyName || 'Moorcheh',
+    contactEmail: branding?.contactEmail || 'support@moorcheh.ai',
+    storagePrefix: branding?.storagePrefix || 'moorcheh-chat',
+    exportPrefix: branding?.exportPrefix || 'Moorcheh-chat',
+    logo: logo || '/assets/logo.png', // Default to extracted logo file
   };
 }
 
@@ -51,30 +59,23 @@ export function getBrandingConfig(): BrandingConfig {
  * Helper functions to get specific branding values
  */
 export const branding = {
-  getAppName: () => getBrandingConfig().appName,
-  getAppTitle: () => getBrandingConfig().appTitle,
-  getAppSubtitle: () => getBrandingConfig().appSubtitle,
-  getAppDescription: () => getBrandingConfig().appDescription,
-  getAppLogo: () => getBrandingConfig().appLogo,
-  getCompanyName: () => getBrandingConfig().companyName,
-  getContactEmail: () => getBrandingConfig().contactEmail,
-  getAiAssistantName: () => getBrandingConfig().aiAssistantName,
-  getStoragePrefix: () => getBrandingConfig().storagePrefix,
-  getExportPrefix: () => getBrandingConfig().exportPrefix,
-  
+  getAppName: () => getBrandingConfig().appName || 'Moorcheh AI Assistant',
+  getAppTitle: () => getBrandingConfig().appTitle || 'Moorcheh Chat',
+  getAppSubtitle: () => getBrandingConfig().appSubtitle || 'Your intelligent chat companion',
+  getAppDescription: () => getBrandingConfig().appDescription || 'AI-powered chat application with customizable themes and fonts',
+  getCompanyName: () => getBrandingConfig().companyName || 'Moorcheh',
+  getContactEmail: () => getBrandingConfig().contactEmail || 'support@moorcheh.ai',
+  getStoragePrefix: () => getBrandingConfig().storagePrefix || 'moorcheh-chat',
+  getExportPrefix: () => getBrandingConfig().exportPrefix || 'Moorcheh-chat',
+  getLogo: () => getBrandingConfig().logo,
+
   // Storage key helpers
   getThemeStorageKey: () => `${getBrandingConfig().storagePrefix}-theme`,
   getChatDataStorageKey: () => `${getBrandingConfig().storagePrefix}-data`,
-  
+
   // Export filename helper
   getExportFilename: (date?: Date) => {
     const dateStr = (date || new Date()).toISOString().split('T')[0];
     return `${getBrandingConfig().exportPrefix}-${dateStr}.txt`;
-  },
-  
-  // AI prompt helper
-  getAiPrompt: (customPrompt?: string) => {
-    if (customPrompt) return customPrompt;
-    return `You are a helpful AI assistant named ${getBrandingConfig().aiAssistantName}.`;
   }
 }; 

@@ -1,6 +1,83 @@
-# 🔧 API Configuration Guide
+# 🔧 Configuration Guide
 
-## Quick Start
+## 📋 Overview
+
+This project now uses a consolidated configuration system with two main config files:
+
+1. **`appearance.json`** - Main appearance configuration (fonts, themes, branding)
+2. **`api-config.json`** - AI API configuration for Moorcheh
+
+## 🎨 Appearance Configuration
+
+### Quick Start
+
+Edit `appearance.json` to customize your app's appearance:
+
+```json
+{
+  "fonts": {
+    "primary": "Roboto",
+    "heading": "Inter",
+    "mono": "Fira Code"
+  },
+  "theme": {
+    "defaultTheme": "slate"
+  },
+  "branding": {
+    "appName": "Moorcheh AI Assistant",
+    "appTitle": "Moorcheh Chat",
+    "appSubtitle": "Your intelligent chat companion",
+    "appDescription": "AI-powered chat application with customizable themes and fonts",
+    "companyName": "Moorcheh",
+    "contactEmail": "support@moorcheh.ai",
+
+    "storagePrefix": "moorcheh-chat",
+    "exportPrefix": "Moorcheh-chat"
+  }
+}
+```
+
+### Configuration Sections
+
+#### Fonts Configuration
+```json
+"fonts": {
+  "primary": "Roboto",    // Main UI font
+  "heading": "Inter",     // Headings font
+  "mono": "Fira Code"     // Code font
+}
+```
+
+#### Theme Configuration
+```json
+"theme": {
+  "defaultTheme": "slate"  // Default theme (slate, light, dark, blue, etc.)
+}
+```
+
+#### Branding Configuration
+```json
+"branding": {
+  "appName": "Moorcheh AI Assistant",
+  "appTitle": "Moorcheh Chat",
+  "appSubtitle": "Your intelligent chat companion",
+  "appDescription": "AI-powered chat application with customizable themes and fonts",
+  "companyName": "Moorcheh",
+  "contactEmail": "support@moorcheh.ai",
+
+  "storagePrefix": "moorcheh-chat",
+  "exportPrefix": "Moorcheh-chat"
+}
+```
+
+### Available Theme Options
+
+The following themes are available in the `defaultTheme` field:
+- `light`, `dark`, `blue`, `green`, `purple`, `orange`, `red`, `pink`, `yellow`, `teal`, `indigo`, `rose`, `emerald`, `amber`, `coral`, `slate`, `system`
+
+## 🤖 API Configuration
+
+### Quick Start
 
 **Option 1: Interactive Setup (Recommended)**
 Visit [http://localhost:3000/landing](http://localhost:3000/landing) to use the interactive setup flow that guides you through API configuration step by step.
@@ -11,37 +88,7 @@ Visit [http://localhost:3000/landing](http://localhost:3000/landing) to use the 
 3. Export the JSON configuration and paste it into `api-config.json`
 4. Restart your development server with `npm run dev`
 
-## Detailed Configuration Steps
-
-### Step 1: Get Your API Configuration
-
-1. Log in to [Moorcheh Console](https://console.moorcheh.ai)
-2. Navigate to the Documentation section at `console.moorcheh.ai/docs`
-3. Use the Playground at `console.moorcheh.ai/playground` to:
-   - Test different settings
-   - Generate your configuration
-   - Verify the behavior
-
-### Step 2: Create Configuration File
-
-Create `api-config.json` in the `config` directory with your settings:
-
-```json
-{
-  "namespace": "your-namespace",
-  "query": "",
-  "top_k": 5,
-  "type": "text",
-  "aiModel": "your-model",
-  "temperature": 0.7,
-  "kiosk_mode": false,
-  "chatHistory": [],
-  "headerPrompt": "Your system prompt here",
-  "footerPrompt": "Your footer instructions here"
-}
-```
-
-### Configuration Fields Explained
+### API Configuration Fields
 
 | Field | Description | Auto-filled? |
 |-------|-------------|--------------|
@@ -56,16 +103,39 @@ Create `api-config.json` in the `config` directory with your settings:
 | `headerPrompt` | System instructions at start | No |
 | `footerPrompt` | Instructions at end of prompt | No |
 
-### Important Notes
+## 🔄 How It Works
 
-- Only `query` and `chatHistory` are automatically managed by the system
-- All other fields remain exactly as you configure them
+### Configuration Flow
+1. **appearance.json** → `branding-config.ts` → App branding
+2. **appearance.json** → `font-config.ts` → Font settings
+3. **appearance.json** → `theme-config.ts` → Theme settings
+4. **api-config.json** → Chat components → AI responses
+
+### File Structure
+```
+config/
+├── appearance.json          # Main appearance config
+├── api-config.json          # AI API config
+├── branding-config.json     # Extended branding config (optional)
+└── README.md               # This file
+```
+
+## ⚠️ Important Notes
+
+- Changes to `appearance.json` are reflected immediately in the app
 - Changes to `api-config.json` require a server restart
-- Keep your configuration secure and never commit it to version control
+- Keep your `api-config.json` secure and never commit it to version control
+- The `appearance.json` is safe to commit (contains only UI settings)
 
-## Troubleshooting
+## 🛠️ Troubleshooting
 
-If you encounter issues:
+### Appearance Issues
+1. Verify your JSON syntax is valid
+2. Check that theme names match the available options
+3. Ensure font names are valid Google Fonts or system fonts
+4. Try refreshing the page after changes
+
+### API Issues
 1. Verify your configuration matches the example format
 2. Ensure all required fields are present
 3. Check that the values match your Moorcheh Console settings

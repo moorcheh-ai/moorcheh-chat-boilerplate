@@ -4,12 +4,15 @@ import { CustomizationInitializer } from "../components/chat/CustomizationInitia
 import { getBrandingConfig } from "../lib/branding-config";
 import { getFontClasses } from "../lib/fonts";
 
-const brandingConfig = getBrandingConfig();
+// Dynamic metadata generation
+export async function generateMetadata(): Promise<Metadata> {
+  const brandingConfig = getBrandingConfig();
 
-export const metadata: Metadata = {
-  title: brandingConfig.appTitle,
-  description: brandingConfig.appDescription,
-};
+  return {
+    title: brandingConfig.appTitle,
+    description: brandingConfig.appDescription,
+  };
+}
 
 export default function RootLayout({
   children,

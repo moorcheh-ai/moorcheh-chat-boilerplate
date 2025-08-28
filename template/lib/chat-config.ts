@@ -90,7 +90,7 @@ export interface ChatConfig {
  */
 export const chatConfig: ChatConfig = {
   // Chat Type - Change this to switch between widget and interface
-  chatType: 'widget', // Options: 'widget' | 'interface'
+  chatType: 'interface', // Options: 'widget' | 'interface'
   
   // Widget Configuration
   widget: {
@@ -120,12 +120,11 @@ export const chatConfig: ChatConfig = {
     maxMessages: 100,
     // API configuration - Automatically loaded from config/api-config.json
     api: getApiConfigForChat(),
-    // Branding - Automatically loaded from environment variables
-    // Set NEXT_PUBLIC_APP_NAME, NEXT_PUBLIC_APP_SUBTITLE, etc. in .env.local
+    // Branding - Automatically loaded from appearance.json
     branding: {
-      title: getBrandingConfig().appName,
-      subtitle: getBrandingConfig().appSubtitle,
-      logo: getBrandingConfig().appLogo,
+      title: getBrandingConfig().appName || 'Moorcheh AI Assistant',
+      subtitle: getBrandingConfig().appSubtitle || 'Your intelligent chat companion',
+      logo: getBrandingConfig().logo,
     },
   },
 };

@@ -76,9 +76,9 @@ After creating your project, you'll need to configure the Moorcheh AI integratio
 
 ### 2. Configure API Settings
 
-1. **Set your API key** in `.env.local`:
+1. **Set your API key** as an environment variable:
 ```bash
-NEXT_PUBLIC_MOORCHEH_API_KEY = 'your_api_key_here'
+NEXT_PUBLIC_MOORCHEH_API_KEY=your_api_key_here
 ```
 
 2. **Configure your API request** in `config/api-config.json`:
@@ -89,11 +89,20 @@ NEXT_PUBLIC_MOORCHEH_API_KEY = 'your_api_key_here'
 
 The boilerplate will automatically handle the `query` and `chatHistory` fields while using your namespace and model configuration.
 
-### 3. Additional Customization (Optional)
+### 3. Customize Appearance (Optional)
 
-- **Branding**: Edit `.env.local` with your app name and logo
-- **Themes**: Customize in `customize/themes/` directory  
-- **Fonts**: Customize in `customize/fonts/` directory
+**Option 1: Interactive Setup (Recommended)**
+Visit [http://localhost:3000/landing](http://localhost:3000/landing) to use the interactive setup flow that guides you through:
+- Branding configuration (app name, company, etc.)
+- Theme selection (10+ themes available)
+- Typography settings (primary, heading, mono fonts)
+- Live preview of your changes
+
+**Option 2: Manual Configuration**
+Edit `config/appearance.json` directly to customize:
+- **Branding**: App name, title, subtitle, company info
+- **Themes**: Choose from 10+ available themes
+- **Fonts**: Configure primary, heading, and monospace fonts
 
 See the documentation files in your generated project for detailed customization guides.
 

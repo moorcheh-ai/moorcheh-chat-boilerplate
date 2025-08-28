@@ -18,8 +18,8 @@ npm install
    - Create a new text namespace
    - Upload your documents to the namespace
 
-4. **Set up environment variables:**
-   - Create `.env.local` in your project root
+4. **Set up environment variable:**
+   - Create `.env.local` in your project root (or use your existing env setup)
    - Add your API key:
 ```bash
 NEXT_PUBLIC_MOORCHEH_API_KEY=your_api_key_here
@@ -39,7 +39,11 @@ npm run dev
 
 Open [http://localhost:3000](http://localhost:3000) to see your chat application.
 
-**Explore setup options:** Visit [http://localhost:3000/landing](http://localhost:3000/landing) to configure themes, fonts, and branding.
+**Complete setup:** Visit [http://localhost:3000/landing](http://localhost:3000/landing) to configure your chat application through our 4-step interactive setup:
+1. **API Key Setup** - Connect to Moorcheh AI services
+2. **Branding** - Configure app name, company, and contact info
+3. **Theme Selection** - Choose from 10+ beautiful themes
+4. **Typography & Complete** - Configure fonts and finish setup
 
 **Test your customizations:** Visit [http://localhost:3000/demo](http://localhost:3000/demo) to test themes and fonts.
 
@@ -53,7 +57,8 @@ Open [http://localhost:3000](http://localhost:3000) to see your chat application
 - **10+ Customizable themes** with Tailwind CSS
 - **30+ fonts** with Next.js optimization
 - **Tailwind CSS** and Radix UI components
-- **Complete branding system** via environment variables
+- **Complete branding system** via appearance.json configuration
+- **Interactive setup flow** with live preview and automatic configuration saving
 
 ## Configuration Guides
 
@@ -104,11 +109,17 @@ export const chatConfig = {
 ```
 
 ### Change Branding
-```bash
-# .env.local
-NEXT_PUBLIC_APP_NAME=My Chat App
-NEXT_PUBLIC_APP_TITLE=My Chat
-NEXT_PUBLIC_APP_LOGO=/logo.png
+```json
+// config/appearance.json
+{
+  "branding": {
+    "appName": "My Chat App",
+    "appTitle": "My Chat",
+    "appSubtitle": "Your AI assistant",
+    "companyName": "My Company",
+    "contactEmail": "support@mycompany.com"
+  }
+}
 ```
 
 ## Deployment

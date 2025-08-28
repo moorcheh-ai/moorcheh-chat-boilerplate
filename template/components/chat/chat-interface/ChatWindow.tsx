@@ -161,7 +161,7 @@ export default function ChatWindow() {
       {/* Main Chat Area */}
       <main className={`flex-1 ${isMobile ? 'h-full' : 'rounded-xl border border-border bg-card shadow-sm'} overflow-hidden flex flex-col`}>
         {/* Chat Header */}
-        <div className={`border-b border-border px-3 sm:px-4 py-2 sm:py-3 flex justify-between items-center ${isMobile ? 'bg-background' : ''}`}>
+        <div className={`px-3 sm:px-4 py-2 sm:py-3 flex justify-between items-center ${isMobile ? 'bg-background' : ''}`}>
           <div className="flex items-center gap-2 min-w-0 flex-1">
             {/* Mobile sidebar trigger */}
             {showSidebarInLayout && isMobile && (
@@ -183,7 +183,17 @@ export default function ChatWindow() {
               </Sheet>
             )}
             
-            <div className="bg-primary/10 p-1.5 sm:p-2 rounded-full flex-shrink-0">
+            <img
+              src={commonConfig.branding.logo || '/assets/logo.png'}
+              alt={commonConfig.branding.title || 'Logo'}
+              className="w-8 h-8 sm:w-10 sm:h-10 rounded-full object-contain flex-shrink-0 bg-primary/10"
+              onError={(e) => {
+                // Hide the image if it fails to load and show fallback
+                e.currentTarget.style.display = 'none';
+                e.currentTarget.nextElementSibling?.classList.remove('hidden');
+              }}
+            />
+            <div className="bg-primary/10 p-1.5 sm:p-2 rounded-full flex-shrink-0 hidden">
               <BookOpen size={16} className="text-primary sm:w-[18px] sm:h-[18px]" />
             </div>
             <div className="min-w-0 flex-1">
@@ -228,7 +238,7 @@ export default function ChatWindow() {
         </div>
         
         {/* Input Area */}
-        <div className={`${isMobile ? 'p-3 pt-2' : 'p-2 sm:p-4 pt-1 sm:pt-2'} border-t border-border ${isMobile ? 'bg-background' : ''}`}>
+        <div className={`${isMobile ? 'p-3 pt-2' : 'p-2 sm:p-4 pt-1 sm:pt-2'} ${isMobile ? 'bg-background' : ''}`}>
           <MessageInput onSend={sendMessage} isLoading={isLoading} />
         </div>
       </main>

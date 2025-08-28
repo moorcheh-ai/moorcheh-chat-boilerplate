@@ -1,51 +1,54 @@
 /**
  * Main Font Configuration
- * 
- * Edit this file to change your application's font settings.
- * Changes here will be reflected throughout your entire application.
+ *
+ * This file now reads font settings from appearance.json.
+ * Edit the appearance.json file to change your application's font settings.
  */
+
+import appearanceConfig from '../../config/appearance.json';
 
 export type FontName = string;
 
 export interface FontConfig {
   /** Primary font used for body text and most UI elements */
   primaryFont: FontName;
-  
+
   /** Font used for headings (h1, h2, h3, etc.) */
   headingFont: FontName;
-  
+
   /** Font used for code blocks and monospace text */
   monoFont: FontName;
-  
+
   /** Enable loading fonts from Google Fonts */
   enableGoogleFonts: boolean;
-  
+
   /** Preload critical fonts for better performance */
   preloadFonts: boolean;
-  
+
   /** Font display strategy */
   fontDisplay: 'auto' | 'block' | 'swap' | 'fallback' | 'optional';
-  
+
   /** Enable font optimization */
   enableOptimization: boolean;
-  
+
   /** Base font size for the application */
   baseFontSize: string;
-  
+
   /** Font size scale ratio */
   scaleRatio: number;
 }
 
 /**
  *  MAIN FONT CONFIGURATION
- * 
- * Change these settings to customize your app's typography
+ *
+ * Font settings are now loaded from appearance.json
+ * The appearance.json file contains the primary, heading, and mono font settings.
  */
 export const fontConfig: FontConfig = {
-  // Primary fonts
-  primaryFont: 'Roboto', // Main UI font - Options: 'Inter', 'Roboto', 'Open Sans', 'Lato', etc.
-  headingFont: 'Inter', // Headings font - Can be same as primary or different
-  monoFont: 'Fira Code', // Code font - Options: 'JetBrains Mono', 'Fira Code', 'Source Code Pro'
+  // Primary fonts loaded from appearance.json
+  primaryFont: appearanceConfig.fonts?.primary || 'Roboto',
+  headingFont: appearanceConfig.fonts?.heading || 'Inter',
+  monoFont: appearanceConfig.fonts?.mono || 'Fira Code',
   
   // Google Fonts integration
   enableGoogleFonts: true, // Automatically load fonts from Google Fonts
