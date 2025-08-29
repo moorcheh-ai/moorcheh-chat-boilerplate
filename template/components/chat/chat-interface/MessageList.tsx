@@ -1,12 +1,14 @@
 'use client';
 
-import { useRef, useEffect } from 'react';
+import { useRef, useEffect, useState } from 'react';
 import { Message } from '@/hooks/useChat';
-import { CircleUser, Bot } from 'lucide-react';
+import { CircleUser, Bot, Copy, Check } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import ReactMarkdown from 'react-markdown';
 import type { Components } from 'react-markdown';
 import { useIsMobile } from '@/hooks/use-mobile';
+import { getCommonConfig } from '@/lib/chat-config';
+import Image from 'next/image';
 
 interface MessageListProps {
   messages: Message[];
@@ -24,6 +26,18 @@ const EXAMPLE_QUESTIONS = [
 export default function MessageList({ messages, isLoading, onSendExample }: MessageListProps) {
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const isMobile = useIsMobile();
+  const commonConfig = getCommonConfig();
+  const [copiedMessageId, setCopiedMessageId] = useState<string | null>(null);
+
+  const handleCopy = async (text: string, messageId: string) => {
+    try {
+      await navigator.clipboard.writeText(text);
+      setCopiedMessageId(messageId);
+      setTimeout(() => setCopiedMessageId(null), 2000);
+    } catch (err) {
+      console.error('Failed to copy text:', err);
+    }
+  };
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -66,7 +80,18 @@ export default function MessageList({ messages, isLoading, onSendExample }: Mess
       {/* Welcome message when no messages */}
       {showWelcomeMessage && (
         <div className="flex-1 flex flex-col items-center justify-center text-center p-4 sm:p-6 space-y-4">
-          <div className="bg-primary/10 p-3 rounded-full">
+          <Image
+            src={commonConfig.branding.logo || '/assets/logo.png'}
+            alt={commonConfig.branding.title || 'Logo'}
+            width={48}
+            height={48}
+            className="w-8 h-8 sm:w-12 sm:h-12 rounded-full object-contain bg-primary/10"
+            onError={(e) => {
+              (e.currentTarget as HTMLImageElement).style.display = 'none';
+              (e.currentTarget as HTMLImageElement).nextElementSibling?.classList.remove('hidden');
+            }}
+          />
+          <div className="bg-primary/10 p-3 rounded-full hidden">
             <Bot size={isMobile ? 20 : 24} className="text-primary" />
           </div>
           <div>
@@ -99,7 +124,18 @@ export default function MessageList({ messages, isLoading, onSendExample }: Mess
               {/* Desktop avatars only */}
               {msg.sender === 'ai' && !isMobile && (
                 <div className="flex-shrink-0 mr-2 sm:mr-3">
-                  <div className="bg-primary/10 rounded-full p-1 w-7 h-7 sm:w-8 sm:h-8 flex items-center justify-center">
+                  <Image
+                    src={commonConfig.branding.logo || '/assets/logo.png'}
+                    alt={commonConfig.branding.title || 'Logo'}
+                    width={32}
+                    height={32}
+                    className="w-7 h-7 sm:w-8 sm:h-8 rounded-full object-contain bg-primary/10"
+                    onError={(e) => {
+                      (e.currentTarget as HTMLImageElement).style.display = 'none';
+                      (e.currentTarget as HTMLImageElement).nextElementSibling?.classList.remove('hidden');
+                    }}
+                  />
+                  <div className="bg-primary/10 rounded-full p-1 w-7 h-7 sm:w-8 sm:h-8 flex items-center justify-center hidden">
                     <Bot size={14} className="text-primary sm:w-4 sm:h-4" />
                   </div>
                 </div>
@@ -130,15 +166,40 @@ export default function MessageList({ messages, isLoading, onSendExample }: Mess
                   </div>
                 ) : (
                   <div className={`${
-                    isMobile 
+                    isMobile
                       ? 'text-foreground markdown-content text-sm'
                       : 'text-card-foreground markdown-content text-sm sm:text-base'
                   }`}>
                     <ReactMarkdown components={markdownComponents}>
                       {msg.text}
                     </ReactMarkdown>
+                    {/* Copy button for assistant messages */}
+                    <div className="flex justify-end mt-2">
+                      <Button
+                        size="sm"
+                        variant="ghost"
+                        className="h-7 w-7 p-0 text-muted-foreground hover:text-foreground hover:bg-muted/50"
+                        onClick={() => handleCopy(msg.text, msg.id)}
+                      >
+                        {copiedMessageId === msg.id ? (
+                          <Check className="h-3 w-3" />
+                        ) : (
+                          <Copy className="h-3 w-3" />
+                        )}
+                      </Button>
+                    </div>
                   </div>
                 )}
+                {/* Timestamp for both user and assistant messages */}
+                <div className={`text-xs text-muted-foreground mt-1 ${
+                  msg.sender === 'user' ? 'text-right' : 'text-left'
+                }`}>
+                  {msg.timestamp.toLocaleTimeString([], {
+                    hour: '2-digit',
+                    minute: '2-digit'
+                  })}
+                  {/* User indicator removed */}
+                </div>
               </div>
               
               {/* Desktop avatars only */}
@@ -157,7 +218,18 @@ export default function MessageList({ messages, isLoading, onSendExample }: Mess
               {/* Desktop avatar only */}
               {!isMobile && (
                 <div className="flex-shrink-0 mr-2 sm:mr-3">
-                  <div className="bg-primary/10 rounded-full p-1 w-7 h-7 sm:w-8 sm:h-8 flex items-center justify-center">
+                  <Image
+                    src={commonConfig.branding.logo || '/assets/logo.png'}
+                    alt={commonConfig.branding.title || 'Logo'}
+                    width={32}
+                    height={32}
+                    className="w-7 h-7 sm:w-8 sm:h-8 rounded-full object-contain bg-primary/10"
+                    onError={(e) => {
+                      (e.currentTarget as HTMLImageElement).style.display = 'none';
+                      (e.currentTarget as HTMLImageElement).nextElementSibling?.classList.remove('hidden');
+                    }}
+                  />
+                  <div className="bg-primary/10 rounded-full p-1 w-7 h-7 sm:w-8 sm:h-8 flex items-center justify-center hidden">
                     <Bot size={14} className="text-primary sm:w-4 sm:h-4" />
                   </div>
                 </div>
@@ -172,6 +244,13 @@ export default function MessageList({ messages, isLoading, onSendExample }: Mess
                   <div className="h-1.5 w-1.5 sm:h-2 sm:w-2 bg-primary/60 rounded-full animate-bounce [animation-delay:-0.15s]"></div>
                   <div className="h-1.5 w-1.5 sm:h-2 sm:w-2 bg-primary/60 rounded-full animate-bounce"></div>
                 </div>
+              </div>
+              {/* Timestamp for loading state */}
+              <div className="text-xs text-muted-foreground mt-1 text-left">
+                {new Date().toLocaleTimeString([], {
+                  hour: '2-digit',
+                  minute: '2-digit'
+                })}
               </div>
             </div>
           )}

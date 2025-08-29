@@ -10,6 +10,7 @@ import { fetchAnswer } from '../../../lib/answer';
 import { getWidgetConfig, getCommonConfig } from '../../../lib/chat-config';
 import { cn } from '../../../lib/utils';
 import { useIsMobile } from '../../../hooks/use-mobile';
+import Image from 'next/image';
 
 interface Message {
   role: "user" | "assistant";
@@ -178,7 +179,18 @@ export default function ChatWidget() {
             {/* Header */}
             <CardHeader className="flex flex-row items-center justify-between p-3 pb-2 border-b bg-primary text-primary-foreground rounded-t-lg">
               <div className="flex items-center gap-2 min-w-0 flex-1">
-                <div className="w-6 h-6 sm:w-8 sm:h-8 rounded-full bg-primary-foreground/20 flex items-center justify-center flex-shrink-0">
+                <Image
+                  src={commonConfig.branding.logo || '/assets/logo.png'}
+                  alt={commonConfig.branding.title || 'Logo'}
+                  width={24}
+                  height={24}
+                  className="w-6 h-6 sm:w-8 sm:h-8 rounded-full object-contain flex-shrink-0 bg-primary-foreground/10"
+                  onError={(e) => {
+                    (e.currentTarget as HTMLImageElement).style.display = 'none';
+                    (e.currentTarget as HTMLImageElement).nextElementSibling?.classList.remove('hidden');
+                  }}
+                />
+                <div className="w-6 h-6 sm:w-8 sm:h-8 rounded-full bg-primary-foreground/20 flex items-center justify-center flex-shrink-0 hidden">
                   <Bot size={isMobile ? 12 : 16} className="text-primary-foreground" />
                 </div>
                 <div className="min-w-0 flex-1">
@@ -220,7 +232,20 @@ export default function ChatWidget() {
                 <CardContent className="flex-1 overflow-y-auto p-3 space-y-3">
                   {messages.length === 0 && (
                     <div className="text-center text-muted-foreground py-4 sm:py-8">
-                      <Bot size={isMobile ? 24 : 32} className="mx-auto mb-2 opacity-50" />
+                      <Image
+                        src={commonConfig.branding.logo || '/assets/logo.png'}
+                        alt={commonConfig.branding.title || 'Logo'}
+                        width={40}
+                        height={40}
+                        className="w-8 h-8 sm:w-10 sm:h-10 mx-auto mb-2 opacity-50 rounded-full object-contain bg-primary/10"
+                        onError={(e) => {
+                          (e.currentTarget as HTMLImageElement).style.display = 'none';
+                          (e.currentTarget as HTMLImageElement).nextElementSibling?.classList.remove('hidden');
+                        }}
+                      />
+                      <div className="hidden">
+                        <Bot size={isMobile ? 24 : 32} className="mx-auto mb-2 opacity-50" />
+                      </div>
                       <p className="text-xs sm:text-sm">
                         {commonConfig.branding.subtitle || "Hi! How can I help you today?"}
                       </p>
@@ -236,11 +261,26 @@ export default function ChatWidget() {
                       )}
                     >
                       {message.role === 'assistant' && !isMobile && (
-                        <Avatar className="h-6 w-6 mt-1">
-                          <AvatarFallback className="text-xs bg-primary text-primary-foreground">
-                            AI
-                          </AvatarFallback>
-                        </Avatar>
+                        <Image
+                          src={commonConfig.branding.logo || '/assets/logo.png'}
+                          alt={commonConfig.branding.title || 'Logo'}
+                          width={24}
+                          height={24}
+                          className="h-6 w-6 mt-1 rounded-full object-contain bg-primary/10"
+                          onError={(e) => {
+                            (e.currentTarget as HTMLImageElement).style.display = 'none';
+                            (e.currentTarget as HTMLImageElement).nextElementSibling?.classList.remove('hidden');
+                          }}
+                        />
+                      )}
+                      {message.role === 'assistant' && !isMobile && (
+                        <div className="hidden">
+                          <Avatar className="h-6 w-6 mt-1">
+                            <AvatarFallback className="text-xs bg-primary text-primary-foreground">
+                              AI
+                            </AvatarFallback>
+                          </Avatar>
+                        </div>
                       )}
                       
                       <div
@@ -254,8 +294,20 @@ export default function ChatWidget() {
                         {/* Mobile AI indicator */}
                         {message.role === 'assistant' && isMobile && (
                           <div className="flex items-center gap-1 mb-1 opacity-75">
-                            <Bot size={10} className="text-primary" />
-                            <span className="text-xs font-medium">AI</span>
+                            <Image
+                              src={commonConfig.branding.logo || '/assets/logo.png'}
+                              alt={commonConfig.branding.title || 'Logo'}
+                              width={16}
+                              height={16}
+                              className="w-4 h-4 rounded-full object-contain bg-primary/10"
+                              onError={(e) => {
+                                (e.currentTarget as HTMLImageElement).style.display = 'none';
+                                (e.currentTarget as HTMLImageElement).nextElementSibling?.classList.remove('hidden');
+                              }}
+                            />
+                            <div className="hidden">
+                              <Bot size={10} className="text-primary" />
+                            </div>
                           </div>
                         )}
                         
@@ -272,14 +324,11 @@ export default function ChatWidget() {
                               minute: '2-digit' 
                             })}
                           </span>
-                          {/* Mobile user indicator */}
-                          {message.role === 'user' && isMobile && (
-                            <span className="text-xs opacity-75">You</span>
-                          )}
+                          {/* Mobile user indicator - removed */}
                         </div>
                       </div>
                       
-                      {message.role === 'user' && !isMobile && (
+                      {message.role === 'user' && (
                         <Avatar className="h-6 w-6 mt-1">
                           <AvatarFallback className="text-xs bg-secondary text-secondary-foreground">
                             U
@@ -292,17 +341,44 @@ export default function ChatWidget() {
                   {isLoading && (
                     <div className="flex justify-start">
                       {!isMobile && (
-                        <Avatar className="h-6 w-6 mt-1 mr-2">
-                          <AvatarFallback className="text-xs bg-primary text-primary-foreground">
-                            AI
-                          </AvatarFallback>
-                        </Avatar>
+                        <Image
+                          src={commonConfig.branding.logo || '/assets/logo.png'}
+                          alt={commonConfig.branding.title || 'Logo'}
+                          width={24}
+                          height={24}
+                          className="h-6 w-6 mt-1 mr-2 rounded-full object-contain bg-primary/10"
+                          onError={(e) => {
+                            (e.currentTarget as HTMLImageElement).style.display = 'none';
+                            (e.currentTarget as HTMLImageElement).nextElementSibling?.classList.remove('hidden');
+                          }}
+                        />
+                      )}
+                      {!isMobile && (
+                        <div className="hidden">
+                          <Avatar className="h-6 w-6 mt-1 mr-2">
+                            <AvatarFallback className="text-xs bg-primary text-primary-foreground">
+                              AI
+                            </AvatarFallback>
+                          </Avatar>
+                        </div>
                       )}
                       <div className="max-w-[85%] px-2.5 sm:px-3 py-2 rounded-lg bg-muted rounded-bl-sm">
                         {isMobile && (
                           <div className="flex items-center gap-1 mb-1 opacity-75">
-                            <Bot size={10} className="text-primary" />
-                            <span className="text-xs font-medium">AI</span>
+                            <Image
+                              src={commonConfig.branding.logo || '/assets/logo.png'}
+                              alt={commonConfig.branding.title || 'Logo'}
+                              width={16}
+                              height={16}
+                              className="w-4 h-4 rounded-full object-contain bg-primary/10"
+                              onError={(e) => {
+                                (e.currentTarget as HTMLImageElement).style.display = 'none';
+                                (e.currentTarget as HTMLImageElement).nextElementSibling?.classList.remove('hidden');
+                              }}
+                            />
+                            <div className="hidden">
+                              <Bot size={10} className="text-primary" />
+                            </div>
                           </div>
                         )}
                         <div className="flex space-x-1 items-center h-4">
@@ -388,7 +464,24 @@ export default function ChatWidget() {
         size="icon"
         aria-label={isOpen ? 'Close chat' : 'Open chat'}
       >
-        {isOpen ? <X size={isMobile ? 20 : 24} /> : <MessageCircle size={isMobile ? 20 : 24} />}
+        {isOpen ? (
+          <X size={isMobile ? 20 : 24} />
+        ) : (
+          <Image
+            src={commonConfig.branding.logo || '/assets/logo.png'}
+            alt={commonConfig.branding.title || 'Logo'}
+            width={56}
+            height={56}
+            className="w-full h-full rounded-full object-cover"
+            onError={(e) => {
+              (e.currentTarget as HTMLImageElement).style.display = 'none';
+              (e.currentTarget as HTMLImageElement).nextElementSibling?.classList.remove('hidden');
+            }}
+          />
+        )}
+        {isOpen ? null : (
+          <MessageCircle size={isMobile ? 20 : 24} className="hidden" />
+        )}
       </Button>
     </div>
   );

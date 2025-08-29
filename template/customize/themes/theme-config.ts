@@ -1,45 +1,48 @@
 /**
  * Main Theme Configuration
- * 
- * Edit this file to change your application's theme settings.
- * Changes here will be reflected throughout your entire application.
+ *
+ * This file now reads theme settings from appearance.json.
+ * Edit the appearance.json file to change your application's theme settings.
  */
+
+import appearanceConfig from '../../config/appearance.json';
 
 export type ThemeName = 'light' | 'dark' | 'blue' | 'green' | 'system' | string;
 
 export interface ThemeConfig {
   /** The default theme to use when the app loads */
   defaultTheme: ThemeName;
-  
+
   /** Enable automatic system theme detection (light/dark) */
   enableSystemTheme: boolean;
-  
+
   /** Show theme toggle button in the UI */
   enableThemeToggle: boolean;
-  
+
   /** Store theme preference in localStorage */
   persistTheme: boolean;
-  
+
   /** Available themes for the theme switcher */
   availableThemes: ThemeName[];
-  
+
   /** Theme display names for the UI */
   themeLabels: Record<string, string>;
-  
+
   /** Animation duration for theme transitions (in ms) */
   transitionDuration: number;
 }
 
 /**
  * MAIN THEME CONFIGURATION
- * 
- * Change these settings to customize your app's theming behavior.
- * 🔥 IMPORTANT: Changes to defaultTheme will immediately take effect across your entire app!
+ *
+ * Theme settings are now loaded from appearance.json
+ * The appearance.json file contains the defaultTheme setting.
+ * 🔥 IMPORTANT: Changes to defaultTheme in appearance.json will immediately take effect across your entire app!
  * The system will automatically update localStorage and apply the new theme.
  */
 export const themeConfig: ThemeConfig = {
-  // Default theme when app loads - CHANGE THIS TO SWITCH YOUR APP'S THEME
-  defaultTheme: 'slate', // Options: 'light', 'dark', 'blue', 'green', 'system', or custom theme name
+  // Default theme loaded from appearance.json - CHANGE THIS IN appearance.json TO SWITCH YOUR APP'S THEME
+  defaultTheme: appearanceConfig.theme?.defaultTheme || 'slate', // Options: 'light', 'dark', 'blue', 'green', 'system', or custom theme name
   
   // System theme detection
   enableSystemTheme: true, // Auto-detect user's system preference (light/dark)

@@ -3,18 +3,19 @@
 import { useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
-import { 
-  Key, 
-  Palette, 
-  Type, 
-  Check, 
-  Copy, 
-  Sparkles, 
-  ArrowRight, 
+import {
+  Key,
+  Palette,
+  Type,
+  Check,
+  Copy,
+  Sparkles,
+  ArrowRight,
   ArrowLeft,
-  Code,
   Settings,
-  ExternalLink
+  ExternalLink,
+  Mail,
+  Building2
 } from "lucide-react";
 import { Button } from "../ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../ui/card";
@@ -22,12 +23,34 @@ import { Input } from "../ui/input";
 import { Label } from "../ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select";
 import { Textarea } from "../ui/textarea";
-import { Badge } from "../ui/badge";
 import { Alert, AlertDescription } from "../ui/alert";
 import { themes } from "../../customize/themes/available-themes";
 import { availableFonts, popularCombinations } from "../../customize/fonts/available-fonts";
 import { useFontPreview, preloadFonts } from "../../hooks/useFontPreview";
 import CelebrationConfetti from "../ui/celebration-confetti";
+
+// Type for appearance.json structure
+interface AppearanceConfig {
+  fonts: {
+    primary: string;
+    heading: string;
+    mono: string;
+  };
+  theme: {
+    defaultTheme: string;
+  };
+  branding: {
+    appName: string;
+    appTitle: string;
+    appSubtitle: string;
+    appDescription: string;
+    companyName: string;
+    contactEmail: string;
+    storagePrefix: string;
+    exportPrefix: string;
+    logo: string;
+  };
+}
 
 interface BrandingAnswers {
   appName: string;
@@ -36,9 +59,14 @@ interface BrandingAnswers {
   appDescription: string;
   companyName: string;
   contactEmail: string;
-  aiAssistantName: string;
+  storagePrefix: string;
+  exportPrefix: string;
+  logo: string;
   selectedTheme: string;
   selectedFont: string;
+  primaryFont: string;
+  headingFont: string;
+  monoFont: string;
 }
 
 const themeNames = Object.keys(themes);
@@ -48,12 +76,13 @@ export default function SetupFlow() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const initialStep = parseInt(searchParams?.get('step') || '1');
-  
+
   const [currentStep, setCurrentStep] = useState(initialStep);
   const [hasApiKey, setHasApiKey] = useState(false);
   const [apiKey, setApiKey] = useState("");
   const [showCelebration, setShowCelebration] = useState(false);
-  const [copiedEnv, setCopiedEnv] = useState(false);
+
+  const [isLoadingConfig, setIsLoadingConfig] = useState(true);
   const [answers, setAnswers] = useState<BrandingAnswers>({
     appName: "",
     appTitle: "",
@@ -61,16 +90,110 @@ export default function SetupFlow() {
     appDescription: "",
     companyName: "",
     contactEmail: "",
-    aiAssistantName: "",
+    storagePrefix: "",
+    exportPrefix: "",
+    logo: "",
     selectedTheme: "slate",
-    selectedFont: "Inter",
+    selectedFont: "Saira",
+    primaryFont: "Saira",
+    headingFont: "Roboto",
+    monoFont: "JetBrains Mono",
   });
 
   // Move font preview hook to top level - must be called every render
   const { fontFamily } = useFontPreview(answers.selectedFont);
 
+  // Load appearance configuration
+  const loadAppearanceConfig = async () => {
+    try {
+      const response = await fetch('/config/appearance.json');
+      if (response.ok) {
+        const config: AppearanceConfig = await response.json();
+
+        // Update answers with loaded configuration
+        setAnswers(prev => ({
+          ...prev,
+          appName: config.branding.appName || "",
+          appTitle: config.branding.appTitle || "",
+          appSubtitle: config.branding.appSubtitle || "",
+          appDescription: config.branding.appDescription || "",
+          companyName: config.branding.companyName || "",
+          contactEmail: config.branding.contactEmail || "",
+          storagePrefix: config.branding.storagePrefix || "",
+          exportPrefix: config.branding.exportPrefix || "",
+          logo: config.branding.logo || "",
+          selectedTheme: config.theme.defaultTheme || "slate",
+          primaryFont: config.fonts.primary || "Saira",
+          headingFont: config.fonts.heading || "Roboto",
+          monoFont: config.fonts.mono || "JetBrains Mono",
+          selectedFont: config.fonts.primary || "Inter", // Default to primary font for preview
+        }));
+      }
+    } catch {
+      console.log('No existing appearance.json found, using defaults');
+    } finally {
+      setIsLoadingConfig(false);
+    }
+  };
+
+  // Generate appearance configuration
+  const generateAppearanceConfig = () => {
+    const newConfig: AppearanceConfig = {
+      fonts: {
+        primary: answers.primaryFont,
+        heading: answers.headingFont,
+        mono: answers.monoFont,
+      },
+      theme: {
+        defaultTheme: answers.selectedTheme,
+      },
+      branding: {
+        appName: answers.appName,
+        appTitle: answers.appTitle,
+        appSubtitle: answers.appSubtitle,
+        appDescription: answers.appDescription,
+        companyName: answers.companyName,
+        contactEmail: answers.contactEmail,
+        storagePrefix: answers.storagePrefix || answers.appName.toLowerCase().replace(/\s+/g, '-') + '-chat',
+        exportPrefix: answers.exportPrefix || answers.appName.replace(/\s+/g, ''),
+        logo: answers.logo || "/assets/logo.png",
+      },
+    };
+
+    return JSON.stringify(newConfig, null, 2);
+  };
+
+  // Save appearance configuration
+  const saveAppearanceConfig = async () => {
+    const config = JSON.parse(generateAppearanceConfig());
+
+    try {
+      const response = await fetch('/api/update-appearance', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(config),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to update appearance configuration');
+      }
+
+      const result = await response.json();
+      console.log('Appearance config updated successfully:', result);
+      return JSON.stringify(config, null, 2);
+    } catch (error) {
+      console.error('Error saving appearance config:', error);
+      // Fallback: provide config for manual update
+      console.log('Please manually update config/appearance.json with:', generateAppearanceConfig());
+      throw new Error('Failed to save appearance configuration. Please manually update config/appearance.json');
+    }
+  };
+
   useEffect(() => {
     setHasApiKey(!!process.env.NEXT_PUBLIC_MOORCHEH_API_KEY);
+    loadAppearanceConfig();
     // Preload popular fonts for better performance
     preloadFonts(['Inter', 'Poppins', 'Roboto', 'Open Sans', 'Lato']);
   }, []);
@@ -88,69 +211,60 @@ export default function SetupFlow() {
       label: "Browser tab title?",
       placeholder: "My Chat App",
       description: "What users see in their browser tab",
-      icon: <Settings className="w-5 h-5" />,
+      icon: <Type className="w-5 h-5" />,
     },
     {
-      id: "appSubtitle", 
+      id: "appSubtitle",
       label: "Chat welcome message?",
       placeholder: "How can I help you today?",
       description: "The greeting message in your chat interface",
       icon: <Sparkles className="w-5 h-5" />,
     },
     {
+      id: "appDescription",
+      label: "App description?",
+      placeholder: "AI-powered chat application with customizable themes and fonts",
+      description: "Brief description of your application",
+      icon: <Type className="w-5 h-5" />,
+    },
+    {
       id: "companyName",
       label: "Your company name?",
       placeholder: "My Company",
       description: "Used in branding and contact information",
-      icon: <Settings className="w-5 h-5" />,
+      icon: <Building2 className="w-5 h-5" />,
     },
     {
       id: "contactEmail",
       label: "Support email?",
       placeholder: "support@mycompany.com",
       description: "For user support and contact",
-      icon: <Settings className="w-5 h-5" />,
+      icon: <Mail className="w-5 h-5" />,
     },
-    {
-      id: "aiAssistantName",
-      label: "AI assistant name?",
-      placeholder: "Assistant",
-      description: "What should users call your AI?",
-      icon: <Sparkles className="w-5 h-5" />,
-    },
+
   ];
 
-  const generateEnvConfig = () => {
-    const config = Object.entries(answers)
-      .filter(([key]) => !['selectedTheme', 'selectedFont'].includes(key))
-      .map(([key, value]) => {
-        const envKey = `NEXT_PUBLIC_${key.replace(/([A-Z])/g, '_$1').toUpperCase()}`;
-        return `${envKey}=${value}`;
-      })
-      .join('\n');
 
-    const themeConfig = `
-# Theme & Font Configuration (update the files below)
-# Theme: ${answers.selectedTheme} - Edit customize/themes/theme-config.ts
-# Font: ${answers.selectedFont} - Edit customize/fonts/font-config.ts`;
 
-    return `# Required API Key\nNEXT_PUBLIC_MOORCHEH_API_KEY=${apiKey}\n\n# App Branding\n${config}${themeConfig}`;
-  };
-
-  const copyEnvConfig = async () => {
-    await navigator.clipboard.writeText(generateEnvConfig());
-    setCopiedEnv(true);
-    setTimeout(() => setCopiedEnv(false), 2000);
-  };
-
-  const handleNext = () => {
-    if (currentStep < 5) {
+  const handleNext = async () => {
+    if (currentStep < 4) {
       setCurrentStep(currentStep + 1);
     } else {
-      setShowCelebration(true);
-      setTimeout(() => {
-        setCurrentStep(6);
-      }, 2000);
+      try {
+        // Save appearance.json when completing setup
+        await saveAppearanceConfig();
+        setShowCelebration(true);
+        setTimeout(() => {
+          setCurrentStep(5);
+        }, 2000);
+      } catch (error) {
+        console.error('Failed to save appearance configuration:', error);
+        // Still show celebration but user will need to manually update appearance.json
+        setShowCelebration(true);
+        setTimeout(() => {
+          setCurrentStep(5);
+        }, 2000);
+      }
     }
   };
 
@@ -162,12 +276,17 @@ export default function SetupFlow() {
 
   const renderChatPreview = () => {
     const currentTheme = themes[answers.selectedTheme] || themes.green;
-    
+
+    // Use primary font for preview
+    const previewFontFamily = availableFonts[answers.primaryFont]?.name || fontFamily;
+
+    const appName = answers.appName || 'AI Assistant';
+
     const previewMessages = [
-      { role: 'assistant', content: answers.appSubtitle || 'How can I help you today?' },
-      { role: 'user', content: 'Tell me about your features' },
-      { role: 'assistant', content: `I'm ${answers.aiAssistantName || 'your AI assistant'}, ready to help with any questions!` }
-    ];
+      { role: 'assistant', content: answers.appSubtitle || `Hello! I'm ${appName}, how can I help you today?` },
+      { role: 'user', content: 'What can you help me with?' },
+      { role: 'assistant', content: `I can assist you with a wide range of tasks including answering questions, providing information, creative writing, problem-solving, and much more. What would you like to explore?` },
+       ];
 
     return (
       <motion.div 
@@ -184,7 +303,7 @@ export default function SetupFlow() {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
-        key={`${answers.selectedTheme}-${answers.selectedFont}`}
+        key={`${answers.selectedTheme}-${answers.primaryFont}-${answers.headingFont}-${answers.monoFont}`}
       >
         <motion.div 
           className="bg-primary text-primary-foreground p-4"
@@ -192,9 +311,9 @@ export default function SetupFlow() {
           animate={{ opacity: 1 }}
           transition={{ delay: 0.2 }}
         >
-          <h3 
+          <h3
             className="font-semibold text-lg transition-all duration-300"
-            style={{ fontFamily }}
+            style={{ fontFamily: availableFonts[answers.headingFont]?.name || fontFamily }}
           >
             {answers.appName || 'My AI Assistant'}
           </h3>
@@ -202,7 +321,7 @@ export default function SetupFlow() {
         <div className="p-4 space-y-3 max-h-64 overflow-y-auto">
           {previewMessages.map((msg, index) => (
             <motion.div
-              key={`${msg.role}-${index}-${answers.selectedTheme}-${answers.selectedFont}`}
+              key={`${msg.role}-${index}-${answers.selectedTheme}-${answers.primaryFont}-${answers.headingFont}-${answers.monoFont}`}
               className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}
               initial={{ opacity: 0, x: msg.role === 'user' ? 20 : -20 }}
               animate={{ opacity: 1, x: 0 }}
@@ -214,7 +333,7 @@ export default function SetupFlow() {
                     ? 'bg-primary text-primary-foreground' 
                     : 'bg-card text-card-foreground border'
                 }`}
-                style={{ fontFamily }}
+                style={{ fontFamily: previewFontFamily }}
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
               >
@@ -298,8 +417,8 @@ export default function SetupFlow() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 3.0, duration: 0.5 }}
           >
-            <Button 
-              onClick={() => router.push('/')} 
+            <Button
+              onClick={() => window.location.href = '/'}
               size="lg"
               className="px-8 py-3 text-lg font-semibold cursor-pointer"
             >
@@ -308,6 +427,18 @@ export default function SetupFlow() {
             </Button>
           </motion.div>
         </motion.div>
+      </div>
+    );
+  }
+
+  // Show loading state while fetching appearance config
+  if (isLoadingConfig) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-background via-background to-muted/10 flex items-center justify-center">
+        <div className="text-center space-y-4">
+          <div className="w-8 h-8 border-4 border-primary border-t-transparent rounded-full animate-spin mx-auto"></div>
+          <p className="text-muted-foreground">Loading configuration...</p>
+        </div>
       </div>
     );
   }
@@ -323,7 +454,7 @@ export default function SetupFlow() {
           
           {/* Progress Steps */}
           <div className="flex justify-center items-center mt-6 space-x-2">
-            {[1, 2, 3, 4, 5].map((step) => (
+            {[1, 2, 3, 4].map((step) => (
               <div key={step} className="flex items-center">
                 <div
                   className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium transition-colors ${
@@ -334,21 +465,20 @@ export default function SetupFlow() {
                 >
                   {step < currentStep ? <Check className="w-4 h-4" /> : step}
                 </div>
-                {step < 5 && (
+                {step < 4 && (
                   <div className={`w-8 h-1 ${step < currentStep ? 'bg-primary' : 'bg-muted'}`} />
                 )}
               </div>
             ))}
           </div>
-          
+
           {/* Step Labels */}
           <div className="flex justify-center mt-2 text-xs text-muted-foreground">
-            <div className="grid grid-cols-5 gap-4 text-center max-w-lg">
+            <div className="grid grid-cols-4 gap-2 text-center max-w-xl">
               <span>API Key</span>
               <span>Branding</span>
               <span>Theme</span>
-              <span>Font</span>
-              <span>Setup</span>
+              <span>Fonts</span>
             </div>
           </div>
         </div>
@@ -569,7 +699,7 @@ export default function SetupFlow() {
                 </motion.div>
               )}
 
-              {/* Step 4: Font Selection */}
+              {/* Step 4: Font Configuration */}
               {currentStep === 4 && (
                 <motion.div
                   key="step4"
@@ -585,58 +715,18 @@ export default function SetupFlow() {
                           <Type className="w-5 h-5 text-primary" />
                         </div>
                         <div>
-                          <CardTitle>Typography Style</CardTitle>
-                          <CardDescription>Select fonts that express your personality</CardDescription>
+                          <CardTitle>Typography Configuration</CardTitle>
+                          <CardDescription>Configure fonts for different text elements</CardDescription>
                         </div>
                       </div>
                     </CardHeader>
                     <CardContent className="space-y-6">
-                      {/* Popular Font Combinations */}
+                      {/* Primary Font */}
                       <div className="space-y-3">
-                        <Label>Popular Combinations</Label>
-                        <div className="grid gap-3">
-                          {popularCombinations.slice(0, 4).map((combo) => (
-                            <motion.div
-                              key={combo.name}
-                              whileHover={{ scale: 1.01 }}
-                              className={`cursor-pointer p-4 rounded-lg border-2 transition-colors ${
-                                answers.selectedFont === combo.primary
-                                  ? 'border-primary bg-primary/5'
-                                  : 'border-border hover:border-primary/50'
-                              }`}
-                              onClick={() => setAnswers(prev => ({ ...prev, selectedFont: combo.primary }))}
-                            >
-                              <div className="flex items-center justify-between">
-                                <div>
-                                  <p 
-                                    className="font-semibold"
-                                    style={{ fontFamily: availableFonts[combo.primary]?.name }}
-                                  >
-                                    {combo.name}
-                                  </p>
-                                  <p className="text-sm text-muted-foreground">{combo.description}</p>
-                                  <p 
-                                    className="text-sm mt-1"
-                                    style={{ fontFamily: availableFonts[combo.primary]?.name }}
-                                  >
-                                    Preview: {combo.primary}
-                                  </p>
-                                </div>
-                                {answers.selectedFont === combo.primary && (
-                                  <Check className="w-5 h-5 text-primary" />
-                                )}
-                              </div>
-                            </motion.div>
-                          ))}
-                        </div>
-                      </div>
-
-                      {/* Custom Font Selection */}
-                      <div className="space-y-3">
-                        <Label>Or choose a specific font</Label>
-                        <Select 
-                          value={answers.selectedFont} 
-                          onValueChange={(value) => setAnswers(prev => ({ ...prev, selectedFont: value }))}
+                        <Label>Primary Font (Body Text)</Label>
+                        <Select
+                          value={answers.primaryFont}
+                          onValueChange={(value) => setAnswers(prev => ({ ...prev, primaryFont: value }))}
                         >
                           <SelectTrigger>
                             <SelectValue />
@@ -651,65 +741,121 @@ export default function SetupFlow() {
                             ))}
                           </SelectContent>
                         </Select>
+                        <p className="text-sm text-muted-foreground">Used for regular text content</p>
                       </div>
-                      
-                      <div className="flex gap-2 pt-4">
-                        <Button onClick={handlePrevious} variant="outline" className="cursor-pointer">
-                          <ArrowLeft className="w-4 h-4 mr-2" />
-                          Previous
-                        </Button>
-                        <Button onClick={handleNext} className="flex-1 cursor-pointer">
-                          Complete Configuration
-                          <ArrowRight className="w-4 h-4 ml-2" />
-                        </Button>
-                      </div>
-                    </CardContent>
-                  </Card>
-                </motion.div>
-              )}
 
-              {/* Step 5: Setup Configuration */}
-              {currentStep === 5 && (
-                <motion.div
-                  key="step5"
-                  initial={{ opacity: 0, x: -20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  exit={{ opacity: 0, x: 20 }}
-                  transition={{ duration: 0.3 }}
-                >
-                  <Card>
-                    <CardHeader>
-                      <div className="flex items-center gap-3">
-                        <div className="w-10 h-10 bg-blue-500/10 rounded-lg flex items-center justify-center">
-                          <Code className="w-5 h-5 text-blue-500" />
-                        </div>
-                        <div>
-                          <CardTitle>Final Setup</CardTitle>
-                          <CardDescription>Copy your configuration to complete the setup</CardDescription>
+                      {/* Heading Font */}
+                      <div className="space-y-3">
+                        <Label>Heading Font (Titles & Headings)</Label>
+                        <Select
+                          value={answers.headingFont}
+                          onValueChange={(value) => setAnswers(prev => ({ ...prev, headingFont: value }))}
+                        >
+                          <SelectTrigger>
+                            <SelectValue />
+                          </SelectTrigger>
+                          <SelectContent className="max-h-60">
+                            {fontNames.map((fontName) => (
+                              <SelectItem key={fontName} value={fontName}>
+                                <span style={{ fontFamily: availableFonts[fontName]?.name }}>
+                                  {fontName} - {availableFonts[fontName]?.description}
+                                </span>
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                        <p className="text-sm text-muted-foreground">Used for headings and titles</p>
+                      </div>
+
+                      {/* Mono Font */}
+                      <div className="space-y-3">
+                        <Label>Monospace Font (Code & Data)</Label>
+                        <Select
+                          value={answers.monoFont}
+                          onValueChange={(value) => setAnswers(prev => ({ ...prev, monoFont: value }))}
+                        >
+                          <SelectTrigger>
+                            <SelectValue />
+                          </SelectTrigger>
+                          <SelectContent className="max-h-60">
+                            {fontNames.map((fontName) => (
+                              <SelectItem key={fontName} value={fontName}>
+                                <span style={{ fontFamily: availableFonts[fontName]?.name }}>
+                                  {fontName} - {availableFonts[fontName]?.description}
+                                </span>
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                        <p className="text-sm text-muted-foreground">Used for code blocks and technical content</p>
+                      </div>
+
+                      {/* Popular Combinations */}
+                      <div className="space-y-3">
+                        <Label>Popular Combinations</Label>
+                        <div className="grid gap-3">
+                          {popularCombinations.slice(0, 3).map((combo) => (
+                            <motion.div
+                              key={combo.name}
+                              whileHover={{ scale: 1.01 }}
+                              className={`cursor-pointer p-4 rounded-lg border-2 transition-colors ${
+                                answers.primaryFont === combo.primary
+                                  ? 'border-primary bg-primary/5'
+                                  : 'border-border hover:border-primary/50'
+                              }}`}
+                              onClick={() => setAnswers(prev => ({
+                                ...prev,
+                                primaryFont: combo.primary,
+                                headingFont: combo.primary,
+                                monoFont: 'JetBrains Mono'
+                              }))}
+                            >
+                              <div className="flex items-center justify-between">
+                                <div>
+                                  <p
+                                    className="font-semibold"
+                                    style={{ fontFamily: availableFonts[combo.primary]?.name }}
+                                  >
+                                    {combo.name}
+                                  </p>
+                                  <p className="text-sm text-muted-foreground">{combo.description}</p>
+                                  <p
+                                    className="text-sm mt-1"
+                                    style={{ fontFamily: availableFonts[combo.primary]?.name }}
+                                  >
+                                    Primary: {combo.primary}
+                                  </p>
+                                </div>
+                                {answers.primaryFont === combo.primary && (
+                                  <Check className="w-5 h-5 text-primary" />
+                                )}
+                              </div>
+                            </motion.div>
+                          ))}
                         </div>
                       </div>
-                    </CardHeader>
-                    <CardContent className="space-y-6">
-                      
-                      {/* Environment Variables */}
+
+                      {/* Appearance Configuration */}
                       <div className="space-y-3">
                         <Label className="flex items-center gap-2">
-                          <Code className="w-4 h-4" />
-                          Environment Variables (.env.local)
+                          <Settings className="w-4 h-4" />
+                          Configuration Preview (config/appearance.json)
                         </Label>
                         <div className="relative">
                           <Textarea
                             readOnly
-                            value={generateEnvConfig()}
+                            value={generateAppearanceConfig()}
                             className="font-mono text-sm min-h-[200px]"
                           />
                           <Button
                             size="sm"
                             variant="outline"
                             className="absolute top-2 right-2 cursor-pointer"
-                            onClick={copyEnvConfig}
+                            onClick={async () => {
+                              await navigator.clipboard.writeText(generateAppearanceConfig());
+                            }}
                           >
-                            {copiedEnv ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
+                            <Copy className="w-4 h-4" />
                           </Button>
                         </div>
                       </div>
@@ -718,63 +864,16 @@ export default function SetupFlow() {
                       <Alert>
                         <Settings className="w-4 h-4" />
                         <AlertDescription>
-                          1. Copy the environment variables above<br/>
-                          2. Create a <code>.env.local</code> file in your project root<br/>
-                          3. Paste the variables and save the file<br/>
-                          4. Restart your development server
+                          Your configuration will be saved automatically to <code>config/appearance.json</code> when you complete setup.
                         </AlertDescription>
                       </Alert>
 
-                      {/* Configuration Preview */}
-                      <div className="grid gap-4">
-                        <Card className="border-dashed">
-                          <CardContent className="pt-6">
-                            <div className="flex items-start gap-3">
-                              <div className="w-6 h-6 bg-blue-500/10 rounded-full flex items-center justify-center mt-1">
-                                <Palette className="w-3 h-3 text-blue-500" />
-                              </div>
-                              <div className="flex-1">
-                                <h4 className="font-medium">Theme Configuration</h4>
-                                <p className="text-sm text-muted-foreground mt-1">
-                                  Selected theme: <Badge variant="outline">{answers.selectedTheme}</Badge>
-                                </p>
-                                <p className="text-xs text-muted-foreground mt-1">
-                                  Edit <code className="bg-muted px-1 rounded">customize/themes/theme-config.ts</code> to change later
-                                </p>
-                              </div>
-                            </div>
-                          </CardContent>
-                        </Card>
-
-                        <Card className="border-dashed">
-                          <CardContent className="pt-6">
-                            <div className="flex items-start gap-3">
-                              <div className="w-6 h-6 bg-purple-500/10 rounded-full flex items-center justify-center mt-1">
-                                <Type className="w-3 h-3 text-purple-500" />
-                              </div>
-                              <div className="flex-1">
-                                <h4 className="font-medium">Font Configuration</h4>
-                                <p className="text-sm text-muted-foreground mt-1">
-                                  Selected font: <Badge variant="outline">{answers.selectedFont}</Badge>
-                                </p>
-                                <p className="text-xs text-muted-foreground mt-1">
-                                  Edit <code className="bg-muted px-1 rounded">customize/fonts/font-config.ts</code> to change later
-                                </p>
-                              </div>
-                            </div>
-                          </CardContent>
-                        </Card>
-                      </div>
-
                       <div className="flex gap-2 pt-4">
-                        <Button onClick={handlePrevious} variant="outline">
+                        <Button onClick={handlePrevious} variant="outline" className="cursor-pointer">
                           <ArrowLeft className="w-4 h-4 mr-2" />
                           Previous
                         </Button>
-                        <Button 
-                          onClick={handleNext} 
-                          className="flex-1"
-                        >
+                        <Button onClick={handleNext} className="flex-1 cursor-pointer">
                           Complete Setup! 🎉
                           <ArrowRight className="w-4 h-4 ml-2" />
                         </Button>
@@ -784,8 +883,12 @@ export default function SetupFlow() {
                 </motion.div>
               )}
 
-              {/* Step 6: Final Completion */}
-              {currentStep === 6 && (
+
+
+
+
+              {/* Step 5: Final Completion */}
+              {currentStep === 5 && (
                 <motion.div
                   key="step6"
                   initial={{ opacity: 0, x: -20 }}
@@ -812,7 +915,7 @@ export default function SetupFlow() {
                         <div>
                           <h3 className="text-lg font-semibold">Congratulations!</h3>
                                                       <p className="text-muted-foreground">
-                              Your {answers.appName || "AI Assistant"} is now configured with {answers.selectedTheme} theme and {answers.selectedFont} font.
+                              Your {answers.appName || "AI Assistant"} is now configured with {answers.selectedTheme} theme and typography settings.
                             </p>
                         </div>
                       </div>
@@ -820,16 +923,16 @@ export default function SetupFlow() {
                       <Alert>
                         <Check className="w-4 h-4" />
                         <AlertDescription>
-                          Your environment variables have been generated. Make sure you&apos;ve copied them to your <code>.env.local</code> file and restarted your development server.
+                          Your configuration has been saved to <code>config/appearance.json</code>! Restart your development server to apply all changes.
                         </AlertDescription>
                       </Alert>
 
                       <div className="flex gap-2 pt-4">
-                        <Button onClick={() => router.push('/')} className="flex-1">
+                        <Button onClick={() => window.location.href = '/'} className="flex-1">
                           <Check className="w-4 h-4 mr-2" />
                           View Your Chat
                         </Button>
-                        <Button variant="outline" onClick={() => setCurrentStep(1)}>
+                        <Button variant="outline" onClick={() => window.location.reload()}>
                           Start Over
                         </Button>
                       </div>

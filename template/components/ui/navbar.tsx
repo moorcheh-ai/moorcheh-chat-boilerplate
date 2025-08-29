@@ -1,17 +1,14 @@
 "use client";
 
 import Link from "next/link";
-import Image from "next/image";
 import { useState } from "react";
 import { Button } from "../ui/button";
 import { Menu, X } from "lucide-react";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { branding } from "@/lib/branding-config";
-import { useIsMobile } from "@/hooks/use-mobile";
 
 export function Navbar() {
   const [open, setOpen] = useState(false);
-  const isMobile = useIsMobile();
 
   const handleLinkClick = () => {
     setOpen(false);
@@ -23,14 +20,9 @@ export function Navbar() {
         <div className="flex justify-between h-14 sm:h-16 items-center w-full">
           {/* Logo */}
           <Link href="/" className="flex-shrink-0 flex items-center touch-manipulation">
-            <Image 
-              src={branding.getAppLogo()} 
-              alt={branding.getCompanyName()} 
-              width={isMobile ? 120 : 140} 
-              height={isMobile ? 32 : 40}
-              className="h-8 sm:h-10 w-auto"
-              priority
-            />
+            <div className="text-xl sm:text-2xl font-bold text-primary">
+              {branding.getAppName()}
+            </div>
           </Link>
 
           {/* Desktop Navigation */}
@@ -77,14 +69,9 @@ export function Navbar() {
                   {/* Mobile header */}
                   <div className="flex items-center justify-between p-4 border-b border-border">
                     <div className="flex items-center gap-3">
-                      <Image 
-                        src={branding.getAppLogo()} 
-                        alt={branding.getCompanyName()} 
-                        width={100} 
-                        height={28}
-                        className="h-7 w-auto"
-                        priority
-                      />
+                      <div className="text-lg font-bold text-primary">
+                        {branding.getAppName()}
+                      </div>
                     </div>
                     <Button
                       variant="ghost"
