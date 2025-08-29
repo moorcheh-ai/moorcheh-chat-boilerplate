@@ -12,9 +12,10 @@ import {
   Sparkles,
   ArrowRight,
   ArrowLeft,
-  Code,
   Settings,
-  ExternalLink
+  ExternalLink,
+  Mail,
+  Building2
 } from "lucide-react";
 import { Button } from "../ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../ui/card";
@@ -22,7 +23,6 @@ import { Input } from "../ui/input";
 import { Label } from "../ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select";
 import { Textarea } from "../ui/textarea";
-import { Badge } from "../ui/badge";
 import { Alert, AlertDescription } from "../ui/alert";
 import { themes } from "../../customize/themes/available-themes";
 import { availableFonts, popularCombinations } from "../../customize/fonts/available-fonts";
@@ -82,7 +82,6 @@ export default function SetupFlow() {
   const [apiKey, setApiKey] = useState("");
   const [showCelebration, setShowCelebration] = useState(false);
 
-  const [appearanceConfig, setAppearanceConfig] = useState<AppearanceConfig | null>(null);
   const [isLoadingConfig, setIsLoadingConfig] = useState(true);
   const [answers, setAnswers] = useState<BrandingAnswers>({
     appName: "",
@@ -110,7 +109,6 @@ export default function SetupFlow() {
       const response = await fetch('/config/appearance.json');
       if (response.ok) {
         const config: AppearanceConfig = await response.json();
-        setAppearanceConfig(config);
 
         // Update answers with loaded configuration
         setAnswers(prev => ({
@@ -131,7 +129,7 @@ export default function SetupFlow() {
           selectedFont: config.fonts.primary || "Inter", // Default to primary font for preview
         }));
       }
-    } catch (error) {
+    } catch {
       console.log('No existing appearance.json found, using defaults');
     } finally {
       setIsLoadingConfig(false);
@@ -213,7 +211,7 @@ export default function SetupFlow() {
       label: "Browser tab title?",
       placeholder: "My Chat App",
       description: "What users see in their browser tab",
-      icon: <Settings className="w-5 h-5" />,
+      icon: <Type className="w-5 h-5" />,
     },
     {
       id: "appSubtitle",
@@ -227,21 +225,21 @@ export default function SetupFlow() {
       label: "App description?",
       placeholder: "AI-powered chat application with customizable themes and fonts",
       description: "Brief description of your application",
-      icon: <Settings className="w-5 h-5" />,
+      icon: <Type className="w-5 h-5" />,
     },
     {
       id: "companyName",
       label: "Your company name?",
       placeholder: "My Company",
       description: "Used in branding and contact information",
-      icon: <Settings className="w-5 h-5" />,
+      icon: <Building2 className="w-5 h-5" />,
     },
     {
       id: "contactEmail",
       label: "Support email?",
       placeholder: "support@mycompany.com",
       description: "For user support and contact",
-      icon: <Settings className="w-5 h-5" />,
+      icon: <Mail className="w-5 h-5" />,
     },
 
   ];

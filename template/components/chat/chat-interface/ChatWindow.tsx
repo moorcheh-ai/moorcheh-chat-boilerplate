@@ -10,6 +10,7 @@ import { getInterfaceConfig, getCommonConfig } from "@/lib/chat-config";
 import { useIsMobile } from '@/hooks/use-mobile';
 import { useState } from 'react';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
+import Image from 'next/image';
 
 export default function ChatWindow() {
   const { 
@@ -183,14 +184,15 @@ export default function ChatWindow() {
               </Sheet>
             )}
             
-            <img
+            <Image
               src={commonConfig.branding.logo || '/assets/logo.png'}
               alt={commonConfig.branding.title || 'Logo'}
+              width={40}
+              height={40}
               className="w-8 h-8 sm:w-10 sm:h-10 rounded-full object-contain flex-shrink-0 bg-primary/10"
               onError={(e) => {
-                // Hide the image if it fails to load and show fallback
-                e.currentTarget.style.display = 'none';
-                e.currentTarget.nextElementSibling?.classList.remove('hidden');
+                (e.currentTarget as HTMLImageElement).style.display = 'none';
+                (e.currentTarget as HTMLImageElement).nextElementSibling?.classList.remove('hidden');
               }}
             />
             <div className="bg-primary/10 p-1.5 sm:p-2 rounded-full flex-shrink-0 hidden">

@@ -10,6 +10,7 @@ import { fetchAnswer } from '../../../lib/answer';
 import { getWidgetConfig, getCommonConfig } from '../../../lib/chat-config';
 import { cn } from '../../../lib/utils';
 import { useIsMobile } from '../../../hooks/use-mobile';
+import Image from 'next/image';
 
 interface Message {
   role: "user" | "assistant";
@@ -178,14 +179,15 @@ export default function ChatWidget() {
             {/* Header */}
             <CardHeader className="flex flex-row items-center justify-between p-3 pb-2 border-b bg-primary text-primary-foreground rounded-t-lg">
               <div className="flex items-center gap-2 min-w-0 flex-1">
-                <img
+                <Image
                   src={commonConfig.branding.logo || '/assets/logo.png'}
                   alt={commonConfig.branding.title || 'Logo'}
+                  width={24}
+                  height={24}
                   className="w-6 h-6 sm:w-8 sm:h-8 rounded-full object-contain flex-shrink-0 bg-primary-foreground/10"
                   onError={(e) => {
-                    // Hide the image if it fails to load and show fallback
-                    e.currentTarget.style.display = 'none';
-                    e.currentTarget.nextElementSibling?.classList.remove('hidden');
+                    (e.currentTarget as HTMLImageElement).style.display = 'none';
+                    (e.currentTarget as HTMLImageElement).nextElementSibling?.classList.remove('hidden');
                   }}
                 />
                 <div className="w-6 h-6 sm:w-8 sm:h-8 rounded-full bg-primary-foreground/20 flex items-center justify-center flex-shrink-0 hidden">
@@ -230,13 +232,15 @@ export default function ChatWidget() {
                 <CardContent className="flex-1 overflow-y-auto p-3 space-y-3">
                   {messages.length === 0 && (
                     <div className="text-center text-muted-foreground py-4 sm:py-8">
-                      <img
+                      <Image
                         src={commonConfig.branding.logo || '/assets/logo.png'}
                         alt={commonConfig.branding.title || 'Logo'}
+                        width={40}
+                        height={40}
                         className="w-8 h-8 sm:w-10 sm:h-10 mx-auto mb-2 opacity-50 rounded-full object-contain bg-primary/10"
                         onError={(e) => {
-                          e.currentTarget.style.display = 'none';
-                          e.currentTarget.nextElementSibling?.classList.remove('hidden');
+                          (e.currentTarget as HTMLImageElement).style.display = 'none';
+                          (e.currentTarget as HTMLImageElement).nextElementSibling?.classList.remove('hidden');
                         }}
                       />
                       <div className="hidden">
@@ -257,13 +261,15 @@ export default function ChatWidget() {
                       )}
                     >
                       {message.role === 'assistant' && !isMobile && (
-                        <img
+                        <Image
                           src={commonConfig.branding.logo || '/assets/logo.png'}
                           alt={commonConfig.branding.title || 'Logo'}
+                          width={24}
+                          height={24}
                           className="h-6 w-6 mt-1 rounded-full object-contain bg-primary/10"
                           onError={(e) => {
-                            e.currentTarget.style.display = 'none';
-                            e.currentTarget.nextElementSibling?.classList.remove('hidden');
+                            (e.currentTarget as HTMLImageElement).style.display = 'none';
+                            (e.currentTarget as HTMLImageElement).nextElementSibling?.classList.remove('hidden');
                           }}
                         />
                       )}
@@ -288,13 +294,15 @@ export default function ChatWidget() {
                         {/* Mobile AI indicator */}
                         {message.role === 'assistant' && isMobile && (
                           <div className="flex items-center gap-1 mb-1 opacity-75">
-                            <img
+                            <Image
                               src={commonConfig.branding.logo || '/assets/logo.png'}
                               alt={commonConfig.branding.title || 'Logo'}
+                              width={16}
+                              height={16}
                               className="w-4 h-4 rounded-full object-contain bg-primary/10"
                               onError={(e) => {
-                                e.currentTarget.style.display = 'none';
-                                e.currentTarget.nextElementSibling?.classList.remove('hidden');
+                                (e.currentTarget as HTMLImageElement).style.display = 'none';
+                                (e.currentTarget as HTMLImageElement).nextElementSibling?.classList.remove('hidden');
                               }}
                             />
                             <div className="hidden">
@@ -333,13 +341,15 @@ export default function ChatWidget() {
                   {isLoading && (
                     <div className="flex justify-start">
                       {!isMobile && (
-                        <img
+                        <Image
                           src={commonConfig.branding.logo || '/assets/logo.png'}
                           alt={commonConfig.branding.title || 'Logo'}
+                          width={24}
+                          height={24}
                           className="h-6 w-6 mt-1 mr-2 rounded-full object-contain bg-primary/10"
                           onError={(e) => {
-                            e.currentTarget.style.display = 'none';
-                            e.currentTarget.nextElementSibling?.classList.remove('hidden');
+                            (e.currentTarget as HTMLImageElement).style.display = 'none';
+                            (e.currentTarget as HTMLImageElement).nextElementSibling?.classList.remove('hidden');
                           }}
                         />
                       )}
@@ -355,13 +365,15 @@ export default function ChatWidget() {
                       <div className="max-w-[85%] px-2.5 sm:px-3 py-2 rounded-lg bg-muted rounded-bl-sm">
                         {isMobile && (
                           <div className="flex items-center gap-1 mb-1 opacity-75">
-                            <img
+                            <Image
                               src={commonConfig.branding.logo || '/assets/logo.png'}
                               alt={commonConfig.branding.title || 'Logo'}
+                              width={16}
+                              height={16}
                               className="w-4 h-4 rounded-full object-contain bg-primary/10"
                               onError={(e) => {
-                                e.currentTarget.style.display = 'none';
-                                e.currentTarget.nextElementSibling?.classList.remove('hidden');
+                                (e.currentTarget as HTMLImageElement).style.display = 'none';
+                                (e.currentTarget as HTMLImageElement).nextElementSibling?.classList.remove('hidden');
                               }}
                             />
                             <div className="hidden">
@@ -455,13 +467,15 @@ export default function ChatWidget() {
         {isOpen ? (
           <X size={isMobile ? 20 : 24} />
         ) : (
-          <img
+          <Image
             src={commonConfig.branding.logo || '/assets/logo.png'}
             alt={commonConfig.branding.title || 'Logo'}
+            width={56}
+            height={56}
             className="w-full h-full rounded-full object-cover"
             onError={(e) => {
-              e.currentTarget.style.display = 'none';
-              e.currentTarget.nextElementSibling?.classList.remove('hidden');
+              (e.currentTarget as HTMLImageElement).style.display = 'none';
+              (e.currentTarget as HTMLImageElement).nextElementSibling?.classList.remove('hidden');
             }}
           />
         )}

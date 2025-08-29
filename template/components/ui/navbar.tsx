@@ -1,17 +1,14 @@
 "use client";
 
 import Link from "next/link";
-import Image from "next/image";
 import { useState } from "react";
 import { Button } from "../ui/button";
 import { Menu, X } from "lucide-react";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { branding } from "@/lib/branding-config";
-import { useIsMobile } from "@/hooks/use-mobile";
 
 export function Navbar() {
   const [open, setOpen] = useState(false);
-  const isMobile = useIsMobile();
 
   const handleLinkClick = () => {
     setOpen(false);

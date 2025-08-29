@@ -8,6 +8,7 @@ import ReactMarkdown from 'react-markdown';
 import type { Components } from 'react-markdown';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { getCommonConfig } from '@/lib/chat-config';
+import Image from 'next/image';
 
 interface MessageListProps {
   messages: Message[];
@@ -79,13 +80,15 @@ export default function MessageList({ messages, isLoading, onSendExample }: Mess
       {/* Welcome message when no messages */}
       {showWelcomeMessage && (
         <div className="flex-1 flex flex-col items-center justify-center text-center p-4 sm:p-6 space-y-4">
-          <img
+          <Image
             src={commonConfig.branding.logo || '/assets/logo.png'}
             alt={commonConfig.branding.title || 'Logo'}
+            width={48}
+            height={48}
             className="w-8 h-8 sm:w-12 sm:h-12 rounded-full object-contain bg-primary/10"
             onError={(e) => {
-              e.currentTarget.style.display = 'none';
-              e.currentTarget.nextElementSibling?.classList.remove('hidden');
+              (e.currentTarget as HTMLImageElement).style.display = 'none';
+              (e.currentTarget as HTMLImageElement).nextElementSibling?.classList.remove('hidden');
             }}
           />
           <div className="bg-primary/10 p-3 rounded-full hidden">
@@ -121,13 +124,15 @@ export default function MessageList({ messages, isLoading, onSendExample }: Mess
               {/* Desktop avatars only */}
               {msg.sender === 'ai' && !isMobile && (
                 <div className="flex-shrink-0 mr-2 sm:mr-3">
-                  <img
+                  <Image
                     src={commonConfig.branding.logo || '/assets/logo.png'}
                     alt={commonConfig.branding.title || 'Logo'}
+                    width={32}
+                    height={32}
                     className="w-7 h-7 sm:w-8 sm:h-8 rounded-full object-contain bg-primary/10"
                     onError={(e) => {
-                      e.currentTarget.style.display = 'none';
-                      e.currentTarget.nextElementSibling?.classList.remove('hidden');
+                      (e.currentTarget as HTMLImageElement).style.display = 'none';
+                      (e.currentTarget as HTMLImageElement).nextElementSibling?.classList.remove('hidden');
                     }}
                   />
                   <div className="bg-primary/10 rounded-full p-1 w-7 h-7 sm:w-8 sm:h-8 flex items-center justify-center hidden">
@@ -213,13 +218,15 @@ export default function MessageList({ messages, isLoading, onSendExample }: Mess
               {/* Desktop avatar only */}
               {!isMobile && (
                 <div className="flex-shrink-0 mr-2 sm:mr-3">
-                  <img
+                  <Image
                     src={commonConfig.branding.logo || '/assets/logo.png'}
                     alt={commonConfig.branding.title || 'Logo'}
+                    width={32}
+                    height={32}
                     className="w-7 h-7 sm:w-8 sm:h-8 rounded-full object-contain bg-primary/10"
                     onError={(e) => {
-                      e.currentTarget.style.display = 'none';
-                      e.currentTarget.nextElementSibling?.classList.remove('hidden');
+                      (e.currentTarget as HTMLImageElement).style.display = 'none';
+                      (e.currentTarget as HTMLImageElement).nextElementSibling?.classList.remove('hidden');
                     }}
                   />
                   <div className="bg-primary/10 rounded-full p-1 w-7 h-7 sm:w-8 sm:h-8 flex items-center justify-center hidden">
