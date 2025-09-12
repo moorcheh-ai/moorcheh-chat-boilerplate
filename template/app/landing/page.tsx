@@ -11,15 +11,30 @@ import {
   Rocket
 } from "lucide-react";
 import { Button } from "../../components/ui/button";
+import ThemeSelector from "../../components/ui/ThemeSelector";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "../../components/ui/dialog";
 
 import SpotlightCard from "../../components/ui/spotlight";
 
 export default function LandingPage() {
   const router = useRouter();
   const [hasApiKey, setHasApiKey] = useState<boolean>(false);
+  const [showThemeSelector, setShowThemeSelector] = useState<boolean>(false);
+  const [currentTheme, setCurrentTheme] = useState<string>('slate');
 
   useEffect(() => {
     setHasApiKey(!!process.env.NEXT_PUBLIC_MOORCHEH_API_KEY);
+    
+    // Load current theme from appearance.json
+    fetch('/api/appearance')
+      .then(res => res.json())
+      .then(config => {
+        setCurrentTheme(config.theme?.defaultTheme || 'slate');
+      })
+      .catch(() => {
+        // Fallback to default theme
+        setCurrentTheme('slate');
+      });
   }, []);
 
   const handleGetStarted = () => {
@@ -110,11 +125,22 @@ export default function LandingPage() {
                 title: "Beautiful Themes",
                 description: "Choose from pre-built themes or create custom color schemes that match your brand",
                 content: (
-                  <div className="flex gap-2">
-                    <div className="w-4 h-4 rounded-full bg-blue-500"></div>
-                    <div className="w-4 h-4 rounded-full bg-green-500"></div>
-                    <div className="w-4 h-4 rounded-full bg-purple-500"></div>
-                    <div className="w-4 h-4 rounded-full bg-orange-500"></div>
+                  <div className="space-y-2">
+                    <div className="flex gap-2">
+                      <div className="w-4 h-4 rounded-full bg-blue-500"></div>
+                      <div className="w-4 h-4 rounded-full bg-green-500"></div>
+                      <div className="w-4 h-4 rounded-full bg-purple-500"></div>
+                      <div className="w-4 h-4 rounded-full bg-orange-500"></div>
+                    </div>
+                    <Button 
+                      variant="outline" 
+                      size="sm" 
+                      className="w-full"
+                      onClick={() => setShowThemeSelector(true)}
+                    >
+                      <Palette className="w-4 h-4 mr-2" />
+                      Choose Theme
+                    </Button>
                   </div>
                 )
               },
@@ -207,6 +233,31 @@ export default function LandingPage() {
           </motion.div>
         </div>
       </main>
+
+      {/* Theme Selector Dialog */}
+      <Dialog open={showThemeSelector} onOpenChange={setShowThemeSelector}>
+        <DialogContent
+          className="max-w-4xl max-h-[70vh] overflow-y-auto"
+          aria-describedby="theme-selector-description"
+        >
+          <DialogHeader>
+            <DialogTitle className="text-center">Choose Your Theme</DialogTitle>
+            <div
+              id="theme-selector-description"
+              className="text-sm text-muted-foreground text-center"
+            >
+              Select a theme to customize your chat experience
+            </div>
+          </DialogHeader>
+          <ThemeSelector
+            currentTheme={currentTheme}
+            onThemeSelect={(theme) => {
+              setCurrentTheme(theme);
+              setShowThemeSelector(false);
+            }}
+          />
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
