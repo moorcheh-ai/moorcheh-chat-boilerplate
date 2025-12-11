@@ -15,6 +15,7 @@ import { fontConfig } from '../../customize/fonts/font-config';
 import { availableFonts, generateGoogleFontsUrl } from '../../customize/fonts/available-fonts';
 import { branding } from '../../lib/branding-config';
 import { customFonts, generateFontFaceCSS } from '../../customize/fonts/custom-fonts';
+import { logger } from '../../lib/logger';
 
 export function CustomizationInitializer() {
   useEffect(() => {
@@ -32,7 +33,7 @@ export function CustomizationInitializer() {
           if (savedTheme) {
             // If saved theme differs from config, update localStorage to match config
             if (savedTheme !== themeConfig.defaultTheme) {
-              console.log(`Updating theme from config: ${themeConfig.defaultTheme}`);
+              // Theme updated from config
               localStorage.setItem(branding.getThemeStorageKey(), themeConfig.defaultTheme);
               themeToApply = themeConfig.defaultTheme;
             } else {
@@ -73,9 +74,9 @@ export function CustomizationInitializer() {
             root.classList.add('theme-transitioning');
           }
           
-          console.log(`Applied theme: ${themeToApply}`);
+          // Theme applied successfully
         } else {
-          console.warn(`Theme "${themeToApply}" not found, falling back to light theme`);
+          // Theme not found, falling back to light theme
           // Fallback to light theme
           const lightTheme = allThemes['light'];
           if (lightTheme) {
@@ -91,7 +92,7 @@ export function CustomizationInitializer() {
         applyFonts();
 
       } catch (error) {
-        console.error('Failed to initialize customization:', error);
+        logger.error('Failed to initialize customization:', error);
       }
     };
 
@@ -145,7 +146,7 @@ export function CustomizationInitializer() {
           }
         });
       } catch (error) {
-        console.error('Failed to apply fonts:', error);
+        logger.error('Failed to apply fonts:', error);
       }
     };
 

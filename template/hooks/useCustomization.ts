@@ -100,7 +100,7 @@ export function useCustomization(): UseCustomizationReturn {
         localStorage.setItem(branding.getThemeStorageKey(), themeName);
       }
 
-      console.log(`Theme applied: ${themeName}`);
+      // Theme applied successfully
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to apply theme');
     }
@@ -250,7 +250,7 @@ export function useCustomization(): UseCustomizationReturn {
               themeToUse = stored;
             } else {
               // Invalid stored theme, fallback to config default
-              console.log(`Invalid stored theme "${stored}", falling back to config default "${themeConfig.defaultTheme}"`);
+              // Invalid stored theme, falling back to config default
               localStorage.setItem(branding.getThemeStorageKey(), themeConfig.defaultTheme);
               themeToUse = themeConfig.defaultTheme;
             }

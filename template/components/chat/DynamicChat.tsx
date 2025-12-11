@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { getChatType, validateChatConfig } from '../../lib/chat-config';
 import { ChatWidget } from './chat-widget';
 import ChatWindow from './chat-interface/ChatWindow';
+import { logger } from '../../lib/logger';
 
 export default function DynamicChat() {
   const [chatType, setChatType] = useState<'widget' | 'interface' | null>(null);
@@ -17,7 +18,7 @@ export default function DynamicChat() {
     if (isValid) {
       setChatType(getChatType());
     } else {
-      console.error('Invalid chat configuration. Please check your chat-config.ts file.');
+      logger.error('Invalid chat configuration. Please check your chat-config.ts file.');
     }
   }, []);
 

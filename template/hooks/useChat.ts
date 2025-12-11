@@ -2,6 +2,8 @@ import { useState, useCallback, useEffect } from 'react';
 import { fetchAnswer } from '@/lib/answer';
 import { getCommonConfig } from '@/lib/chat-config';
 import { branding } from '@/lib/branding-config';
+import { logger } from '@/lib/logger';
+import { CHAT_CONSTANTS } from '@/lib/constants';
 
 export interface Message {
   id: string;
@@ -73,7 +75,7 @@ const loadChatData = (): { histories: ChatHistory[]; activeId: string | null } =
       return { histories, activeId: data.activeId };
     }
   } catch (error) {
-    console.error('Error loading chat data:', error);
+    logger.error('Error loading chat data:', error);
   }
   return { histories: [], activeId: null };
 };
@@ -87,7 +89,7 @@ const saveChatData = (histories: ChatHistory[], activeId: string | null) => {
       lastSaved: new Date().toISOString()
     }));
   } catch (error) {
-    console.error('Error saving chat data:', error);
+    logger.error('Error saving chat data:', error);
   }
 };
 
@@ -188,9 +190,9 @@ export default function useChat(): UseChatReturn {
     setIsLoading(true);
 
     try {
-      // Get chat history for context (last 10 messages)
+      // Get chat history for context (last N messages)
       const currentChat = chatHistories.find(h => h.id === currentChatId);
-      const chatHistory = currentChat?.messages.slice(-10).map(msg => ({
+      const chatHistory = currentChat?.messages.slice(-CHAT_CONSTANTS.MAX_MESSAGES_IN_HISTORY).map(msg => ({
         role: msg.sender === 'user' ? 'user' : 'assistant',
         content: msg.text
       })) || [];

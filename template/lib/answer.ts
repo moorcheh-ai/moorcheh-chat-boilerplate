@@ -4,6 +4,8 @@ import {
   getApiHeaders, 
   validateApiConfig
 } from './api-config';
+import { logger } from './logger';
+import { API_CONSTANTS } from './constants';
 
 export interface AnswerRequest {
   namespace: string;
@@ -34,7 +36,7 @@ export async function fetchAnswer(payload: AnswerRequest): Promise<AnswerRespons
   // Validate API configuration first
   const validation = validateApiConfig();
   if (!validation.isValid) {
-    console.error('API Configuration errors:', validation.errors);
+    logger.error('API Configuration errors:', validation.errors);
     throw new Error(`API Configuration invalid: ${validation.errors.join(', ')}`);
   }
 
@@ -54,22 +56,33 @@ export async function fetchAnswer(payload: AnswerRequest): Promise<AnswerRespons
   const headers = getApiHeaders();
 
   try {
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), API_CONSTANTS.DEFAULT_TIMEOUT);
+
     const res = await fetch(endpoint, {
       method: "POST",
       headers,
       body: JSON.stringify(requestBody),
+      signal: controller.signal,
     });
-    //console.log(requestBody); // uncomment this to see the request body for debugging
+
+    clearTimeout(timeoutId);
 
     if (!res.ok) {
       const errorText = await res.text();
-      throw new Error(`API error (${res.status}): ${errorText}`);
+      logger.error('API request failed:', { status: res.status, error: errorText });
+      throw new Error(`API error (${res.status}): ${errorText.substring(0, 200)}`);
     }
 
-    return res.json();
-   // console.log(res.json()); // uncomment this to see the response for debugging
+    const data = await res.json();
+    logger.debug('API request successful');
+    return data;
   } catch (error) {
-    console.error('API request failed:', error);
+    if (error instanceof Error && error.name === 'AbortError') {
+      logger.error('API request timeout');
+      throw new Error('Request timeout. Please try again.');
+    }
+    logger.error('API request failed:', error);
     throw error;
   }
 }
@@ -79,6 +92,7 @@ export async function fetchAnswer(payload: AnswerRequest): Promise<AnswerRespons
  * @deprecated Use fetchAnswer instead
  */
 export async function fetchAnswerLegacy(payload: AnswerRequest): Promise<AnswerResponse> {
+  logger.warn('fetchAnswerLegacy is deprecated. Use fetchAnswer instead.');
   const res = await fetch("https://api.moorcheh.ai/v1/answer", {
     method: "POST",
     headers: {
@@ -87,6 +101,9 @@ export async function fetchAnswerLegacy(payload: AnswerRequest): Promise<AnswerR
     },
     body: JSON.stringify(payload),
   });
-  if (!res.ok) throw new Error("API error");
+  if (!res.ok) {
+    logger.error('Legacy API request failed:', res.status);
+    throw new Error("API error");
+  }
   return res.json();
 } 

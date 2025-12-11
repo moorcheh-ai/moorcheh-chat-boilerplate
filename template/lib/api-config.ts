@@ -10,6 +10,8 @@
  */
 
 import apiConfigJson from '../config/api-config.json';
+import { logger } from './logger';
+import { VALIDATION_CONSTANTS } from './constants';
 
 export interface ApiRequestBody {
   namespace: string;
@@ -73,7 +75,7 @@ export function buildApiRequestBody(
  * Get API endpoint URL from environment or default
  */
 export function getApiEndpoint(): string {
-  return  'https://api.moorcheh.ai/v1/answer';
+  return process.env.NEXT_PUBLIC_MOORCHEH_API_ENDPOINT || 'https://api.moorcheh.ai/v1/answer';
 }
 
 /**
@@ -135,16 +137,16 @@ export function validateApiConfig(): { isValid: boolean; errors: string[] } {
     }
     
     // Type validations
-    if (template.top_k && (typeof template.top_k !== 'number' || template.top_k < 1)) {
-      errors.push('top_k must be a positive number');
+    if (template.top_k && (typeof template.top_k !== 'number' || template.top_k < VALIDATION_CONSTANTS.MIN_TOP_K || template.top_k > VALIDATION_CONSTANTS.MAX_TOP_K)) {
+      errors.push(`top_k must be a number between ${VALIDATION_CONSTANTS.MIN_TOP_K} and ${VALIDATION_CONSTANTS.MAX_TOP_K}`);
     }
     
-    if (template.temperature && (typeof template.temperature !== 'number' || template.temperature < 0 || template.temperature > 2)) {
-      errors.push('temperature must be a number between 0 and 2');
+    if (template.temperature && (typeof template.temperature !== 'number' || template.temperature < VALIDATION_CONSTANTS.MIN_TEMPERATURE || template.temperature > VALIDATION_CONSTANTS.MAX_TEMPERATURE)) {
+      errors.push(`temperature must be a number between ${VALIDATION_CONSTANTS.MIN_TEMPERATURE} and ${VALIDATION_CONSTANTS.MAX_TEMPERATURE}`);
     }
     
-    if (template.threshold && (typeof template.threshold !== 'number' || template.threshold < 0 || template.threshold > 1)) {
-      errors.push('threshold must be a number between 0 and 1');
+    if (template.threshold && (typeof template.threshold !== 'number' || template.threshold < VALIDATION_CONSTANTS.MIN_THRESHOLD || template.threshold > VALIDATION_CONSTANTS.MAX_THRESHOLD)) {
+      errors.push(`threshold must be a number between ${VALIDATION_CONSTANTS.MIN_THRESHOLD} and ${VALIDATION_CONSTANTS.MAX_THRESHOLD}`);
     }
     
     // Kiosk mode validation

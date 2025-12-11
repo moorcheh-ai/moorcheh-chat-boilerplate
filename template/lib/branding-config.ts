@@ -33,7 +33,7 @@ export interface BrandingConfig {
  * Falls back to default "Moorcheh" branding if not found
  */
 export function getBrandingConfig(): BrandingConfig {
-  const branding = appearanceConfig.branding;
+  const branding = appearanceConfig.branding as BrandingConfig | undefined;
 
   // Handle logo - if it's a data URI, use it directly; otherwise treat as file path
   let logo = branding?.logo;

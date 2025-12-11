@@ -130,7 +130,7 @@ export default function SetupFlow() {
         }));
       }
     } catch {
-      console.log('No existing appearance.json found, using defaults');
+      // No existing appearance.json found, using defaults
     } finally {
       setIsLoadingConfig(false);
     }
@@ -181,12 +181,10 @@ export default function SetupFlow() {
       }
 
       const result = await response.json();
-      console.log('Appearance config updated successfully:', result);
+      // Appearance config updated successfully
       return JSON.stringify(config, null, 2);
     } catch (error) {
-      console.error('Error saving appearance config:', error);
-      // Fallback: provide config for manual update
-      console.log('Please manually update config/appearance.json with:', generateAppearanceConfig());
+      // Error saving appearance config - fallback to manual update
       throw new Error('Failed to save appearance configuration. Please manually update config/appearance.json');
     }
   };
@@ -258,7 +256,7 @@ export default function SetupFlow() {
           setCurrentStep(5);
         }, 2000);
       } catch (error) {
-        console.error('Failed to save appearance configuration:', error);
+        // Failed to save appearance configuration
         // Still show celebration but user will need to manually update appearance.json
         setShowCelebration(true);
         setTimeout(() => {
