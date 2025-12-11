@@ -8,6 +8,7 @@
 
 import { getBrandingConfig } from './branding-config';
 import { getApiConfigForChat } from './api-config';
+import { logger } from './logger';
 
 export type ChatType = 'widget' | 'interface';
 
@@ -214,7 +215,7 @@ export function validateChatConfig(): boolean {
   try {
     // Validate chat type
     if (!['widget', 'interface'].includes(chatConfig.chatType)) {
-      console.error('Invalid chat type:', chatConfig.chatType);
+      logger.error('Invalid chat type:', chatConfig.chatType);
       return false;
     }
     
@@ -222,19 +223,19 @@ export function validateChatConfig(): boolean {
     if (isWidget()) {
       const { position, size, zIndex, offset } = chatConfig.widget;
       if (!['bottom-right', 'bottom-left', 'top-right', 'top-left'].includes(position)) {
-        console.error('Invalid widget position:', position);
+        logger.error('Invalid widget position:', position);
         return false;
       }
       if (!['small', 'medium', 'large'].includes(size)) {
-        console.error('Invalid widget size:', size);
+        logger.error('Invalid widget size:', size);
         return false;
       }
       if (typeof zIndex !== 'number' || zIndex < 0) {
-        console.error('Invalid widget zIndex:', zIndex);
+        logger.error('Invalid widget zIndex:', zIndex);
         return false;
       }
       if (typeof offset.x !== 'number' || typeof offset.y !== 'number') {
-        console.error('Invalid widget offset:', offset);
+        logger.error('Invalid widget offset:', offset);
         return false;
       }
     }
@@ -243,7 +244,7 @@ export function validateChatConfig(): boolean {
     if (isInterface()) {
       const { layout } = chatConfig.interface;
       if (!['sidebar', 'centered', 'fullscreen'].includes(layout)) {
-        console.error('Invalid interface layout:', layout);
+        logger.error('Invalid interface layout:', layout);
         return false;
       }
     }
@@ -251,13 +252,13 @@ export function validateChatConfig(): boolean {
     // Validate API config
     const apiConfig = chatConfig.common.api;
     if (!apiConfig.namespace) {
-      console.error('API namespace is required');
+      logger.error('API namespace is required');
       return false;
     }
     
     return true;
   } catch (error) {
-    console.error('Error validating chat config:', error);
+    logger.error('Error validating chat config:', error);
     return false;
   }
 } 

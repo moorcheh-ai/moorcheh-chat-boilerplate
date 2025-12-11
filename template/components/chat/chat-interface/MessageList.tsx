@@ -35,7 +35,7 @@ export default function MessageList({ messages, isLoading, onSendExample }: Mess
       setCopiedMessageId(messageId);
       setTimeout(() => setCopiedMessageId(null), 2000);
     } catch (err) {
-      console.error('Failed to copy text:', err);
+      // Failed to copy text - error handled silently
     }
   };
 

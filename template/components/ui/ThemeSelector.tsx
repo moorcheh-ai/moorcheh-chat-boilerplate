@@ -6,6 +6,7 @@ import { Check, Palette } from 'lucide-react';
 import { themes } from '../../lib/themes';
 import { Button } from './button';
 import Confetti from 'react-confetti';
+import { logger } from '../../lib/logger';
 
 interface ThemeSelectorProps {
   currentTheme?: string;
@@ -157,7 +158,7 @@ export const ThemeSelector: React.FC<ThemeSelectorProps> = React.memo(({
       // Reload the page to apply the new theme
       window.location.reload();
     } catch (error) {
-      console.error('Error updating theme:', error);
+      logger.error('Error updating theme:', error);
       // Revert selection on error
       setSelectedTheme(currentTheme);
     } finally {
