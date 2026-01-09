@@ -8,8 +8,14 @@ const { execSync } = require('child_process');
 async function setupBoilerplate() {
   const targetDir = process.cwd();
   const templateDir = path.join(__dirname, '../template');
+  
+  // Get package version
+  const packageJsonPath = path.join(__dirname, '../package.json');
+  const packageJson = await fs.readJson(packageJsonPath);
+  const version = packageJson.version;
 
   console.log('🚀 Welcome to Moorcheh Chat Boilerplate!');
+  console.log(`📦 Version: ${version}`);
   console.log('');
 
   // Prompt user for project name and git initialization
@@ -73,6 +79,56 @@ async function setupBoilerplate() {
     clearInterval(progressInterval);
     process.stdout.write('\r✅ Copied boilerplate files\n');
 
+    // Create .gitignore file (npm excludes .gitignore from packages, so we create it programmatically)
+    const gitignorePath = path.join(destDir, '.gitignore');
+    const gitignoreContent = `# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+
+# dependencies
+/node_modules
+/.pnp
+.pnp.*
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/versions
+
+# testing
+/coverage
+
+# next.js
+/.next/
+/out/
+
+# production
+/build
+
+# misc
+.DS_Store
+*.pem
+
+# debug
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+# env files (can opt-in for committing if needed)
+.env*
+
+# vercel
+.vercel
+
+# typescript
+*.tsbuildinfo
+next-env.d.ts
+
+# Moorcheh Boilerplate specific
+/config/api-config.json
+
+`;
+    await fs.writeFile(gitignorePath, gitignoreContent);
+
     // Update package.json with project name
     console.log('📝 Updating project configuration...');
     const packageJsonPath = path.join(destDir, 'package.json');
@@ -88,9 +144,17 @@ async function setupBoilerplate() {
       console.log('🔧 Initializing Git repository...');
       try {
         process.chdir(destDir);
-        execSync('git init', { stdio: 'inherit' });
-        execSync('git add .', { stdio: 'inherit' });
-        execSync('git commit -m "Initial commit from Moorcheh Chat Boilerplate"', { stdio: 'inherit' });
+        execSync('git init', { stdio: 'pipe' });
+        
+        // Ensure .gitignore exists and force add it
+        const gitignoreExists = await fs.pathExists('.gitignore');
+        if (!gitignoreExists) {
+          await fs.writeFile('.gitignore', gitignoreContent);
+        }
+        // Force add .gitignore to ensure it's included
+        execSync('git add -f .gitignore', { stdio: 'pipe' });
+        execSync('git add .', { stdio: 'pipe' });
+        execSync('git commit -m "Initial commit from Moorcheh Chat Boilerplate"', { stdio: 'pipe' });
         console.log('✅ Git repository initialized');
         process.chdir(targetDir);
       } catch (gitError) {
