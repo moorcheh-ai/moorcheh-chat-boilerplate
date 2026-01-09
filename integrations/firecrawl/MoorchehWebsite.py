@@ -43,7 +43,7 @@ VECTOR_DIM = None
 QUERY_CSV = "queries.csv"
 OUTPUT_CSV = "answers.csv"
 SCRAPE_URLS = ["https://www.moorcheh.ai/about"]
-AI_MODEL = "anthropic.claude-3-7-sonnet-20250219-v1:0"
+AI_MODEL = "anthropic.claude-sonnet-4-5-20250929-v1:0"
 
 
 # --- Scrape and Chunk ---

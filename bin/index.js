@@ -3,6 +3,7 @@
 const fs = require('fs-extra');
 const path = require('path');
 const inquirer = require('inquirer');
+const { execSync } = require('child_process');
 
 async function setupBoilerplate() {
   const targetDir = process.cwd();
@@ -11,7 +12,7 @@ async function setupBoilerplate() {
   console.log('🚀 Welcome to Moorcheh Chat Boilerplate!');
   console.log('');
 
-  // Prompt user for project name
+  // Prompt user for project name and git initialization
   const prompt = inquirer.prompt || inquirer.default.prompt;
   const answers = await prompt([
     {
@@ -28,10 +29,16 @@ async function setupBoilerplate() {
         }
         return true;
       }
+    },
+    {
+      type: 'confirm',
+      name: 'initGit',
+      message: 'Initialize Git repository?',
+      default: true
     }
   ]);
 
-  const { projectName } = answers;
+  const { projectName, initGit } = answers;
   const destDir = path.join(targetDir, projectName);
 
   try {
@@ -75,6 +82,24 @@ async function setupBoilerplate() {
     await fs.writeJson(packageJsonPath, packageJson, { spaces: 2 });
     console.log('✅ Updated package.json');
 
+    // Initialize Git repository if requested
+    if (initGit) {
+      console.log('');
+      console.log('🔧 Initializing Git repository...');
+      try {
+        process.chdir(destDir);
+        execSync('git init', { stdio: 'inherit' });
+        execSync('git add .', { stdio: 'inherit' });
+        execSync('git commit -m "Initial commit from Moorcheh Chat Boilerplate"', { stdio: 'inherit' });
+        console.log('✅ Git repository initialized');
+        process.chdir(targetDir);
+      } catch (gitError) {
+        console.log('⚠️  Failed to initialize Git repository:', gitError.message);
+        console.log('   You can initialize it manually with: git init');
+        process.chdir(targetDir);
+      }
+    }
+
     console.log('');
     console.log('🎉 Boilerplate setup complete!');
     console.log('');
@@ -82,7 +107,12 @@ async function setupBoilerplate() {
     console.log(`   1. cd ${projectName}`);
     console.log('   2. npm install');
     console.log('   3. See README.md for API configuration');
-    console.log('   4. npm run dev');
+    if (!initGit) {
+      console.log('   4. (Optional) Initialize Git: git init && git add . && git commit -m "Initial commit"');
+      console.log('   5. npm run dev');
+    } else {
+      console.log('   4. npm run dev');
+    }
     console.log('');
     console.log('📚 Documentation:');
     console.log('   • API Setup: config/README.md');

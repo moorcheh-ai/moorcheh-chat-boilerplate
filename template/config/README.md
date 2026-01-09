@@ -141,4 +141,4 @@ config/
 3. Check that the values match your Moorcheh Console settings
 4. Try regenerating the configuration in the Playground
 
-Need help? Visit our [support documentation](https://console.moorcheh.ai/docs) for more information. 
+Need help? Visit our [support documentation](https://docs.moorcheh.ai/integrations/chat-boilerplate/overview) for more information. 
