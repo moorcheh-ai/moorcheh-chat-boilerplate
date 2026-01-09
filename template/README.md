@@ -132,5 +132,6 @@ Or follow the [Next.js deployment guide](https://nextjs.org/docs/app/building-yo
 
 ## Support
 
+- [Chat Boilerplate Documentation](https://docs.moorcheh.ai/integrations/chat-boilerplate/overview) - Complete guide and API reference
 - [Moorcheh Console](https://console.moorcheh.ai) - API configuration
 - [Next.js Documentation](https://nextjs.org/docs) - Framework guide
