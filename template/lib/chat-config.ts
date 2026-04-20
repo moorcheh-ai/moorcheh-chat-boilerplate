@@ -64,14 +64,14 @@ export interface ChatConfig {
     /** API configuration - automatically loaded from config/api-config.json */
     api: {
       namespace: string;
-      model?: string;
+      ai_model?: string;
       temperature?: number;
-      topK?: number;
+      top_k?: number;
       threshold?: number; // Optional - only present when kiosk_mode is true
-      kioskMode?: boolean;
+      kiosk_mode?: boolean;
       type?: string;
-      headerPrompt?: string;
-      footerPrompt?: string;
+      header_prompt?: string;
+      footer_prompt?: string;
     };
     /** Branding */
     branding: {

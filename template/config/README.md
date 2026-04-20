@@ -96,12 +96,14 @@ Visit [http://localhost:3000/landing](http://localhost:3000/landing) to use the 
 | `query` | The user's current message | Yes ✓ |
 | `top_k` | Number of top results to return (1-10) | No |
 | `type` | Response type (e.g., "text", "json") | No |
-| `aiModel` | AI model to use for responses | No |
+| `ai_model` | AI model to use for responses | No |
 | `temperature` | Response creativity (0.0-1.0) | No |
 | `kiosk_mode` | Enable/disable kiosk mode | No |
-| `chatHistory` | Conversation history array | Yes ✓ |
-| `headerPrompt` | System instructions at start | No |
-| `footerPrompt` | Instructions at end of prompt | No |
+| `chat_history` | Conversation history array | Yes ✓ |
+| `header_prompt` | System instructions at start | No |
+| `footer_prompt` | Instructions at end of prompt | No |
+
+Deprecated camelCase keys from older configs (`aiModel`, `chatHistory`, `headerPrompt`, `footerPrompt`, `kioskMode`, `topK`, `structuredResponse`) are still accepted and converted to snake_case when the file is loaded.
 
 ## 🔄 How It Works
 

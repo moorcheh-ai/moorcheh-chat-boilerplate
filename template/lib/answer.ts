@@ -2,6 +2,7 @@ import {
   buildApiRequestBody, 
   getApiEndpoint, 
   getApiHeaders, 
+  normalizeApiConfigKeys,
   validateApiConfig
 } from './api-config';
 import { logger } from './logger';
@@ -12,13 +13,14 @@ export interface AnswerRequest {
   query: string;
   type?: string;
   top_k?: number;
-  aiModel?: string;
+  ai_model?: string;
   temperature?: number;
   kiosk_mode?: boolean;
   threshold?: number;
-  chatHistory?: { role: string; content: string }[];
-  headerPrompt?: string;
-  footerPrompt?: string;
+  chat_history?: { role: string; content: string }[];
+  header_prompt?: string;
+  footer_prompt?: string;
+  structured_response?: Record<string, unknown>;
   [key: string]: unknown; // Allow additional custom fields
 }
 
@@ -40,14 +42,15 @@ export async function fetchAnswer(payload: AnswerRequest): Promise<AnswerRespons
     throw new Error(`API Configuration invalid: ${validation.errors.join(', ')}`);
   }
 
-  // Prepare overrides from payload (excluding query and chatHistory which are handled separately)
-  const { query, chatHistory, ...overrides } = payload;
+  const payloadNorm = normalizeApiConfigKeys({ ...payload } as Record<string, unknown>) as AnswerRequest;
+  // Prepare overrides from payload (excluding query and chat_history which are handled separately)
+  const { query, chat_history, ...overrides } = payloadNorm;
   
   // Build the complete request body using the configuration
   // This will include all parameters from the payload and handle threshold logic
   const requestBody = buildApiRequestBody(
     query,
-    chatHistory || [],
+    chat_history || [],
     overrides
   );
 
@@ -93,13 +96,14 @@ export async function fetchAnswer(payload: AnswerRequest): Promise<AnswerRespons
  */
 export async function fetchAnswerLegacy(payload: AnswerRequest): Promise<AnswerResponse> {
   logger.warn('fetchAnswerLegacy is deprecated. Use fetchAnswer instead.');
+  const body = normalizeApiConfigKeys({ ...payload } as Record<string, unknown>);
   const res = await fetch("https://api.moorcheh.ai/v1/answer", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
       "x-api-key": process.env.NEXT_PUBLIC_MOORCHEH_API_KEY || "",
     },
-    body: JSON.stringify(payload),
+    body: JSON.stringify(body),
   });
   if (!res.ok) {
     logger.error('Legacy API request failed:', res.status);
