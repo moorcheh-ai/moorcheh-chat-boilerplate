@@ -87,7 +87,7 @@ NEXT_PUBLIC_MOORCHEH_API_KEY=your_api_key_here
    - Export the complete JSON configuration
    - Paste it into `config/api-config.json`
 
-The boilerplate will automatically handle the `query` and `chatHistory` fields while using your namespace and model configuration.
+The boilerplate will automatically handle the `query` and `chat_history` fields while using your namespace and model configuration.
 
 ### 3. Customize Appearance (Optional)
 

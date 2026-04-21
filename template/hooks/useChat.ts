@@ -192,23 +192,22 @@ export default function useChat(): UseChatReturn {
     try {
       // Get chat history for context (last N messages)
       const currentChat = chatHistories.find(h => h.id === currentChatId);
-      const chatHistory = currentChat?.messages.slice(-CHAT_CONSTANTS.MAX_MESSAGES_IN_HISTORY).map(msg => ({
+      const chat_history = currentChat?.messages.slice(-CHAT_CONSTANTS.MAX_MESSAGES_IN_HISTORY).map(msg => ({
         role: msg.sender === 'user' ? 'user' : 'assistant',
         content: msg.text
       })) || [];
 
       // Add current user message to history
-      chatHistory.push({ role: 'user', content: text });
+      chat_history.push({ role: 'user', content: text });
 
       // Call AI API using the new configuration system
       // The config/api-config.json file now handles all these parameters
       const response = await fetchAnswer({
         query: text,
-        chatHistory,
-        // Fallback parameters for backward compatibility
+        chat_history,
         namespace: commonConfig.api.namespace,
-        top_k: commonConfig.api.topK,
-        aiModel: commonConfig.api.model,
+        top_k: commonConfig.api.top_k,
+        ai_model: commonConfig.api.ai_model,
         temperature: commonConfig.api.temperature,
         threshold: commonConfig.api.threshold,
       });

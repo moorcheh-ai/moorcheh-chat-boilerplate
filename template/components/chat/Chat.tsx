@@ -30,11 +30,10 @@ export function Chat() {
       // Use the new API configuration system
       const data = await fetchAnswer({
         query: input,
-        chatHistory: messages.map((m) => ({ role: m.role, content: m.content })),
-        // Fallback parameters for backward compatibility
+        chat_history: messages.map((m) => ({ role: m.role, content: m.content })),
         namespace: commonConfig.api.namespace,
-        top_k: commonConfig.api.topK,
-        aiModel: commonConfig.api.model,
+        top_k: commonConfig.api.top_k,
+        ai_model: commonConfig.api.ai_model,
         temperature: commonConfig.api.temperature,
         threshold: commonConfig.api.threshold,
       });
